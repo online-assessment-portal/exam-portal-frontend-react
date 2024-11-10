@@ -10,7 +10,9 @@ import { notify } from "./../common.js";
 import { dateTimeFormat } from "./../helpers/dateTimeFormat";
 //
 import "./layout.css";
-//
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
 class ExamAdmin extends Component {
   constructor() {
     super();
@@ -56,7 +58,7 @@ class ExamAdmin extends Component {
     formData.append("_csrf", token);
     const formBody = new URLSearchParams(formData).toString();
     try {
-      const promise = await fetch("/admin/authAdmin/", {
+      const promise = await fetch(`${apiUrl}/admin/authAdmin/`, {
         method: "POST",
         body: formBody ? formBody : "",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -145,7 +147,7 @@ class ExamAdmin extends Component {
     }
     //
     try {
-      const promise = await fetch("/admin/loadTestData/", {
+      const promise = await fetch(`${apiUrl}/admin/loadTestData/`, {
         method: "POST",
         body: `passcode=${passcode}&_csrf=${this.state.token}`,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -219,7 +221,7 @@ class ExamAdmin extends Component {
       formData.append("crctOpt", crctOptArrJ);
       formData.append("_csrf", token);
       const formBody = new URLSearchParams(formData).toString();
-      const promise = await fetch("/admin/upload_testData/", {
+      const promise = await fetch(`${apiUrl}/admin/upload_testData/`, {
         method: "POST",
         body: formBody,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -272,7 +274,7 @@ class ExamAdmin extends Component {
   //
   reqLogout = async () => {
     try {
-      const promise = await fetch("/logout/", {
+      const promise = await fetch(`${apiUrl}/logout/`, {
         method: "POST",
         body: `_csrf=${this.state.token}`,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
