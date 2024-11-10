@@ -1,0 +1,530 @@
+#adminLogin > div,
+#adminLoginForm,
+#resultForm,
+#fillInfo,
+#invite {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#adminLogin {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+	width: 100%;
+	background-color: rgb(252, 255, 233);
+}
+#adminLogin > div {
+	flex: 1 1 0%;
+}
+#adminLoginForm {
+	flex-direction: column;
+	margin-bottom: 8vh;
+	padding: 6vh 6em;
+	border-radius: 5px;
+	background-color: white;
+	box-shadow: 0 0 10px gainsboro, 0 0 10px gainsboro, 0 0 10px gainsboro,
+		0 0 10px gainsboro;
+}
+#adminLoginForm > h3 {
+	font-size: 22px;
+	text-decoration: underline;
+	color: blue;
+	font-family: "Courier New", Courier, monospace;
+}
+#adminLoginForm label {
+	width: 150%;
+	text-align: left;
+}
+#adminLoginForm input {
+	width: 150%;
+}
+#adminLoginForm p {
+	color: red;
+	text-align: center;
+}
+#briefAdmin,
+#briefResp {
+	width: 100%;
+	overflow: auto;
+	padding-bottom: 3vh;
+}
+#briefAdmin {
+	max-height: 60vh;
+	margin-bottom: 3vh;
+	border-bottom: 2px solid gainsboro;
+}
+#briefAdmin > div {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	margin-top: 2vh;
+}
+#briefAdmin table button {
+	background: transparent;
+	color: blue;
+	border: none;
+}
+/* For date in Hosted Test Brief */
+#briefAdmin input {
+	outline: none;
+	border: none;
+	font-size: medium;
+	text-align: center;
+}
+/*  */
+#adminLoginForm label,
+#resultForm label {
+	margin-top: 10px;
+	margin-bottom: 3px;
+	font-family: "Noto Sans JP", sans-serif;
+}
+#resultForm label {
+	font-size: 20px;
+	font-weight: bold;
+}
+#hostedTest,
+#printable {
+	width: 100%;
+	border-collapse: collapse;
+	border: 2px solid black;
+}
+#hostedTest th,
+#printable th {
+	font-family: "Noto Sans JP", sans-serif;
+}
+#hostedTest td:first-child {
+	user-select: unset;
+}
+#resultForm input {
+	padding: 2px 5px;
+	font-size: 18px;
+	/* border-radius: 3px; */
+	outline: none;
+	border: 1px solid darkgray;
+}
+#resultForm input:focus {
+	border: 1px solid black;
+}
+#hostedTest th,
+#hostedTest td,
+#printable th,
+#printable td {
+	border: 1px solid gray;
+}
+#printable td:first-child {
+	text-align: left;
+}
+#printable input[type="number"] {
+	font-size: 18px;
+	padding: 2px 5px;
+}
+#secInfoAdmin td:first-child {
+	text-align: center;
+}
+#configAutoEnd input {
+	border-bottom: 2px solid gainsboro !important;
+}
+/*  */
+#resultForm {
+	flex-direction: column;
+	font-size: 18px;
+}
+/*  */
+#describe {
+	margin-top: 5vh;
+	padding-bottom: 3vh;
+	width: 100%;
+	display: inline-flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	border-bottom: 2px solid blue;
+}
+#describe label {
+	font-family: "Noto Sans JP", sans-serif;
+}
+/*  */
+/*  */
+/*  */
+#keyControl,
+#prepareTest {
+	margin: 4vh 0;
+	display: inline-flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	/* border: 2px solid blue; */
+}
+#prepareTest {
+	margin: 0;
+}
+#keyControl div {
+	font-size: 18px;
+}
+#keyControl button,
+#prepareTest button {
+	margin-left: 1vw;
+}
+#prepareTest button {
+	background: transparent;
+	border: 0;
+	color: blue;
+	text-decoration: underline gray;
+}
+/*  */
+#fillInfo {
+	width: 100%;
+	flex-direction: column;
+}
+#fillInfo > div > div {
+	margin-top: 5vh;
+}
+#fillInfo div > label {
+	font-weight: bold;
+	color: blue;
+	font-size: large;
+}
+#fillInfo table,
+#fillInfo th,
+#fillInfo td {
+	border: 2px solid grey;
+}
+#fillInfo td {
+	padding: 0;
+}
+#fillInfo th,
+#fillInfo td:first-child {
+	padding: 4px 8px;
+}
+#fillInfo td:first-child {
+	text-align: left;
+}
+#fillInfo input,
+#fillInfo select {
+	border: 0;
+}
+#fillInfo input[type="radio"] {
+	margin-left: 12px;
+	margin-right: 4px;
+}
+#fillInfo i {
+	cursor: pointer;
+}
+.adminCheckbox input {
+	transform: scale(1.3);
+}
+/*  */
+#fillInfo input[type="text"],
+#basicInfoAdmin select,
+#proctoInfoAdmin select {
+	width: 100%;
+}
+#fillInfo input[type="text"] {
+	padding: 2px 4px;
+}
+#proctoInfoAdmin input[type="number"] {
+	width: 3em;
+	border: 2px solid gainsboro;
+}
+/*  */
+#qsnrAdmin td:first-child,
+#qsnrAdmin td:nth-child(2) {
+	vertical-align: text-top;
+}
+#qsnrAdmin td:nth-child(3) {
+	display: flex;
+	border: 0;
+	flex-direction: column;
+}
+#qsnrAdmin td:nth-last-child(3) div {
+	display: inline-flex;
+	align-items: center;
+}
+#qsnrAdmin button {
+	border: 0;
+	background: transparent;
+	text-decoration: underline blue;
+	align-self: flex-end;
+}
+#qsnrAdmin input {
+	border-bottom: 1px solid gray;
+}
+/*  */
+#fillInfo > button {
+	align-self: flex-end;
+	margin-right: 3em;
+	margin-bottom: 25vh;
+}
+/*  */
+/*  */
+/* Prepare Q-Bank */
+#prepareQBank {
+	padding-bottom: 8vh;
+}
+#prepareQBank fieldset {
+	margin-top: 8vh;
+}
+#prepareQBank fieldset > legend {
+	padding: 0 10px;
+	color: blue;
+	font-family: "Noto Sans JP", sans-serif;
+}
+#prepareQBank legend i,
+#addedComp i {
+	cursor: pointer;
+	margin-left: 10px;
+	color: darkred;
+}
+#addedComp i {
+	margin: 0;
+}
+#prepareQBank fieldset > div {
+	display: inline-flex;
+	width: 100%;
+}
+#prepareQBank fieldset label {
+	margin-top: 1vh;
+	margin-bottom: 0.2vh;
+	font-weight: bold;
+	font-family: "Noto Sans JP", sans-serif;
+}
+#htmlQOpt div label {
+	font-weight: normal;
+}
+#prepareQBank fieldset textarea {
+	padding: 1px 5px;
+	resize: none;
+}
+#prepareQBank fieldset > div > div {
+	display: flex;
+	flex-direction: column;
+	width: 50%;
+	padding: 0 1vw;
+}
+#optionDiv > div {
+	display: flex;
+	flex-direction: column;
+}
+#prepareQBank fieldset button {
+	align-self: flex-end;
+	margin-top: 1vh;
+}
+#prepareQBank fieldset input[type="number"] {
+	width: 30%;
+}
+/* Prepare Coding Question */
+#addedComp tr {
+	border-bottom: 2px solid gainsboro;
+}
+#addedComp td {
+	text-align: left;
+}
+#addedComp td:last-child {
+	text-align: center;
+}
+.edtr_row {
+	display: flex;
+}
+.edtr_row > div {
+	min-height: 50vh;
+}
+.codingInsrtBtn {
+	display: inline-block;
+	justify-content: flex-end;
+}
+.ace-editor {
+	border-radius: 50px;
+}
+/* Invite CSS */
+#invDiv {
+	margin-top: 10vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+#invDiv > table th,
+#invDiv > table tr {
+	border-bottom: 2px solid rgb(200, 200, 200);
+}
+#invDiv > table tr:last-child {
+	border-bottom: none;
+}
+#invDiv > table th,
+#invDiv > table td {
+	border-right: 2px solid rgb(200, 200, 200);
+}
+#invDiv > table th:last-child,
+#invDiv > table td:last-child {
+	border-right: none;
+}
+#invDiv > table label {
+	display: inline-flex;
+	width: 100%;
+	/* border: 1px solid black; */
+	cursor: pointer;
+	/* display: none; */
+}
+#invDiv > table td:nth-child(2) label,
+#invDiv > table td:last-child label {
+	justify-content: center;
+}
+#invite {
+	margin-top: 3vh;
+	flex-direction: column;
+	width: 100%;
+	/* border: 1px solid gray; */
+	overflow: auto;
+}
+#invite > table tr {
+	border-bottom: 2px solid gainsboro;
+}
+#invite td:nth-child(2) {
+	text-align: left;
+}
+#invite .fa-envelope {
+	color: rgba(128, 128, 128, 0.877);
+	cursor: pointer;
+}
+#invite .fa-envelope:hover {
+	color: grey;
+}
+#invDiv > div:nth-child(2),
+#invite > div:nth-child(2) {
+	margin-top: 4vh;
+	min-width: 35%;
+	display: inline-flex;
+	justify-content: space-between;
+}
+#invite h4 {
+	margin-top: 5vh;
+}
+#invite textarea {
+	width: 90vw;
+}
+#invite > button {
+	margin-top: 1vh;
+	margin-right: 4.2vw;
+	align-self: flex-end;
+}
+#invite div:last-child td:first-child {
+	text-align: left;
+}
+#invite #linkBtn {
+	font-size: 22px;
+	text-decoration: none;
+	color: #fff;
+	background-color: #0074d9;
+	border: none;
+	outline: none;
+	border-radius: 3px;
+	padding: 3px 10px;
+}
+#invite table table th,
+#invite table table td {
+	padding: 4px 1em;
+	border: 2px solid rgba(128, 128, 128, 0.5);
+}
+#invite .contactLink a {
+	color: black;
+	display: flex;
+	text-decoration: none;
+}
+/*  */
+#mailCreator {
+	display: flex;
+	justify-content: center;
+	margin: 10vh 0;
+}
+#mailCreator input,
+#mailCreator textarea {
+	width: 150%;
+	resize: none;
+}
+/*  */
+/*  */
+/*  */
+#prepResBtns {
+	float: left;
+	margin: 3vh 0;
+}
+#prepResBtns button {
+	margin-left: 1em;
+}
+#prepResBtns ~ button {
+	float: right;
+	margin: 3vh 0;
+	margin-right: 1em;
+}
+#prepHTML {
+	margin-top: 10vh;
+}
+#prepHTML #htmlEditorWin {
+	height: 93vh;
+}
+/*  */
+/* Prepare Result Code */
+/*  */
+#prepResCd {
+	width: 100%;
+	display: inline-flex;
+	padding: 0 1rem;
+	/* max-height: 100vh; */
+}
+#prepResCd > div:first-child {
+	width: 75%;
+}
+#prepResCd > div:last-child {
+	flex: 1 1 0%;
+}
+/* Question Navigation Buttons in Prepare Result */
+#prepResQNav {
+	width: 100%;
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 4vh;
+}
+#prepResQNav > button {
+	float: left;
+	margin-left: 10px;
+	z-index: 1;
+}
+#prepResQNav div {
+	float: right;
+}
+#prepResQNav div button {
+	margin-right: 10px;
+}
+#exmnrNav {
+	width: 100%;
+	padding-bottom: 2vh;
+	padding-right: 1rem;
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: flex-end;
+}
+#exmnrNav form {
+	margin-top: 2vh;
+}
+#exmnrNav input {
+	margin-right: 10px;
+	width: 65px;
+}
+/*  */
+/*  */
+#printable button {
+	background: transparent;
+	color: #00f;
+	border: none;
+	text-decoration: underline blue;
+}
+@media print {
+	button {
+		display: none;
+	}
+	#briefAdmin {
+		display: none;
+	}
+}

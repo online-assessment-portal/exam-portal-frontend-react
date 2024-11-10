@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+#msgHolder {
+	z-index: 999;
+	display: flex;
+	flex-direction: column !important;
+	position: fixed;
+	top: 0;
+	right: 0;
+	overflow: hidden;
+}
+#msgHolder > div {
+	cursor: grab;
+	margin-top: 1vh;
+	position: relative;
+	padding: 10px;
+	/* display: none; */
+	display: flex;
+	flex-direction: column !important;
+	align-items: center;
+	justify-content: center;
+	word-wrap: break-word;
+	min-width: 20vw;
+	min-height: 0;
+	border-radius: 5px;
+	overflow: hidden;
+	animation: fadeInRight 300ms ease-in;
+}
+#msgHolder h2,
+#msgHolder h3,
+#msgHolder p {
+	font-family: "Open Sans", sans-serif;
+	text-align: center;
+	color: black;
+}
+.msgS {
+	background-color: rgb(202, 250, 197);
+}
+.msgE {
+	background-color: rgb(253, 133, 133);
+}

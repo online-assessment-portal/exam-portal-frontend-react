@@ -1,0 +1,44 @@
+nav {
+	z-index: 99;
+	width: 100%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: rgb(45, 209, 135);
+	box-shadow: -1px 3px 10px rgb(45, 209, 135);
+	padding: 0.8vh 10px;
+	font-family: "Noto Sans JP", sans-serif;
+	font-weight: bold;
+	overflow: auto;
+}
+nav > div {
+	display: inline-flex;
+	align-items: center;
+	white-space: nowrap;
+}
+#brand-logo {
+	/* margin-top: 4px; */
+	max-height: 5.5vh;
+	padding: 2px 4px;
+	border-radius: 3px;
+	background-color: white;
+	box-shadow: 0 0 10px black;
+}
+#brand-text {
+	font-weight: normal;
+	margin-left: 10px;
+	letter-spacing: 1px;
+	font-size: larger;
+	color: white;
+	text-decoration: none;
+	text-shadow: 0 0 10px black, 0 0 20px black;
+}
+nav button {
+	font-size: larger;
+	padding: 4px 10px;
+	border-radius: 3px;
+	font-family: "Roboto", sans-serif;
+	outline: none;
+	border: none;
+	white-space: nowrap;
+}

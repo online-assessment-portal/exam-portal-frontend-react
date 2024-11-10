@@ -1,0 +1,183 @@
+.codeContDivs {
+	padding: 0 15px;
+	padding-left: 8px;
+}
+#qpc {
+	width: 150vw;
+	max-width: 100%;
+	/*  */
+	display: inline-flex;
+	height: 83.5vh;
+	padding-right: 0;
+	overflow: auto;
+}
+:fullscreen #qpc {
+	height: 85.5vh;
+}
+#qpc > div {
+	max-height: 100%;
+	overflow: auto;
+}
+#quesCode {
+	min-width: 45%;
+}
+#editor {
+	min-width: 54.3%;
+}
+#codeOutput {
+	min-width: 45.8%;
+}
+#cdContTop,
+#cdContBtm {
+	width: 100%;
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
+}
+#cdContTop {
+	margin-top: 0.5vh;
+	border-bottom: 2px solid gainsboro;
+}
+#cdContTop div {
+	display: inherit;
+}
+#cdContTop i {
+	margin-left: 15px;
+}
+#cdContBtm {
+	padding-top: 0.6vh;
+	border-top: 2px solid gainsboro;
+}
+#cdContBtm div {
+	font-family: monospace;
+	color: gray;
+	font-size: large;
+}
+#qpc > div::-webkit-scrollbar {
+	width: 8px !important;
+	height: 8px !important;
+}
+#qpc > div::-webkit-scrollbar-thumb {
+	/* background-color: rgb(195, 195, 195); */
+	background: rgb(185, 185, 185);
+	border-radius: 50px;
+}
+#qpc > div::-webkit-scrollbar-thumb:hover {
+	background: rgb(180, 180, 180);
+}
+#qpc > div::-webkit-scrollbar-corner {
+	background-color: rgb(224, 224, 224);
+}
+#quesCode {
+	/* overflow-wrap: anywhere; */
+	padding: 0.5vh 0;
+	padding-right: 8px;
+	overflow-wrap: break-word;
+	overflow: auto;
+	cursor: pointer;
+}
+#quesCode > div > h4 {
+	color: gray;
+	margin-top: 2vh;
+}
+#quesCode h5 {
+	font-family: "Noto Sans JP", sans-serif;
+	color: gray;
+	margin: 0.5vh 0;
+	font-weight: lighter;
+}
+/* extra CSS for html created by question */
+#quesCode img {
+	max-width: 100%;
+	overflow: auto;
+}
+#quesCode .ace_editor,
+#customInp,
+#stdout,
+#errors {
+	border-radius: 5px !important;
+	border: 2px solid gainsboro;
+	box-shadow: 0 0 10px gainsboro;
+}
+#quesCode .ace_editor,
+#codeOutput .ace_editor {
+	max-width: 99%;
+}
+/*  */
+/* Custom input Label */
+#codeOutput {
+	padding: 1vh 10px;
+}
+#custInpDiv {
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 150ms linear;
+	/* transition-duration: 0ms; */
+}
+#codeOutput > label {
+	/* margin-bottom: 10vh; */
+	padding-bottom: 3vh;
+	user-select: none;
+	cursor: pointer;
+}
+#codeOutput > input {
+	margin-bottom: 1vh;
+}
+#readOnlyCode1 {
+	border-bottom: 2px solid grey;
+}
+#readOnlyCode2 {
+	border-top: 2px solid grey;
+}
+#exec {
+	display: inline-block;
+	width: 100%;
+}
+#exec > p {
+	float: left;
+	font-size: larger;
+	margin-top: 1vh;
+	margin-right: 2em;
+}
+#exec > p > span {
+	font-weight: bold;
+}
+#scoreTable {
+	margin-top: 3vh;
+	/* display: flex; */
+	align-self: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	display: none;
+}
+#scoreTable .fa {
+	font-size: larger;
+}
+#scoreTable .fa-check {
+	color: rgb(8, 204, 116);
+}
+#scoreTable .fa-times {
+	color: orangered;
+}
+@media only screen and (max-width: 768px) {
+	#qpc {
+		max-height: unset;
+		flex-direction: column;
+	}
+	#qpc > div {
+		min-height: 80vh;
+	}
+	#cdContTop,
+	#cdContBtm {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	#ques,
+	#editor,
+	#quesCode {
+		width: 100%;
+	}
+	#quesCode {
+		max-height: unset;
+	}
+}

@@ -1,0 +1,125 @@
+#responseWin {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+	background-color: rgba(128, 128, 128, 0.75);
+	transition: background-color 1s ease-in;
+}
+#responseDiv {
+	background-color: white;
+	padding: 4vh 15px;
+	border-radius: 3px;
+	text-align: center;
+	animation: zoomIn 250ms ease-in;
+	max-height: 95vh;
+	overflow: auto;
+}
+.fWidthRes {
+	max-width: 35vw;
+}
+#responseDiv p {
+	margin-top: 1vh;
+}
+#responseDiv button {
+	margin-top: 3vh;
+}
+#responseBtn {
+	display: flex;
+	justify-content: space-around;
+}
+#responseBtn > button {
+	font-size: larger;
+	padding: 5px 15px;
+}
+#responseDiv fieldset {
+	margin-top: 2vh;
+}
+#responseDiv fieldset ul {
+	padding: 0;
+}
+.mediaPerm {
+	display: inline-flex;
+	flex-wrap: wrap;
+	text-align: left;
+	/* vertical-align: text-top; */
+}
+.mediaPerm ~ form {
+	margin-top: 2vh;
+}
+h3.permHead {
+	text-decoration: underline blue;
+	margin-bottom: 2vh;
+}
+.howTo {
+	max-width: 35vw;
+}
+.status {
+	/* font-size: small; */
+	margin-left: 10px;
+	padding-left: 15px;
+	border-left: 2px solid rgb(10, 117, 69);
+}
+.status table {
+	font-size: 15px;
+}
+.status td:first-child {
+	text-align: left;
+}
+/* CSS for Video Element in testInfo.css */
+.status video {
+	max-height: 125px;
+	float: right;
+	margin-top: 2vh;
+}
+#responseDiv form {
+	display: flex;
+	flex-direction: column;
+}
+#responseDiv form button {
+	align-self: flex-end;
+}
+@media only screen and (max-width: 992px) {
+	#responseDiv {
+		max-width: 55vw;
+	}
+	#responseDiv h1,
+	#responseDiv h2,
+	#responseDiv h3 {
+		font-size: larger;
+	}
+	.mediaPerm {
+		flex-direction: column;
+	}
+	.howTo {
+		max-width: 100vw;
+	}
+	.status {
+		/* font-size: small; */
+		margin-top: 2vh;
+		padding: 0;
+		padding-top: 2vh;
+		border: 0;
+		border-top: 2px solid rgb(10, 117, 69);
+	}
+}
+@media only screen and (max-width: 768px) {
+	#responseDiv {
+		max-width: 90vw;
+	}
+	#responseDiv h3 {
+		font-size: medium;
+	}
+	#responseDiv button {
+		font-size: medium;
+	}
+	#responseDiv fieldset ul {
+		padding-left: 10px;
+	}
+}

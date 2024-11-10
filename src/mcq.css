@@ -1,0 +1,60 @@
+#mcqContainer {
+	margin: 1.5% 0;
+	width: 100%;
+	min-height: 55vh;
+}
+#mcqContainer > h1 {
+	font-size: 18px;
+	font-weight: normal;
+	width: 100%;
+}
+#mcqContainer span {
+	color: rgba(128, 128, 128, 0.568);
+	float: right;
+	font-size: medium;
+}
+#mcqContainer > pre {
+	max-width: 100%;
+	overflow: auto;
+	margin-left: 2.5em;
+}
+#mcqOptCont {
+	margin-left: 3%;
+	display: flex;
+	flex-direction: column;
+}
+#mcqOptCont form {
+	margin-top: 1vh;
+	display: flex;
+	flex-direction: column;
+	min-width: 50%;
+	max-width: max-content;
+}
+#mcqOptCont label {
+	padding: 8px 10px;
+	border-radius: 3px;
+	border: 1px solid lightseagreen;
+	margin-top: 2vh;
+	word-break: break-all;
+}
+#mcqOptCont input {
+	margin-right: 5px;
+}
+#mcqOptCont label:hover {
+	cursor: pointer;
+	box-shadow: 0 0 2px lightseagreen;
+}
+@media only screen and (max-width: 768px) {
+	#mcqContainer {
+		min-height: unset;
+	}
+}
+@media only screen and (max-width: 600px) {
+	#mcqContainer > pre,
+	#mcqOptCont {
+		margin-left: 0;
+	}
+	#mcqOptCont form {
+		max-width: unset;
+	}
+}
