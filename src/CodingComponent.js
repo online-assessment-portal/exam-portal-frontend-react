@@ -9,7 +9,9 @@ import { notify, isInViewport } from "./common.js";
 import { extractDefCode } from "./helpers/codingQ";
 import { edtrColl, resetEdtrColl, mouseDownHandlerH } from "./helpers/resizer";
 import { langName, edtrMode, langV } from "./helpers/lang";
-//
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
 class CodingComponent extends PureComponent {
   constructor(props) {
     super();
@@ -248,7 +250,7 @@ class CodingComponent extends PureComponent {
     formData.append("_csrf", token);
     const formBody = new URLSearchParams(formData).toString();
     try {
-      const promise = await fetch("/compiler/cV1/", {
+      const promise = await fetch(`${apiUrl}/compiler/cV1/`, {
         method: "POST",
         body: formBody,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
