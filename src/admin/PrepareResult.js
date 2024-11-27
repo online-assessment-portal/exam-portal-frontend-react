@@ -7,6 +7,8 @@ import { notify } from './../common.js';
 import { dateTimeFormat } from './../helpers/dateTimeFormat';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class PrepareResult extends Component {
   constructor() {
@@ -37,6 +39,7 @@ class PrepareResult extends Component {
     try {
       const promise = await fetch(`${apiUrl}/preResult/getResponseData/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -332,6 +335,7 @@ class PrepareResult extends Component {
     try {
       const promise = await fetch(`${apiUrl}/preResult/uploadResult/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -357,6 +361,7 @@ class PrepareResult extends Component {
     try {
       const promise = await fetch(`${apiUrl}/preResult/getResultStr/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -441,6 +446,7 @@ class PrepareResult extends Component {
     try {
       const promise = await fetch(`${apiUrl}/preResult/iniShowResult/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -665,6 +671,7 @@ class PrepareResult extends Component {
     try {
       const promise = await fetch(`${apiUrl}/preResult/uploadRanking/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });

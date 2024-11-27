@@ -213,9 +213,9 @@ class ToStart extends PureComponent {
     if (hrs > 0) durString += (hrs > 1 ? `${hrs}hrs` : `${hrs}hr`) + ' ';
     if (mins > 0) durString += (mins > 1 ? `${mins}mins` : `${mins}min`) + ' ';
     this.setState({
-      strtTm: strtTm,
-      endTm: endTm,
-      durString: durString,
+      strtTm,
+      endTm,
+      durString,
     });
     document.title = 'Candidate Verification';
   }
@@ -226,7 +226,7 @@ class ToStart extends PureComponent {
       userInfo,
       resQuestionnaire,
       data,
-      sec,
+      secInfo,
       testInfo,
       myBrowser,
       notFullWidth,
@@ -320,7 +320,7 @@ class ToStart extends PureComponent {
                         <td>Duration</td>
                         <td>{durString}</td>
                       </tr>
-                      {sec.length > 1 ? (
+                      {secInfo.length > 1 ? (
                         <tr>
                           <td>Section Movement</td>
                           <td>
@@ -373,14 +373,14 @@ class ToStart extends PureComponent {
                     </tr>
                   </thead>
                   <tbody>
-                    {sec.map((eachSec, secIndex) => {
+                    {secInfo.map((eachSec, secIndex) => {
                       return (
                         <tr key={secIndex}>
                           <td>{String.fromCharCode(65 + secIndex)}</td>
                           <td>{eachSec[0]}</td>
                           <td>
                             {secIndex > 0
-                              ? eachSec[1] - sec[secIndex - 1][1]
+                              ? eachSec[1] - secInfo[secIndex - 1][1]
                               : eachSec[1]}
                           </td>
                           <td>{eachSec[3] ? eachSec[3] : 'None'}</td>

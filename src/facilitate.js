@@ -44,6 +44,7 @@ class Facilitate extends PureComponent {
       const formBody = new URLSearchParams(formData);
       await fetch('https://api.imgbb.com/1/upload', {
         method: 'POST',
+        credentials: 'omit',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });

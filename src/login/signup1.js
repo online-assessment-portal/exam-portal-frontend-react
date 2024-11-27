@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { notify } from './../common.js';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class SignUp1 extends PureComponent {
   constructor() {
@@ -65,6 +67,7 @@ class SignUp1 extends PureComponent {
     try {
       const promise = await fetch(`${apiUrl}/login/otp_auth/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -227,7 +230,7 @@ class SignUp1 extends PureComponent {
                 this.setState({ process: true });
                 localStorage.setItem('gLogin', window.location.pathname);
                 window.location.replace(
-                  'https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20profile&response_type=code&client_id=1025872685182-o5jdqap12eg6d9t06sh5nqqdnj8she8s.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.cf%2Fgsign%2Fgoogle-login'
+                  'https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20profile&response_type=code&client_id=1025872685182-o5jdqap12eg6d9t06sh5nqqdnj8she8s.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.coderadiant.com%2Fgsign%2Fgoogle-login'
                 );
               }}
             >

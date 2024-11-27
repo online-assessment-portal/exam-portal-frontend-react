@@ -1,4 +1,6 @@
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 let crntHide;
 function mouseHide(msgHolder, ele, tm) {
@@ -140,6 +142,7 @@ async function storeError(err, token) {
   try {
     await fetch(`${apiUrl}/cand/mystore/`, {
       method: 'POST',
+      credentials: isProd ? 'same-origin' : 'include',
       body: formBody,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });

@@ -11,6 +11,8 @@ import { edtrColl, resetEdtrColl, mouseDownHandlerH } from './helpers/resizer';
 import { langName, edtrMode, langV } from './helpers/lang';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class CodingComponent extends PureComponent {
   constructor(props) {
@@ -252,6 +254,7 @@ class CodingComponent extends PureComponent {
     try {
       const promise = await fetch(`${apiUrl}/compiler/cV1/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });

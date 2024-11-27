@@ -12,6 +12,8 @@ import RenderVid from './renderVideo';
 import { checkDev } from './../detectDev';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class Proctor extends Component {
   constructor() {
@@ -71,6 +73,7 @@ class Proctor extends Component {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `_csrf=${this.state.token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -1473,6 +1476,7 @@ class Proctor extends Component {
       try {
         const promise = await fetch(`${apiUrl}/proctor/enquire/`, {
           method: 'POST',
+          credentials: isProd ? 'same-origin' : 'include',
           body: `passcode=${passcode}&_csrf=${token}`,
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         });

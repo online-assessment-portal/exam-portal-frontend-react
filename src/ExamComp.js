@@ -36,6 +36,8 @@ import ChatComp from './ChatComponent';
 import FeedbackForm from './feedback';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class ExamComp extends Component {
   constructor() {
@@ -111,6 +113,7 @@ class ExamComp extends Component {
     try {
       const promise = await fetch(`${apiUrl}/cand/examInfo/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `passcode=${passcode}&_csrf=${token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -146,6 +149,7 @@ class ExamComp extends Component {
       const formBody = new URLSearchParams(formData).toString();
       const promise = await fetch(`${apiUrl}/cand/storeLibSel/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -182,7 +186,6 @@ class ExamComp extends Component {
       libSel,
     } = this.response;
     const email = this.state.userInfo.email;
-    //
     const myKey = email + '-' + passcode;
     if (Entry === 1) {
       localStorage.clear();
@@ -214,9 +217,9 @@ class ExamComp extends Component {
     }
     // Decode Complete
     const testInfo = JSON.parse(window.atob(setPortalInit));
+    const { secInfo } = testInfo;
     // Take Care of Indexing - We Receive Question Number and work on index
-    let crntQIndex = 0,
-      sec = testInfo.secInfo;
+    let crntQIndex = 0;
     if (crntSec < 0) {
       this.setState({ reqErr: 'Already Appeared' });
       return false;
@@ -224,18 +227,18 @@ class ExamComp extends Component {
     let qBank = cjoinQbank(this.response, dictIndex);
     let libQIndex = [];
     if (libSel) libQIndex = JSON.parse(libSel);
-    //
     if (testInfo.isPool && !libQIndex.length) {
       // Select Questions in Case of Library Based Exam - Logic on Question Number - not index
-      sec.forEach((eachSec, i) => {
+      secInfo.forEach((eachSec, i) => {
         if (eachSec[1] < eachSec[2]) {
           // Prepare qNumber Array
-          let from = i === 0 ? 1 : sec[i - 1][2] + 1;
+          let from = i === 0 ? 1 : secInfo[i - 1][2] + 1;
           const to = eachSec[2];
           let arr = [];
           for (; from <= to; from++) arr.push(from);
           // Select Randomly
-          const toSelect = i === 0 ? eachSec[1] : eachSec[1] - sec[i - 1][1];
+          const toSelect =
+            i === 0 ? eachSec[1] : eachSec[1] - secInfo[i - 1][1];
           arr = arr.sort(function () {
             return Math.round(Math.random()) - 0.5;
           });
@@ -295,7 +298,7 @@ class ExamComp extends Component {
     let startIndex = 0;
     testInfo.shuffleSec.forEach((opted, key) => {
       if (opted === 1) {
-        const upto = sec[key][1];
+        const upto = secInfo[key][1];
         let toSort = qBank.slice(startIndex, upto);
         toSort = toSort.sort(function () {
           return Math.round(Math.random()) - 0.5;
@@ -376,7 +379,7 @@ class ExamComp extends Component {
       responses = newResponses;
       status = newStatus;
       //
-      if (crntSec > 0) crntQIndex = sec[crntSec - 1][1];
+      if (crntSec > 0) crntQIndex = secInfo[crntSec - 1][1];
       if (status[crntQIndex] === 'nVisQ') {
         status[crntQIndex] = 'nAnsQ';
         nVisQ--;
@@ -399,26 +402,26 @@ class ExamComp extends Component {
       thisIs: testInfo.type === 1 ? 'Test' : 'Event',
       startIn: testBuild0,
       endIn: testBuild1,
-      myKey: myKey,
+      myKey,
       resQuestionnaire: resQuestionnaire,
       reqFScr: testInfo.reqFScr,
       verify: 0,
-      passcode: passcode,
-      crntSec: crntSec,
+      passcode,
+      crntSec,
       crntQIndex: crntQIndex,
       questionBank: qBank,
-      testInfo: testInfo,
-      sec: sec,
-      status: status,
-      responses: responses,
-      tcRes: tcRes,
-      cdLangId: cdLangId,
+      testInfo,
+      secInfo,
+      status,
+      responses,
+      tcRes,
+      cdLangId,
       total: totalQ,
-      nVisQ: nVisQ,
-      revQ: revQ,
-      ansQ: ansQ,
-      ansRevQ: ansRevQ,
-      libQIndex: libQIndex,
+      nVisQ,
+      revQ,
+      ansQ,
+      ansRevQ,
+      libQIndex,
     });
     document.title = testInfo.title + ' - ' + passcode + ' - Shred Test';
   };
@@ -433,6 +436,7 @@ class ExamComp extends Component {
     try {
       const promise = await fetch(`${apiUrl}/cand/submitQnr/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -574,6 +578,7 @@ class ExamComp extends Component {
     try {
       const promise = await fetch(`${apiUrl}/cand/submitTest/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -594,14 +599,14 @@ class ExamComp extends Component {
           const thisIs = this.state.thisIs;
           this.retryEndTest(
             isEnd,
-            `There was an Error Submitting your ${thisIs}<br>Please Contact ${thisIs} Incharge<br>Auto-Retry in ${retrySec}sec`,
+            `There was an Error Submitting your ${thisIs}<br>Please Contact ${thisIs} Incharge<br>Auto-Retry in ${retrySec}secInfo`,
             retrySec
           );
         }
         // else {
         // 	this.retryEndTest(
         // 		isEnd,
-        // 		`Error in Processing Request<br>Auto-Retry in ${retrySec}sec`,
+        // 		`Error in Processing Request<br>Auto-Retry in ${retrySec}secInfo`,
         // 		retrySec
         // 	);
         // }
@@ -611,7 +616,7 @@ class ExamComp extends Component {
       if (isEnd === true)
         this.retryEndTest(
           isEnd,
-          `&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection<br>Auto Retry in ${retrySec}sec`,
+          `&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection<br>Auto Retry in ${retrySec}secInfo`,
           retrySec
         );
       else
@@ -627,7 +632,7 @@ class ExamComp extends Component {
       this.setState({ confirm: false });
       return false;
     }
-    const { crntSec, sec, confirm, testInfo } = this.state;
+    const { crntSec, secInfo, confirm, testInfo } = this.state;
     const gotoNext = async () => {
       let isStored = false;
       isStored = await this.endTest(false);
@@ -636,7 +641,7 @@ class ExamComp extends Component {
       if (isStored) {
         this.setState((prevState) => {
           prevState.nVisQ = prevState.nVisQ - 1;
-          const qIndexN = sec[crntSec][1];
+          const qIndexN = secInfo[crntSec][1];
           prevState.crntQIndex = qIndexN;
           prevState.status[qIndexN] = 'nAnsQ';
           prevState.crntSec = crntSec + 1;
@@ -646,7 +651,7 @@ class ExamComp extends Component {
       }
     };
     // For Ending Test
-    if (crntSec === sec.length - 1) {
+    if (crntSec === secInfo.length - 1) {
       if (confirm === false)
         this.setState({ confirm: 0, confirmCallback: this.nextSec });
       else if (userRes === 1) this.endTest(true);
@@ -658,8 +663,8 @@ class ExamComp extends Component {
   };
   jumpToQ = (index) => {
     if (index < 0) return false;
-    const { crntSec, sec } = this.state;
-    const upto = sec[crntSec][1];
+    const { crntSec, secInfo } = this.state;
+    const upto = secInfo[crntSec][1];
     if (index > upto - 1) {
       this.nextSec();
       return;
@@ -745,6 +750,7 @@ class ExamComp extends Component {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `_csrf=${this.state.userInfo.token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -944,19 +950,19 @@ class ExamComp extends Component {
   };
   //
   processDevCheck = () => {
-    setTimeout(() => {
-      const res = checkDev(this.state.isFullScr);
-      if (res.isOpen || navigator.maxTouchPoints === 1) {
-        const { myKey, loggedIn } = this.state;
-        if (loggedIn) this.storeViolation(myKey, 'devT');
-        window.alert(
-          `Close extra/side window or zoom back to default 100%.\nViolation V|H : ${res.orientation}\nThis is considered a major Violation and your Test/Event might be ended by Proctor.\nThis will be your one and only chance to close the extra/side window and click OK to continue to Test/Event, future violations/extra clicks on OK will FREEZE your TEST / EVENT and a RED Warning will be issued for your Account.`
-        );
-        setTimeout(() => {
-          this.processDevCheck();
-        }, 5000);
-      }
-    }, 1000);
+    // setTimeout(() => {
+    //   const res = checkDev(this.state.isFullScr);
+    //   if (res.isOpen || navigator.maxTouchPoints === 1) {
+    //     const { myKey, loggedIn } = this.state;
+    //     if (loggedIn) this.storeViolation(myKey, "devT");
+    //     window.alert(
+    //       `Close extra/side window or zoom back to default 100%.\nViolation V|H : ${res.orientation}\nThis is considered a major Violation and your Test/Event might be ended by Proctor.\nThis will be your one and only chance to close the extra/side window and click OK to continue to Test/Event, future violations/extra clicks on OK will FREEZE your TEST / EVENT and a RED Warning will be issued for your Account.`
+    //     );
+    //     setTimeout(() => {
+    //       this.processDevCheck();
+    //     }, 5000);
+    //   }
+    // }, 1000);
   };
   focusBackCheckS = () => {
     setTimeout(() => {
@@ -1237,12 +1243,13 @@ class ExamComp extends Component {
             micP = -5;
             callback = () => this.getMediaStream(true, true, false);
           }
-        } else
+        } else {
           notify(
             this.msgHolder,
             'e',
             'Something is wrong with Device Permissions.'
           );
+        }
         if (callback) this.setState({ cameraP: cameraP, micP: micP }, callback);
         else this.setState({ cameraP: cameraP, micP: micP });
       });
@@ -1865,7 +1872,7 @@ class ExamComp extends Component {
     else if (!userInfo) return <h1>Loading</h1>;
     const {
       reqErr,
-      sec,
+      secInfo,
       testInfo,
       confirm,
       myBrowser,
@@ -1909,7 +1916,7 @@ class ExamComp extends Component {
             markActive={this.state.toStartShow}
             userInfo={userInfo}
             data={this.response}
-            sec={sec}
+            secInfo={secInfo}
             testInfo={testInfo}
             setMainCompState={this.setMainCompState}
             fascilateForm={this.fascilateForm}
@@ -2005,8 +2012,7 @@ class ExamComp extends Component {
               recRes={this.recRes}
               nextSec={this.nextSec}
             />
-          ) : null}
-          {question[0] === 'C' ? (
+          ) : question[0] === 'C' ? (
             <CodingComponent
               myKey={myKey}
               crntQIndex={crntQIndex}
@@ -2023,8 +2029,7 @@ class ExamComp extends Component {
               msgHolder={this.msgHolder}
               token={userInfo.token}
             />
-          ) : null}
-          {question[0] === 'H' ? (
+          ) : question[0] === 'H' ? (
             <HTMLComponent
               myKey={myKey}
               crntQIndex={crntQIndex}
@@ -2044,7 +2049,7 @@ class ExamComp extends Component {
             id1={question[0] === 'M' ? 'qNav' : 'qNavCd'}
             id2={question[0] === 'M' ? 'qBtns' : 'qBtnsCd'}
             crntQIndex={crntQIndex}
-            sec={sec}
+            secInfo={secInfo}
             crntSec={crntSec}
             constrained={testInfo.constrained}
             nVisQ={nVisQ}
