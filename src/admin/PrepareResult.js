@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import ShowCodeAdmin from "./showCodeAdmin";
-import HTMLComponent from "./../HTMLComponent";
-import ExcelDownload from "./excelDownload";
-import { notify } from "./../common.js";
+import React, { Component } from 'react';
+import ShowCodeAdmin from './showCodeAdmin';
+import HTMLComponent from './../HTMLComponent';
+import ExcelDownload from './excelDownload';
+import { notify } from './../common.js';
 //
-import { dateTimeFormat } from "./../helpers/dateTimeFormat";
+import { dateTimeFormat } from './../helpers/dateTimeFormat';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -18,11 +18,11 @@ class PrepareResult extends Component {
       // Start calculating Score when true
       calcScore: false,
       //
-      fontS: "16px",
-      theme: "monokai",
+      fontS: '16px',
+      theme: 'monokai',
       //
       crntQIndex: 0,
-      crntQResp: "",
+      crntQResp: '',
       candIndex: 0,
     };
     this.exmnrMarkVal = React.createRef();
@@ -32,13 +32,13 @@ class PrepareResult extends Component {
     event.preventDefault();
     const { msgHolder, token } = this.props;
     const formData = new FormData(event.target);
-    formData.append("_csrf", token);
+    formData.append('_csrf', token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/preResult/getResponseData/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       this.response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
@@ -133,22 +133,22 @@ class PrepareResult extends Component {
         if (this.response.cand[0].result) {
           if (
             window.confirm(
-              "Result has already been Prepared and Uploaded.\nOK - to Recalculate\nCancel to display the Result"
+              'Result has already been Prepared and Uploaded.\nOK - to Recalculate\nCancel to display the Result'
             )
           )
             this.prepareResult();
         } else {
-          notify(msgHolder, "s", "Data Received.<br>Wait till I Process.");
+          notify(msgHolder, 's', 'Data Received.<br>Wait till I Process.');
           this.prepareResult();
         }
       } else if (this.response.error)
-        notify(msgHolder, "e", this.response.error.message);
-      else notify(msgHolder, "e", "");
+        notify(msgHolder, 'e', this.response.error.message);
+      else notify(msgHolder, 'e', '');
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "An Error Occured while Processing your Request<br>Check if Internet Connection Exists"
+        'e',
+        'An Error Occured while Processing your Request<br>Check if Internet Connection Exists'
       );
     }
   };
@@ -166,11 +166,11 @@ class PrepareResult extends Component {
       firstHTMLIndex = -1;
     qBank.forEach((each, index) => {
       // Count M to verify Answer keys equals to no of MCQs
-      if (each[0] === "M") ctrM++;
-      else if (each[0] === "C") {
+      if (each[0] === 'M') ctrM++;
+      else if (each[0] === 'C') {
         if (firstCodeIndex === -1) firstCodeIndex = index;
         ctrC++;
-      } else if (each[0] === "H") {
+      } else if (each[0] === 'H') {
         if (firstHTMLIndex === -1) firstHTMLIndex = index;
         ctrH++;
       }
@@ -179,7 +179,7 @@ class PrepareResult extends Component {
     if (!prepHTML && !prepCode && ctrC) {
       if (
         window.confirm(
-          "There are some Coding Question(s) would you like to Examine Score for them Now.\nOK - for Yes\nCancel - for No"
+          'There are some Coding Question(s) would you like to Examine Score for them Now.\nOK - for Yes\nCancel - for No'
         )
       ) {
         this.nextCandidate(0, firstCodeIndex, {
@@ -194,7 +194,7 @@ class PrepareResult extends Component {
     if (!prepHTML && ctrH) {
       if (
         window.confirm(
-          "There are some Question(s) of WebProg Type would you like to Mark Score for them Now.\nOK - for Yes\nCancel - for No"
+          'There are some Question(s) of WebProg Type would you like to Mark Score for them Now.\nOK - for Yes\nCancel - for No'
         )
       ) {
         this.nextCandidate(0, firstHTMLIndex, {
@@ -211,8 +211,8 @@ class PrepareResult extends Component {
     const crctOptArr = JSON.parse(this.response.testData.crctOpt);
     if (ctrM && ctrM !== crctOptArr.length) {
       if (crctOptArr.length === 0)
-        notify(msgHolder, "e", "Please upload Answer Keys for MCQs.");
-      else notify(msgHolder, "e", "Answer Keys are missing for some MCQs.");
+        notify(msgHolder, 'e', 'Please upload Answer Keys for MCQs.');
+      else notify(msgHolder, 'e', 'Answer Keys are missing for some MCQs.');
       return false;
     }
     // Calculate Score one by one for each Candidate
@@ -232,10 +232,10 @@ class PrepareResult extends Component {
         candLibSelAll[candIndex].forEach((each, i) => {
           const qType = qBank[each - 1][0];
 
-          if (qType === "M") {
+          if (qType === 'M') {
             if (candResp[i] === crctOptArr[each - 1])
               scoreDetAll[candIndex][i] = qBank[each - 1][4];
-          } else if (qType === "C") {
+          } else if (qType === 'C') {
             // Calculate Score for Coding
             scoreCoding = 0;
             tcResAll[candIndex][each - 1].forEach((tcScr) => {
@@ -248,11 +248,11 @@ class PrepareResult extends Component {
         incIndex = 0;
         candResp.forEach((each, qNo) => {
           // Calculate MCQ Score
-          if (qBank[qNo][0] === "M") {
+          if (qBank[qNo][0] === 'M') {
             if (each === crctOptArr[incIndex])
               scoreDetAll[candIndex][qNo] = qBank[qNo][4];
             incIndex++;
-          } else if (qBank[qNo][0] === "C") {
+          } else if (qBank[qNo][0] === 'C') {
             // Calculate Score for Coding
             scoreCoding = 0;
             tcResAll[candIndex][qNo].forEach((tcScr) => {
@@ -302,8 +302,8 @@ class PrepareResult extends Component {
     });
     notify(
       msgHolder,
-      "s",
-      "<h3>Result was Prepared Successfully</h3>Please Upload and then Download it for your refrence."
+      's',
+      '<h3>Result was Prepared Successfully</h3>Please Upload and then Download it for your refrence.'
     );
   };
   uploadResult = async () => {
@@ -319,63 +319,63 @@ class PrepareResult extends Component {
     } = this.state;
     const { msgHolder, token } = this.props;
     let formData = new FormData();
-    formData.append("passcode", passcode);
-    formData.append("mailList", JSON.stringify(mailList));
-    formData.append("scrDet", JSON.stringify(scoreDetAll));
-    formData.append("total", JSON.stringify(totalAll));
-    formData.append("negMark", JSON.stringify(negMark));
-    formData.append("eMarks", JSON.stringify(exmnrMark));
-    formData.append("eCmnts", JSON.stringify(exmnrCmnt));
-    formData.append("finalScore", JSON.stringify(finalScore));
-    formData.append("_csrf", token);
+    formData.append('passcode', passcode);
+    formData.append('mailList', JSON.stringify(mailList));
+    formData.append('scrDet', JSON.stringify(scoreDetAll));
+    formData.append('total', JSON.stringify(totalAll));
+    formData.append('negMark', JSON.stringify(negMark));
+    formData.append('eMarks', JSON.stringify(exmnrMark));
+    formData.append('eCmnts', JSON.stringify(exmnrCmnt));
+    formData.append('finalScore', JSON.stringify(finalScore));
+    formData.append('_csrf', token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/preResult/uploadResult/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true)
-        notify(msgHolder, "s", response.msg);
-      else if (response.error) notify(msgHolder, "e", response.error.message);
-      else notify(msgHolder, "e", "");
+        notify(msgHolder, 's', response.msg);
+      else if (response.error) notify(msgHolder, 'e', response.error.message);
+      else notify(msgHolder, 'e', '');
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "An Error Occured while Processing your Request<br>Check if Internet Connection Exists"
+        'e',
+        'An Error Occured while Processing your Request<br>Check if Internet Connection Exists'
       );
     }
   };
   getResultString = async (mailList) => {
     const { msgHolder, token } = this.props;
     const formData = new FormData();
-    formData.append("mailList", JSON.stringify(mailList));
-    formData.append("_csrf", token);
+    formData.append('mailList', JSON.stringify(mailList));
+    formData.append('_csrf', token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/preResult/getResultStr/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
-        notify(msgHolder, "s", response.msg);
+        notify(msgHolder, 's', response.msg);
         return response.data;
       } else if (response.error) {
-        notify(msgHolder, "e", response.error.message);
+        notify(msgHolder, 'e', response.error.message);
         return false;
       } else {
-        notify(msgHolder, "e", "");
+        notify(msgHolder, 'e', '');
         return false;
       }
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "An Error Occured while Processing your Request<br>Check if Internet Connection Exists"
+        'e',
+        'An Error Occured while Processing your Request<br>Check if Internet Connection Exists'
       );
       return false;
     }
@@ -393,7 +393,7 @@ class PrepareResult extends Component {
     const dateObj = new Date();
     const forMonth =
       (dateObj.getMonth() + 1).toString().slice(-2) +
-      "_" +
+      '_' +
       dateObj.getFullYear().toString().slice(-2);
     resStrColl.forEach((each, index) => {
       if (!each[forMonth]) each[forMonth] = {};
@@ -417,8 +417,8 @@ class PrepareResult extends Component {
     if (!mailList.length) {
       notify(
         msgHolder,
-        "e",
-        "No candidate found with valid response.<br>Result is shown to candidates with atleast 1 response submitted."
+        'e',
+        'No candidate found with valid response.<br>Result is shown to candidates with atleast 1 response submitted.'
       );
       return false;
     }
@@ -434,26 +434,26 @@ class PrepareResult extends Component {
       resultStr
     );
     let formData = new FormData();
-    formData.append("mailList", JSON.stringify(mailList));
-    formData.append("showResData", JSON.stringify(showResData));
-    formData.append("_csrf", token);
+    formData.append('mailList', JSON.stringify(mailList));
+    formData.append('showResData', JSON.stringify(showResData));
+    formData.append('_csrf', token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/preResult/iniShowResult/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true)
-        notify(msgHolder, "s", response.msg);
-      else if (response.error) notify(msgHolder, "e", response.error.message);
-      else notify(msgHolder, "e", "");
+        notify(msgHolder, 's', response.msg);
+      else if (response.error) notify(msgHolder, 'e', response.error.message);
+      else notify(msgHolder, 'e', '');
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "An Error Occured while Processing your Request<br>Check if Internet Connection Exists"
+        'e',
+        'An Error Occured while Processing your Request<br>Check if Internet Connection Exists'
       );
     }
   };
@@ -471,16 +471,16 @@ class PrepareResult extends Component {
       ) {
         // Type 1 for HTML , 2 for Coding
         if (what === 1) {
-          if (type === 1 && each[0] === "H") {
+          if (type === 1 && each[0] === 'H') {
             nextQIndex = qIndex;
             break;
-          } else if (type === 2 && each[0] === "C") {
+          } else if (type === 2 && each[0] === 'C') {
             nextQIndex = qIndex;
             break;
           }
         } else {
-          if (type === 1 && each[0] === "H") prevQIndex = qIndex;
-          else if (type === 2 && each[0] === "C") prevQIndex = qIndex;
+          if (type === 1 && each[0] === 'H') prevQIndex = qIndex;
+          else if (type === 2 && each[0] === 'C') prevQIndex = qIndex;
         }
       }
     }
@@ -491,13 +491,13 @@ class PrepareResult extends Component {
     else if (what === 1) {
       notify(
         msgHolder,
-        "s",
+        's',
         `<h3>No more ${
-          type === 1 ? "Web-Prog" : "Coding"
+          type === 1 ? 'Web-Prog' : 'Coding'
         } Questions Left.</h3>Result is being Prepared Now.`
       );
       this.prepareResult();
-    } else notify(msgHolder, "e", "<h3>No Previous Question Found.</h3>");
+    } else notify(msgHolder, 'e', '<h3>No Previous Question Found.</h3>');
   };
   nextCandidate = (
     candIndex,
@@ -541,8 +541,8 @@ class PrepareResult extends Component {
       if (candIndex === resp.length)
         notify(
           msgHolder,
-          "e",
-          "No more candidate(s) with response to this Question.<br>Please move to next Question."
+          'e',
+          'No more candidate(s) with response to this Question.<br>Please move to next Question.'
         );
       // Merge Received stateObj
       prevState = { ...prevState, ...stateObj };
@@ -552,11 +552,11 @@ class PrepareResult extends Component {
   examinerUpdate = (candIndex, crntQIndex, score, cmnt) => {
     const { msgHolder } = this.props;
     const { exmnrMark, exmnrCmnt } = this.state;
-    if (!score) score = "0";
+    if (!score) score = '0';
     exmnrMark[candIndex][crntQIndex + 1] = parseInt(score);
     if (cmnt) exmnrCmnt[candIndex][crntQIndex + 1] = cmnt;
     this.nextCandidate(candIndex + 1, crntQIndex, { exmnrMark, exmnrCmnt });
-    notify(msgHolder, "s", "Score Updated.");
+    notify(msgHolder, 's', 'Score Updated.');
   };
   //
   chngFontS = (size) => {
@@ -580,7 +580,7 @@ class PrepareResult extends Component {
   generateRanking = () => {
     const { finalScore } = this.state;
     if (!finalScore.length) {
-      notify(this.props.msgHolder, "e", "No Score-card to generate Ranking.");
+      notify(this.props.msgHolder, 'e', 'No Score-card to generate Ranking.');
       return false;
     }
     // score per millisecond
@@ -657,28 +657,28 @@ class PrepareResult extends Component {
     });
     //
     let formData = new FormData();
-    formData.append("passcode", passcode);
-    formData.append("spms", JSON.stringify(spms));
-    formData.append("fsRank", JSON.stringify(newFsrRank));
-    formData.append("_csrf", token);
+    formData.append('passcode', passcode);
+    formData.append('spms', JSON.stringify(spms));
+    formData.append('fsRank', JSON.stringify(newFsrRank));
+    formData.append('_csrf', token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/preResult/uploadRanking/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
-        notify(msgHolder, "s", response.msg);
+        notify(msgHolder, 's', response.msg);
       } else if (this.response.error)
-        notify(msgHolder, "e", this.response.error.message);
-      else notify(msgHolder, "e", "");
+        notify(msgHolder, 'e', this.response.error.message);
+      else notify(msgHolder, 'e', '');
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "An Error Occured while Processing your Request<br>Check if Internet Connection Exists"
+        'e',
+        'An Error Occured while Processing your Request<br>Check if Internet Connection Exists'
       );
     }
   };
@@ -706,7 +706,7 @@ class PrepareResult extends Component {
           <button
             className="btnPrimary"
             type="submit"
-            style={{ marginTop: "1vh" }}
+            style={{ marginTop: '1vh' }}
           >
             Initiate
           </button>
@@ -740,9 +740,9 @@ class PrepareResult extends Component {
               Prepare Result
             </button>
             <p>
-              Candidate {candIndex + 1} of {candResAll.length}{" "}
-              &nbsp;&nbsp;&nbsp;&nbsp;Email-:{" "}
-              {this.response.cand[candIndex].email}{" "}
+              Candidate {candIndex + 1} of {candResAll.length}{' '}
+              &nbsp;&nbsp;&nbsp;&nbsp;Email-:{' '}
+              {this.response.cand[candIndex].email}{' '}
             </p>
             <div>
               <button
@@ -753,7 +753,7 @@ class PrepareResult extends Component {
                   else this.examinerQNav(2, 2);
                 }}
               >
-                {prepHTML ? "Prev WebProg Q." : "Prev Coding Q."}
+                {prepHTML ? 'Prev WebProg Q.' : 'Prev Coding Q.'}
               </button>
               <button
                 className="btnPrimary"
@@ -763,7 +763,7 @@ class PrepareResult extends Component {
                   else this.examinerQNav(1, 2);
                 }}
               >
-                {prepHTML ? "Next WebProg Q." : "Next Coding Q."}
+                {prepHTML ? 'Next WebProg Q.' : 'Next Coding Q.'}
               </button>
             </div>
           </div>

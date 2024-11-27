@@ -1,13 +1,8 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 class ResNavigator extends Component {
   render() {
-    const {
-      sec,
-      crntQIndex,
-      jumpToQ,
-      setMainCompState,
-      isScoreCard,
-    } = this.props;
+    const { sec, crntQIndex, jumpToQ, setMainCompState, isScoreCard } =
+      this.props;
     let i,
       tempArr = [];
     return (
@@ -15,7 +10,7 @@ class ResNavigator extends Component {
         <button
           className="transpBtn"
           onClick={() => setMainCompState({ action: 0 })}
-          style={isScoreCard ? { marginTop: "2vh" } : null}
+          style={isScoreCard ? { marginTop: '2vh' } : null}
         >
           Go back
         </button>
@@ -27,7 +22,7 @@ class ResNavigator extends Component {
             else setMainCompState({ action: 2 });
           }}
         >
-          {isScoreCard ? "Show my Responses" : "Show Scorecard"}
+          {isScoreCard ? 'Show my Responses' : 'Show Scorecard'}
         </button>
         {!isScoreCard
           ? sec.map((eachSec, secIndex) => {
@@ -47,7 +42,7 @@ class ResNavigator extends Component {
                         <button
                           key={each}
                           className={
-                            crntQIndex === each - 1 ? "nVisQ crntQ" : "nVisQ"
+                            crntQIndex === each - 1 ? 'nVisQ crntQ' : 'nVisQ'
                           }
                           type="button"
                           onClick={() => {

@@ -1,39 +1,39 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // CSS
-import "./navbar.css";
-import "./reqExamCd.css";
-import "./testInfo.css";
-import "./reqResponse.css";
-import "./form.css";
-import "./allBtns.css";
-import "./topBar.css";
-import "./examPage.css";
-import "./mcq.css";
-import "./exmPgCmn.css";
-import "./exmPgC.css";
-import "./exmPgH.css";
-import "./htmlEditor.css";
-import "./notify.css";
+import './navbar.css';
+import './reqExamCd.css';
+import './testInfo.css';
+import './reqResponse.css';
+import './form.css';
+import './allBtns.css';
+import './topBar.css';
+import './examPage.css';
+import './mcq.css';
+import './exmPgCmn.css';
+import './exmPgC.css';
+import './exmPgH.css';
+import './htmlEditor.css';
+import './notify.css';
 //
-import { checkDev } from "./detectDev";
+import { checkDev } from './detectDev';
 //
-import { storeError, notify, cjoinQbank } from "./common.js";
+import { storeError, notify, cjoinQbank } from './common.js';
 //
-import Peer from "peerjs";
-import { io } from "socket.io-client";
+import Peer from 'peerjs';
+import { io } from 'socket.io-client';
 // JS
-import LoginComp from "./login/loginComp";
-import ReqExamCode from "./reqExamCd";
-import ToStart from "./toStart";
-import Facilitate from "./facilitate";
-import ReqResponse from "./reqResponse.js";
-import Navigator from "./navigator";
-import McqComponent from "./McqComponent";
-import HTMLComponent from "./HTMLComponent";
-import CodingComponent from "./CodingComponent";
+import LoginComp from './login/loginComp';
+import ReqExamCode from './reqExamCd';
+import ToStart from './toStart';
+import Facilitate from './facilitate';
+import ReqResponse from './reqResponse.js';
+import Navigator from './navigator';
+import McqComponent from './McqComponent';
+import HTMLComponent from './HTMLComponent';
+import CodingComponent from './CodingComponent';
 //
-import ChatComp from "./ChatComponent";
-import FeedbackForm from "./feedback";
+import ChatComp from './ChatComponent';
+import FeedbackForm from './feedback';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -49,7 +49,7 @@ class ExamComp extends Component {
       tcRes: {},
       cdLangId: {},
       err: false,
-      reqErr: "",
+      reqErr: '',
       reqFScr: false,
       toStartShow: false,
       resQuestionnaire: false,
@@ -69,12 +69,12 @@ class ExamComp extends Component {
       chat: false,
     };
     //
-    const store1 = localStorage.getItem("fontSize");
+    const store1 = localStorage.getItem('fontSize');
     if (store1) stateObj.fontS = parseInt(store1);
     else stateObj.fontS = 14;
-    const store2 = localStorage.getItem("theme");
+    const store2 = localStorage.getItem('theme');
     if (store2) stateObj.theme = store2;
-    else stateObj.theme = "chrome";
+    else stateObj.theme = 'chrome';
     //
     this.state = stateObj;
     //
@@ -100,7 +100,7 @@ class ExamComp extends Component {
       );
     //
     this.lateStart = 0;
-    this.lateStartInterval = "";
+    this.lateStartInterval = '';
   }
   setMainCompState = (obj) => {
     this.setState(obj);
@@ -110,9 +110,9 @@ class ExamComp extends Component {
     const passcode = code.toUpperCase();
     try {
       const promise = await fetch(`${apiUrl}/cand/examInfo/`, {
-        method: "POST",
+        method: 'POST',
         body: `passcode=${passcode}&_csrf=${token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       this.response = await promise.json();
       if (promise.status === 200 && promise.ok === true) this.handleFetch();
@@ -120,19 +120,19 @@ class ExamComp extends Component {
         this.setState({ reqErr: this.response.error.message });
       else {
         this.setState({
-          reqErr: "Something went wrong: Unable to Process your Request",
+          reqErr: 'Something went wrong: Unable to Process your Request',
         });
-        notify(this.msgHolder, "e", "", 10000);
+        notify(this.msgHolder, 'e', '', 10000);
       }
     } catch (error) {
       this.submitErr(error);
       notify(
         this.msgHolder,
-        "e",
-        "&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection"
+        'e',
+        '&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection'
       );
       this.setState({
-        reqErr: "Something went wrong: Unable to Process your Request",
+        reqErr: 'Something went wrong: Unable to Process your Request',
       });
     }
   };
@@ -140,28 +140,28 @@ class ExamComp extends Component {
     const { token } = this.state.userInfo;
     try {
       const formData = new FormData();
-      formData.append("passcode", passcode);
-      formData.append("libSel", librarySel);
-      formData.append("_csrf", token);
+      formData.append('passcode', passcode);
+      formData.append('libSel', librarySel);
+      formData.append('_csrf', token);
       const formBody = new URLSearchParams(formData).toString();
       const promise = await fetch(`${apiUrl}/cand/storeLibSel/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
-      let msg = "";
+      let msg = '';
       if (promise.status === 200 && promise.ok === true) return true;
-      else if (response.error) msg = response.error.message + "<br>";
+      else if (response.error) msg = response.error.message + '<br>';
       msg +=
         "Something went wrong.<br>Please don't continue to this Test/Event till this error message appears.<br>Check for the following<ol><li>Internet Connection/Speed</li><li>Clear your Browser cache/history/data</li><br>then refresh current TAB to retry.";
-      notify(this.msgHolder, "e", msg, 60000);
+      notify(this.msgHolder, 'e', msg, 60000);
     } catch (error) {
       this.submitErr(error);
       notify(
         this.msgHolder,
-        "e",
-        "&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection"
+        'e',
+        '&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection'
       );
     }
   };
@@ -183,7 +183,7 @@ class ExamComp extends Component {
     } = this.response;
     const email = this.state.userInfo.email;
     //
-    const myKey = email + "-" + passcode;
+    const myKey = email + '-' + passcode;
     if (Entry === 1) {
       localStorage.clear();
       localStorage.setItem(`${myKey}-dmy75264`, 5865);
@@ -193,7 +193,7 @@ class ExamComp extends Component {
       localStorage.setItem(`${myKey}-mpv`, 0);
       localStorage.setItem(`${myKey}-spv`, 0);
       localStorage.setItem(`${myKey}-devT`, 0);
-      localStorage.setItem(`${myKey}-offline`, "");
+      localStorage.setItem(`${myKey}-offline`, '');
     }
     // Decode Recived Data
     let Status = null,
@@ -218,7 +218,7 @@ class ExamComp extends Component {
     let crntQIndex = 0,
       sec = testInfo.secInfo;
     if (crntSec < 0) {
-      this.setState({ reqErr: "Already Appeared" });
+      this.setState({ reqErr: 'Already Appeared' });
       return false;
     }
     let qBank = cjoinQbank(this.response, dictIndex);
@@ -276,7 +276,7 @@ class ExamComp extends Component {
       // langId of code language used
       cdLangId = {};
     qBank.forEach((each) => {
-      if (each[0] === "C") {
+      if (each[0] === 'C') {
         if (!tcResponse) {
           tcRes = { ...tcRes, [each.qIndex]: new Array(each[8]).fill(null) };
           cdLangId = {
@@ -312,7 +312,7 @@ class ExamComp extends Component {
     });
     // Convert Options into Object and Shuffle Options if TRUE for Each MCQ Bank
     qBank.forEach((eachQ) => {
-      if (eachQ[0] === "M") {
+      if (eachQ[0] === 'M') {
         let optArr = eachQ[3];
         // Convert to Array with each Option as Object with index as key and option as value
         let i = 0;
@@ -352,22 +352,22 @@ class ExamComp extends Component {
         });
       status = newStatus;
       newStatus = [];
-      let statusStr = "";
+      let statusStr = '';
       // reconstruct status array with string code and Count n-VisQ, ansQ, ansRevQ, revQ
       status.forEach((each) => {
         if (each === 0) {
-          statusStr = "nVisQ";
+          statusStr = 'nVisQ';
           nVisQ++;
         } else if (each === 1) {
-          statusStr = "nAnsQ";
-        } else if (each === "revQ") {
+          statusStr = 'nAnsQ';
+        } else if (each === 'revQ') {
           statusStr = 2;
           revQ++;
         } else if (each === 3) {
-          statusStr = "ansRevQ";
+          statusStr = 'ansRevQ';
           ansRevQ++;
         } else if (each === 4) {
-          statusStr = "ansQ";
+          statusStr = 'ansQ';
           ansQ++;
         }
         newStatus.push(statusStr);
@@ -377,13 +377,13 @@ class ExamComp extends Component {
       status = newStatus;
       //
       if (crntSec > 0) crntQIndex = sec[crntSec - 1][1];
-      if (status[crntQIndex] === "nVisQ") {
-        status[crntQIndex] = "nAnsQ";
+      if (status[crntQIndex] === 'nVisQ') {
+        status[crntQIndex] = 'nAnsQ';
         nVisQ--;
       }
     } else {
-      status = new Array(totalQ).fill("nVisQ");
-      status[0] = "nAnsQ";
+      status = new Array(totalQ).fill('nVisQ');
+      status[0] = 'nAnsQ';
       responses = new Array(totalQ).fill(null);
       nVisQ = totalQ - 1;
       revQ = 0;
@@ -392,11 +392,11 @@ class ExamComp extends Component {
     }
     //
     if (testInfo.reqFScr)
-      document.addEventListener("fullscreenchange", this.fullScreenChngHandler);
+      document.addEventListener('fullscreenchange', this.fullScreenChngHandler);
     let resQuestionnaire = false;
     if (testInfo.ques && questionnaire) resQuestionnaire = questionnaire;
     this.setState({
-      thisIs: testInfo.type === 1 ? "Test" : "Event",
+      thisIs: testInfo.type === 1 ? 'Test' : 'Event',
       startIn: testBuild0,
       endIn: testBuild1,
       myKey: myKey,
@@ -420,35 +420,35 @@ class ExamComp extends Component {
       ansRevQ: ansRevQ,
       libQIndex: libQIndex,
     });
-    document.title = testInfo.title + " - " + passcode + " - Shred Test";
+    document.title = testInfo.title + ' - ' + passcode + ' - Shred Test';
   };
   //
   submitQuestionnaire = async (data) => {
     const { passcode, userInfo } = this.state;
     const formData = new FormData();
-    formData.append("passcode", passcode);
-    formData.append("response", data);
-    formData.append("_csrf", userInfo.token);
+    formData.append('passcode', passcode);
+    formData.append('response', data);
+    formData.append('_csrf', userInfo.token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/cand/submitQnr/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const resData = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         this.setState({ resQuestionnaire: data });
-        notify(this.msgHolder, "s", resData.notify);
+        notify(this.msgHolder, 's', resData.notify);
       } else if (resData.error)
-        notify(this.msgHolder, "e", resData.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', resData.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       this.submitErr(error);
       notify(
         this.msgHolder,
-        "e",
-        "&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection"
+        'e',
+        '&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection'
       );
     }
   };
@@ -473,11 +473,11 @@ class ExamComp extends Component {
     status = newStatus;
     newStatus = [];
     status.forEach((each) => {
-      if (each === "nVisQ") statusCode = 0;
-      else if (each === "nAnsQ") statusCode = 1;
-      else if (each === "revQ") statusCode = 2;
-      else if (each === "ansRevQ") statusCode = 3;
-      else if (each === "ansQ") statusCode = 4;
+      if (each === 'nVisQ') statusCode = 0;
+      else if (each === 'nAnsQ') statusCode = 1;
+      else if (each === 'revQ') statusCode = 2;
+      else if (each === 'ansRevQ') statusCode = 3;
+      else if (each === 'ansQ') statusCode = 4;
       newStatus.push(statusCode);
     });
     const returnData = [newResponses, newStatus];
@@ -485,7 +485,7 @@ class ExamComp extends Component {
   };
   retryEndTest = (isEnd, msg, retrySec) => {
     if ((isEnd && this.retry < 5) || this.retry < 3) {
-      notify(this.msgHolder, "e", msg, retrySec * 1000);
+      notify(this.msgHolder, 'e', msg, retrySec * 1000);
       setTimeout(() => {
         this.retry++;
         this.endTest(isEnd);
@@ -494,10 +494,10 @@ class ExamComp extends Component {
       this.retry = 0;
       notify(
         this.msgHolder,
-        "e",
-        "Unable to Process Your Request<br>Try manually after few Seconds"
+        'e',
+        'Unable to Process Your Request<br>Try manually after few Seconds'
       );
-      this.setState({ confirm: "overErr" });
+      this.setState({ confirm: 'overErr' });
     }
   };
   notifiedEndTest = (userResp) => {
@@ -520,19 +520,19 @@ class ExamComp extends Component {
     } = this.state;
     const data = this.prepareRespAndStatus(responses, status);
     if (isEnd === true)
-      if (confirm !== "over") this.setState({ confirm: "over" });
-      else if (confirm !== "cover") this.setState({ confirm: "cover" });
+      if (confirm !== 'over') this.setState({ confirm: 'over' });
+      else if (confirm !== 'cover') this.setState({ confirm: 'cover' });
     let formData = new FormData();
-    formData.append("passcode", passcode);
+    formData.append('passcode', passcode);
     formData.append(
-      "crntSec",
+      'crntSec',
       isEnd === true ? -1 : isEnd === false ? crntSec + 1 : crntSec
     );
-    formData.append("response", JSON.stringify(data[0]));
-    formData.append("status", JSON.stringify(data[1]));
-    formData.append("tcResponse", JSON.stringify(tcRes));
-    formData.append("cdLangId", JSON.stringify(cdLangId));
-    formData.append("_csrf", userInfo.token);
+    formData.append('response', JSON.stringify(data[0]));
+    formData.append('status', JSON.stringify(data[1]));
+    formData.append('tcResponse', JSON.stringify(tcRes));
+    formData.append('cdLangId', JSON.stringify(cdLangId));
+    formData.append('_csrf', userInfo.token);
     if (isEnd) {
       const vData = {};
       let rsz = parseInt(localStorage.getItem(`${myKey}-rsz`));
@@ -560,34 +560,34 @@ class ExamComp extends Component {
       vData.devT = devT;
       //
       let offline = localStorage.getItem(`${myKey}-offline`);
-      if (offline === null) offline = "CIMID";
+      if (offline === null) offline = 'CIMID';
       vData.offline = offline;
       //
-      formData.append("vData", window.btoa(JSON.stringify(vData)));
+      formData.append('vData', window.btoa(JSON.stringify(vData)));
       //
       const str = `${window.innerWidth}x${window.innerHeight}_${window.screen.width}x${window.screen.height}_${window.outerWidth}x${window.outerHeight}`;
-      formData.append("sSize", str);
+      formData.append('sSize', str);
     }
     const retrySec = Math.floor(Math.random() * 30) + 10;
     //
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/cand/submitTest/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const resData = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         if (isEnd === true) {
-          notify(this.msgHolder, "s", "<h2>Submission Success</h2>");
+          notify(this.msgHolder, 's', '<h2>Submission Success</h2>');
           this.setState({ verify: 9 });
         } else {
           this.setState({ confirm: false });
           return 1;
         }
       } else if (resData.error) {
-        notify(this.msgHolder, "e", resData.error.message, 60000);
+        notify(this.msgHolder, 'e', resData.error.message, 60000);
         this.setState({ confirm: false });
       } else {
         if (isEnd === true) {
@@ -617,8 +617,8 @@ class ExamComp extends Component {
       else
         notify(
           this.msgHolder,
-          "e",
-          "&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection"
+          'e',
+          '&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection'
         );
     }
   };
@@ -638,7 +638,7 @@ class ExamComp extends Component {
           prevState.nVisQ = prevState.nVisQ - 1;
           const qIndexN = sec[crntSec][1];
           prevState.crntQIndex = qIndexN;
-          prevState.status[qIndexN] = "nAnsQ";
+          prevState.status[qIndexN] = 'nAnsQ';
           prevState.crntSec = crntSec + 1;
           prevState.confirm = false;
           return prevState;
@@ -667,8 +667,8 @@ class ExamComp extends Component {
     this.setState((prevState) => {
       const statusArr = prevState.status;
       let nvQ = prevState.nVisQ;
-      if (statusArr[index] === "nVisQ") {
-        statusArr[index] = "nAnsQ";
+      if (statusArr[index] === 'nVisQ') {
+        statusArr[index] = 'nAnsQ';
         nvQ--;
       }
       return { crntQIndex: index, status: statusArr, nVisQ: nvQ };
@@ -679,40 +679,40 @@ class ExamComp extends Component {
       let { crntQIndex, status, nVisQ, nAnsQ, ansQ, ansRevQ, revQ } = prevState;
       //
       const crntStatus = status[crntQIndex];
-      if (recStatus === "ansQ") {
+      if (recStatus === 'ansQ') {
         // In case of Coding and HTML Submit Code at that time
 
         // In case of First Answer
-        if (crntStatus !== "ansQ") ansQ++;
+        if (crntStatus !== 'ansQ') ansQ++;
         //
-        if (crntStatus === "nAnsQ") nAnsQ--;
-        else if (crntStatus === "revQ") revQ--;
-        else if (crntStatus === "ansRevQ") ansRevQ--;
+        if (crntStatus === 'nAnsQ') nAnsQ--;
+        else if (crntStatus === 'revQ') revQ--;
+        else if (crntStatus === 'ansRevQ') ansRevQ--;
         prevState.status[crntQIndex] = recStatus;
-      } else if (recStatus === "nAnsQ") {
+      } else if (recStatus === 'nAnsQ') {
         nAnsQ++;
         // Clear Response
-        if (crntStatus === "ansQ") ansQ--;
-        else if (crntStatus === "ansRevQ") ansRevQ--;
-        else if (crntStatus === "revQ") revQ--;
+        if (crntStatus === 'ansQ') ansQ--;
+        else if (crntStatus === 'ansRevQ') ansRevQ--;
+        else if (crntStatus === 'revQ') revQ--;
         prevState.status[crntQIndex] = recStatus;
-      } else if (recStatus === "revQ") {
-        if (crntStatus === "ansQ") {
+      } else if (recStatus === 'revQ') {
+        if (crntStatus === 'ansQ') {
           ansQ--;
           ansRevQ++;
-          prevState.status[crntQIndex] = "ansRevQ";
-        } else if (crntStatus === "nAnsQ") {
+          prevState.status[crntQIndex] = 'ansRevQ';
+        } else if (crntStatus === 'nAnsQ') {
           revQ++;
           prevState.status[crntQIndex] = recStatus;
-        } else if (crntStatus === "ansRevQ") {
+        } else if (crntStatus === 'ansRevQ') {
           ansRevQ--;
           ansQ++;
-          prevState.status[crntQIndex] = "ansQ";
-        } else if (crntStatus === "revQ") {
+          prevState.status[crntQIndex] = 'ansQ';
+        } else if (crntStatus === 'revQ') {
           revQ--;
-          prevState.status[crntQIndex] = "nAnsQ";
-        } else notify(this.msgHolder, "e", "Invalid Request");
-      } else notify(this.msgHolder, "e", "Invalid Request");
+          prevState.status[crntQIndex] = 'nAnsQ';
+        } else notify(this.msgHolder, 'e', 'Invalid Request');
+      } else notify(this.msgHolder, 'e', 'Invalid Request');
       //
       prevState.responses[crntQIndex] = recRes;
       //
@@ -744,43 +744,43 @@ class ExamComp extends Component {
   reqLogout = async () => {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
-        method: "POST",
+        method: 'POST',
         body: `_csrf=${this.state.userInfo.token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true)
         window.location.reload();
       else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       this.submitErr(error);
       notify(
         this.msgHolder,
-        "e",
-        "&starf; Something went wrong.<br>OR<br>&starf; Unable to connect to Server."
+        'e',
+        '&starf; Something went wrong.<br>OR<br>&starf; Unable to connect to Server.'
       );
     }
   };
   fascilateForm = (input) => {
-    input.addEventListener("focus", (ev) =>
-      ev.target.parentNode.classList.add("focused")
+    input.addEventListener('focus', (ev) =>
+      ev.target.parentNode.classList.add('focused')
     );
-    input.addEventListener("blur", (ev) => {
+    input.addEventListener('blur', (ev) => {
       const val = ev.target.value;
       const parent = ev.target.parentNode;
-      if (val === "") {
-        ev.target.classList.remove("filled");
-        parent.classList.remove("focused");
-      } else parent.classList.add("filled");
+      if (val === '') {
+        ev.target.classList.remove('filled');
+        parent.classList.remove('focused');
+      } else parent.classList.add('filled');
     });
   };
   sendViolation = (data) => {
     const { userInfo, passcode } = this.state;
     data.email = userInfo.email;
     data.code = passcode;
-    data.type = "vio";
+    data.type = 'vio';
     if (this.adminDataConn && this.adminDataConn.open)
       this.adminDataConn.send(data);
   };
@@ -803,7 +803,7 @@ class ExamComp extends Component {
       if (leftVio === 0) {
         notify(
           this.msgHolder,
-          "e",
+          'e',
           `<h3>${thisIs} was ended due to repeated Violations.</h3>`
         );
         // End Test
@@ -811,13 +811,13 @@ class ExamComp extends Component {
       } else if (leftVio < 6) {
         notify(
           this.msgHolder,
-          "e",
+          'e',
           `<h4>your ${thisIs} will auto-end after next</h4><h3>${leftVio} ${
-            key === "fsv"
-              ? "Full-Screen"
-              : key === "rsz"
-              ? "Resize Screen"
-              : "Window-Switch"
+            key === 'fsv'
+              ? 'Full-Screen'
+              : key === 'rsz'
+                ? 'Resize Screen'
+                : 'Window-Switch'
           } Violation(s).</h3>`,
           10000
         );
@@ -830,7 +830,7 @@ class ExamComp extends Component {
     const notSupp = () => {
       notify(
         this.msgHolder,
-        "e",
+        'e',
         `<h4>Couldn't switch to Full Screen Mode.</h4>Try using alternate Browser.If that doesn't work, you can continue this ${this.state.thisIs} in Normal Screen Mode.`,
         10000
       );
@@ -871,7 +871,7 @@ class ExamComp extends Component {
     // Continue with no FullScreen
     if (fsNotSupp)
       document.removeEventListener(
-        "fullscreenchange",
+        'fullscreenchange',
         this.fullScreenChngHandler
       );
     this.setState(
@@ -889,11 +889,11 @@ class ExamComp extends Component {
     const { myKey, verify, fsNotSupp } = this.state;
     if (!fsNotSupp && !document.fullscreenElement) {
       if (verify) {
-        this.storeViolation(myKey, "fsv");
-        notify(this.msgHolder, "e", "Full Screen Violation");
+        this.storeViolation(myKey, 'fsv');
+        notify(this.msgHolder, 'e', 'Full Screen Violation');
       }
       this.setState({
-        confirm: "fscr",
+        confirm: 'fscr',
         confirmCallback: this.openFullscreen,
         isFullScr: false,
       });
@@ -914,11 +914,11 @@ class ExamComp extends Component {
         return false;
       }
       //
-      this.storeViolation(myKey, "rsz");
+      this.storeViolation(myKey, 'rsz');
       //
       if (!this.rszNoti) {
         this.rszNoti = true;
-        notify(this.msgHolder, "e", "Resize Violation");
+        notify(this.msgHolder, 'e', 'Resize Violation');
         setTimeout(() => {
           this.rszNoti = false;
         }, 5000);
@@ -948,7 +948,7 @@ class ExamComp extends Component {
       const res = checkDev(this.state.isFullScr);
       if (res.isOpen || navigator.maxTouchPoints === 1) {
         const { myKey, loggedIn } = this.state;
-        if (loggedIn) this.storeViolation(myKey, "devT");
+        if (loggedIn) this.storeViolation(myKey, 'devT');
         window.alert(
           `Close extra/side window or zoom back to default 100%.\nViolation V|H : ${res.orientation}\nThis is considered a major Violation and your Test/Event might be ended by Proctor.\nThis will be your one and only chance to close the extra/side window and click OK to continue to Test/Event, future violations/extra clicks on OK will FREEZE your TEST / EVENT and a RED Warning will be issued for your Account.`
         );
@@ -962,29 +962,29 @@ class ExamComp extends Component {
     setTimeout(() => {
       const { scrnStream, myKey } = this.state;
       if (scrnStream.active === false) {
-        this.storeViolation(myKey, "spv");
+        this.storeViolation(myKey, 'spv');
         // Recall initiated for Media Stream
         this.recallIniScr = true;
         this.setState({ scrnStream: null }, this.testRequirements);
       }
     }, 1000);
-    window.removeEventListener("focus", this.focusBackCheckS);
+    window.removeEventListener('focus', this.focusBackCheckS);
   };
   focusBackCheckM = () => {
     const processVio = () => {
       notify(
         this.msgHolder,
-        "e",
-        "Media Proctoring In-active Stream detected.Please provide it again."
+        'e',
+        'Media Proctoring In-active Stream detected.Please provide it again.'
       );
       const { myKey } = this.state;
-      this.storeViolation(myKey, "mpv");
+      this.storeViolation(myKey, 'mpv');
       // Recall initiated for Media Stream
       this.recallIniMedia = true;
       this.setState({ candStream: null }, this.testRequirements);
     };
     setTimeout(async () => {
-      const perm = await this.permissionStatus("camera");
+      const perm = await this.permissionStatus('camera');
       if (perm < -2) {
         processVio();
         return false;
@@ -994,7 +994,7 @@ class ExamComp extends Component {
       // In case nothing is returned
       if (!status) processVio();
     }, 1000);
-    window.removeEventListener("focus", this.focusBackCheckM);
+    window.removeEventListener('focus', this.focusBackCheckM);
   };
   //
   lostFocus = () => {
@@ -1013,21 +1013,21 @@ class ExamComp extends Component {
       thisIs,
     } = this.state;
     if (
-      myBrowser !== "C" &&
-      myBrowser !== "O" &&
+      myBrowser !== 'C' &&
+      myBrowser !== 'O' &&
       scrnStream &&
       candStandScrn === 0
     )
-      window.addEventListener("focus", this.focusBackCheckS);
+      window.addEventListener('focus', this.focusBackCheckS);
     //
     if (candStream && candStandCam === 0)
-      window.addEventListener("focus", this.focusBackCheckM);
+      window.addEventListener('focus', this.focusBackCheckM);
     // Check if lost focus was on HTML Based Q - iframe
     if (verify !== 1) return false;
     const question = questionBank[crntQIndex];
-    if (question[0] === "H") {
+    if (question[0] === 'H') {
       const tag = document.activeElement.tagName;
-      if (tag === "IFRAME") return false;
+      if (tag === 'IFRAME') return false;
     }
     // if (this.props.checkFrame) {
     // 	const frameDiv = document.querySelector("#frameDiv iframe");
@@ -1046,18 +1046,18 @@ class ExamComp extends Component {
     // Process Violation if Test has Started
     const msgHolder = this.msgHolder;
     //
-    this.storeViolation(myKey, "wfo");
+    this.storeViolation(myKey, 'wfo');
     //
     if (this.focusVio === true) {
       notify(
         msgHolder,
-        "e",
+        'e',
         `<h3>Repeated Violation</h3>May auto-end ${thisIs}.`
       );
       return false;
     } else {
       this.focusVio = true;
-      notify(msgHolder, "e", "Window-Switch Violation");
+      notify(msgHolder, 'e', 'Window-Switch Violation');
       setTimeout(() => {
         this.focusVio = false;
       }, 5000);
@@ -1093,8 +1093,8 @@ class ExamComp extends Component {
     const notSupp = () => {
       notify(
         this.msgHolder,
-        "e",
-        "Window Proctoring : Not Supported.<br>Fallback detection will be implemented.<br>Please prefer switching to Desktop/PC."
+        'e',
+        'Window Proctoring : Not Supported.<br>Fallback detection will be implemented.<br>Please prefer switching to Desktop/PC.'
       );
       this.setState({ confirm: 4 });
     };
@@ -1106,13 +1106,13 @@ class ExamComp extends Component {
         const lbl = vidTrack.label;
         if (
           testInfo.win === 1 &&
-          ((myBrowser === "M" && lbl.search("Primary Monitor") === -1) ||
-            ((myBrowser === "C" || myBrowser === "O") &&
-              lbl.search("screen") === -1))
+          ((myBrowser === 'M' && lbl.search('Primary Monitor') === -1) ||
+            ((myBrowser === 'C' || myBrowser === 'O') &&
+              lbl.search('screen') === -1))
         ) {
           notify(
             this.msgHolder,
-            "e",
+            'e',
             `Invalid Screen Selection.<br>Please select as required for the ${this.state.thisIs}.<br>Read Instructions before Proceeding.`
           );
           this.setState({
@@ -1121,16 +1121,16 @@ class ExamComp extends Component {
           return false;
         } else if (
           testInfo.win === 2 &&
-          ((myBrowser === "M" &&
-            lbl.search("Shred_Test — Mozilla Firefox") === -1 &&
-            lbl.search("Primary Monitor") === -1) ||
-            ((myBrowser === "C" || myBrowser === "O") &&
-              lbl.search("window") === -1 &&
-              lbl.search("screen") === -1))
+          ((myBrowser === 'M' &&
+            lbl.search('Shred_Test — Mozilla Firefox') === -1 &&
+            lbl.search('Primary Monitor') === -1) ||
+            ((myBrowser === 'C' || myBrowser === 'O') &&
+              lbl.search('window') === -1 &&
+              lbl.search('screen') === -1))
         ) {
           notify(
             this.msgHolder,
-            "e",
+            'e',
             `&starf; Invalid Screen Selection.<br>&starf; Please select as required for the ${this.state.thisIs}.<br>&starf; Read Instructions before Proceeding.`
           );
           this.setState({
@@ -1149,19 +1149,19 @@ class ExamComp extends Component {
             this.recallIniScr = false;
             if (this.recallIniMedia !== true) this.requestPeerReCall();
           }
-          stream.addEventListener("inactive", () => {
+          stream.addEventListener('inactive', () => {
             notify(
               this.msgHolder,
-              "e",
-              "In-active Stream detected.Please provide it again."
+              'e',
+              'In-active Stream detected.Please provide it again.'
             );
-            this.storeViolation(myKey, "spv");
+            this.storeViolation(myKey, 'spv');
             // Recall initiated for Screen Stream
             this.recallIniScr = true;
             this.setState({ scrnStream: null }, this.testRequirements);
           });
-          stream.addEventListener("removetrack", () => {
-            notify(this.msgHolder, "e", "Screen Stream Track Removed");
+          stream.addEventListener('removetrack', () => {
+            notify(this.msgHolder, 'e', 'Screen Stream Track Removed');
           });
           this.setState({
             scrnStream: stream,
@@ -1169,8 +1169,8 @@ class ExamComp extends Component {
         }
       })
       .catch((err) => {
-        if (err.message === "Permission denied")
-          notify(this.msgHolder, "e", "Permission Denied by Candidate.");
+        if (err.message === 'Permission denied')
+          notify(this.msgHolder, 'e', 'Permission Denied by Candidate.');
         else notSupp();
       });
   };
@@ -1185,7 +1185,7 @@ class ExamComp extends Component {
     //
     if (video)
       video = {
-        facingMode: { exact: "user" },
+        facingMode: { exact: 'user' },
         width: resolution.w,
         height: resolution.h,
         frameRate: testInfo.camF,
@@ -1216,20 +1216,20 @@ class ExamComp extends Component {
         const errMsg = err.message;
         let callback = null;
         err = err.toString();
-        if (errMsg === "Could not start video source") {
+        if (errMsg === 'Could not start video source') {
           cameraP = -4;
           if (micP === -1)
             callback = () => this.getMediaStream(true, false, true);
-        } else if (errMsg === "Could not start audio source") {
+        } else if (errMsg === 'Could not start audio source') {
           micP = -4;
           if (cameraP === -1)
             callback = () => this.getMediaStream(true, true, false);
-        } else if (!isCust && errMsg === "Permission denied") {
+        } else if (!isCust && errMsg === 'Permission denied') {
           if (cameraP === -1)
             callback = () => this.getMediaStream(true, true, false);
           else if (micP === -1)
             callback = () => this.getMediaStream(true, false, true);
-        } else if (errMsg === "Permission dismissed") {
+        } else if (errMsg === 'Permission dismissed') {
           if (cameraP === -2) {
             cameraP = -5;
             callback = () => this.getMediaStream(true, false, true);
@@ -1240,8 +1240,8 @@ class ExamComp extends Component {
         } else
           notify(
             this.msgHolder,
-            "e",
-            "Something is wrong with Device Permissions."
+            'e',
+            'Something is wrong with Device Permissions.'
           );
         if (callback) this.setState({ cameraP: cameraP, micP: micP }, callback);
         else this.setState({ cameraP: cameraP, micP: micP });
@@ -1249,20 +1249,20 @@ class ExamComp extends Component {
   };
   permissionStatus = async (device, addLis = false) => {
     let { cameraP, micP, candStream, myBrowser } = this.state;
-    if (myBrowser === "M") {
+    if (myBrowser === 'M') {
       if (!candStream)
         this.setState({ cameraP: -9, micP: -9 }, this.getMediaStream);
       return true;
     }
     let val;
-    if (device === "camera") val = cameraP;
+    if (device === 'camera') val = cameraP;
     else val = micP;
     const result = await navigator.permissions.query({ name: device });
-    if (result.state === "granted") val = -1;
-    else if (result.state === "prompt") val = -2;
-    else if (result.state === "denied") val = -3;
+    if (result.state === 'granted') val = -1;
+    else if (result.state === 'prompt') val = -2;
+    else if (result.state === 'denied') val = -3;
     //
-    if (device === "camera") cameraP = val;
+    if (device === 'camera') cameraP = val;
     else micP = val;
     if (addLis)
       result.onchange = () => {
@@ -1291,21 +1291,21 @@ class ExamComp extends Component {
       this.state;
     let { confirm, candStandCam, candStandScrn } = this.state;
     if (confirm !== false) {
-      if (confirm === "usrM") {
+      if (confirm === 'usrM') {
         if (
           !candStream ||
           (testInfo.cam > 1 && candStream.getVideoTracks().length === 0) ||
           (testInfo.mic > 1 && candStream.getAudioTracks().length === 0)
         ) {
-          let msg = "";
+          let msg = '';
           if (
             testInfo.cam > 1 &&
             (!candStream || candStream.getVideoTracks().length === 0)
           ) {
-            return this.enquireDevice("videoinput").then((status) => {
+            return this.enquireDevice('videoinput').then((status) => {
               if (status) {
                 msg = `&starf; WebCam Detected<br>&starf; Since your Organzation has made it compulsory,<br>you can step ahead only after the ${this.state.thisIs} gains complete access to your web-cam.`;
-                notify(this.msgHolder, "e", msg);
+                notify(this.msgHolder, 'e', msg);
                 return false;
               } else {
                 if (testInfo.cam === 2) {
@@ -1315,7 +1315,7 @@ class ExamComp extends Component {
                   });
                 } else {
                   msg = `&starf; Since your Organzation has made it compulsory,<br>you can step ahead only after the ${this.state.thisIs} gains complete access to your web-cam.`;
-                  notify(this.msgHolder, "e", msg);
+                  notify(this.msgHolder, 'e', msg);
                   return false;
                 }
               }
@@ -1324,10 +1324,10 @@ class ExamComp extends Component {
             testInfo.mic > 1 &&
             (!candStream || candStream.getAudioTracks().length === 0)
           ) {
-            return this.enquireDevice("audioinput").then((status) => {
+            return this.enquireDevice('audioinput').then((status) => {
               if (status) {
                 msg = `&starf; Microphone Detected<br>&starf; Since your Organzation has made it compulsory,<br>you can step ahead only after the ${this.state.thisIs} gains complete access to your microphone.`;
-                notify(this.msgHolder, "e", msg);
+                notify(this.msgHolder, 'e', msg);
                 return false;
               } else {
                 if (testInfo.mic === 2) {
@@ -1337,7 +1337,7 @@ class ExamComp extends Component {
                   });
                 } else {
                   msg = `&starf; Since your Organzation has made it compulsory,<br>you can step ahead only after the ${this.state.thisIs} gains complete access to your microphone.`;
-                  notify(this.msgHolder, "e", msg);
+                  notify(this.msgHolder, 'e', msg);
                   return false;
                 }
               }
@@ -1354,7 +1354,7 @@ class ExamComp extends Component {
             confirm = 3;
           else {
             msg = `&starf; Since your Organization has made media proctoring compulsory,<br>you can step ahead only after the ${this.state.thisIs} gains complete access to required media device(s).`;
-            notify(this.msgHolder, "e", msg);
+            notify(this.msgHolder, 'e', msg);
             return false;
           }
         } else if (!candStream) confirm = 3;
@@ -1363,12 +1363,12 @@ class ExamComp extends Component {
         if (usrResp) {
           candStandCam = 1;
           confirm = false;
-        } else confirm = "usrM";
-      } else if (confirm === "usrS") {
+        } else confirm = 'usrM';
+      } else if (confirm === 'usrS') {
         if (!scrnStream && (testInfo.win === 1 || testInfo.win === 2)) {
           notify(
             this.msgHolder,
-            "e",
+            'e',
             `&starf; Since your Organization has made Screen Proctoring compulsory,<br>you can proceed only after the ${this.state.thisIs} gains your Screen Proctoring.`
           );
           return false;
@@ -1378,15 +1378,15 @@ class ExamComp extends Component {
         if (usrResp) {
           candStandScrn = 1;
           confirm = false;
-        } else confirm = "usrS";
+        } else confirm = 'usrS';
       }
     }
     if (confirm === false) {
       if (candStandCam === 0 && !candStream && (testInfo.cam || testInfo.mic))
-        confirm = "usrM";
+        confirm = 'usrM';
       else if (candStandScrn === 0 && !scrnStream && testInfo.win)
-        confirm = "usrS";
-      else if (reqFScr && !isFullScr && !fsNotSupp) confirm = "fscr";
+        confirm = 'usrS';
+      else if (reqFScr && !isFullScr && !fsNotSupp) confirm = 'fscr';
     }
     this.setState({
       confirm: confirm,
@@ -1421,7 +1421,7 @@ class ExamComp extends Component {
   newAdminAuthorize = (newAdmin) => {
     const accept = () => {
       this.adminDataConn = newAdmin;
-      newAdmin.send({ type: "verifyRes", proctorMe: true });
+      newAdmin.send({ type: 'verifyRes', proctorMe: true });
       // Force Update in case of ChatComponent is Open so that it receives the fresh data connection
       if (this.state.chat) this.forceUpdate();
     };
@@ -1449,17 +1449,17 @@ class ExamComp extends Component {
           }
           rej();
         }, 5000);
-        this.adminDataConn.send({ type: "verifyReq" });
-        this.adminDataConn.once("data", (data) => {
-          if (data.type === "verifyRes") {
-            newAdmin.send({ type: "verifyRes", proctorMe: false });
+        this.adminDataConn.send({ type: 'verifyReq' });
+        this.adminDataConn.once('data', (data) => {
+          if (data.type === 'verifyRes') {
+            newAdmin.send({ type: 'verifyRes', proctorMe: false });
             res();
             if (timeout) clearTimeout(timeout);
           }
         });
       })
         .then(() => {
-          console.log("");
+          console.log('');
         })
         .catch(() => accept());
     } else accept();
@@ -1475,7 +1475,7 @@ class ExamComp extends Component {
       //
       const { userInfo } = this.state;
       const data = {
-        type: "re-call",
+        type: 're-call',
         email: userInfo.email,
         name: userInfo.name,
       };
@@ -1487,60 +1487,60 @@ class ExamComp extends Component {
   initatePeerConn = () => {
     const { testInfo } = this.state;
     const peerHost =
-      testInfo.pser === 0 ? "mypeercleanserve.herokuapp.com" : "mypeerserv.tk";
+      testInfo.pser === 0 ? 'mypeercleanserve.herokuapp.com' : 'mypeerserv.tk';
     this.peerConn = new Peer(undefined, {
       host: peerHost,
       secure: true,
       port: 443,
-      path: "/peerjs/myapp",
+      path: '/peerjs/myapp',
     });
     //
     // setInterval(() => {
     // 	console.log(this.peerConn.connections);
     // }, 5000);
     //
-    this.peerConn.on("open", this.connectToSocket);
-    this.peerConn.on("connection", (conn) => {
+    this.peerConn.on('open', this.connectToSocket);
+    this.peerConn.on('connection', (conn) => {
       // conn.on("open", () => {
       // console.log("Data Receiver Connection Open");
       // });
-      conn.on("data", (data) => {
+      conn.on('data', (data) => {
         // New Addmin Verification Request
-        if (data.type === "verifyReq") this.newAdminAuthorize(conn);
+        if (data.type === 'verifyReq') this.newAdminAuthorize(conn);
         // this.newAdminConn.send({ proctor: true });
-        else if (data.type === "ct") {
+        else if (data.type === 'ct') {
           this.answerStream = data.req;
-          conn.send({ type: "ct", accept: 1 });
+          conn.send({ type: 'ct', accept: 1 });
         } else if (data.closeAll === true) {
           // Close all PeerJS connections : admin Initated a Close
           this.closeAllConn();
         } else if (data.closeMedia === true) this.closeAllConn(true);
-        else if (data.type === "chat") {
-          const old = localStorage.getItem("chat_Admin");
-          let newChat = { nMsg: 1, of: "admin", store: [] };
+        else if (data.type === 'chat') {
+          const old = localStorage.getItem('chat_Admin');
+          let newChat = { nMsg: 1, of: 'admin', store: [] };
           if (old) {
             newChat = JSON.parse(old);
             if (this.state.chat) newChat.nMsg = 0;
             else newChat.nMsg += 1;
           }
           if (!this.state.chat)
-            notify(this.msgHolder, "s", `${newChat.nMsg} new Message(s)`);
+            notify(this.msgHolder, 's', `${newChat.nMsg} new Message(s)`);
           newChat.store.push({ in: data.msg });
-          localStorage.setItem("chat_Admin", JSON.stringify(newChat));
+          localStorage.setItem('chat_Admin', JSON.stringify(newChat));
           this.forceUpdate();
-        } else if (data.type === "setVio") {
+        } else if (data.type === 'setVio') {
           const { myKey } = this.state;
           localStorage.setItem(`${myKey}-${data.setFor}`, data.setVal);
-        } else if (data.type === "chngConstr") {
+        } else if (data.type === 'chngConstr') {
           delete data.type;
           this.changeConstrVid(data);
         }
       });
     });
-    this.peerConn.on("call", (callConn) => {
+    this.peerConn.on('call', (callConn) => {
       this.adminMediaConn.push(callConn);
-      if (this.answerStream === "cam") callConn.answer(this.state.candStream);
-      else if (this.answerStream === "scrn")
+      if (this.answerStream === 'cam') callConn.answer(this.state.candStream);
+      else if (this.answerStream === 'scrn')
         callConn.answer(this.state.scrnStream);
       // else
       // 	notify(
@@ -1551,7 +1551,7 @@ class ExamComp extends Component {
       // callConn.on("close", () => {
       // 	console.log("Media Connection Closed");
       // });
-      callConn.on("error", (err) => {
+      callConn.on('error', (err) => {
         this.submitErr(err);
       });
     });
@@ -1561,10 +1561,10 @@ class ExamComp extends Component {
     // this.peerConn.on("disconnected", () => {
     // 	console.log("Peer Dis-Connected");
     // });
-    this.peerConn.on("error", (err) => {
+    this.peerConn.on('error', (err) => {
       this.submitErr(err);
       this.setState({
-        confirm: "peer",
+        confirm: 'peer',
         confirmCallback: this.setMainCompState,
       });
     });
@@ -1581,26 +1581,26 @@ class ExamComp extends Component {
       scrn: scrnStream ? true : false,
     };
     const socket = this.socket;
-    socket.emit("join-room", passcode, data);
+    socket.emit('join-room', passcode, data);
     //
-    socket.on("closeAll", (peerId) => {
+    socket.on('closeAll', (peerId) => {
       if (this.adminDataConn && this.adminDataConn.peer === peerId) {
         // Close all PeerJS connections : admin Initated a Close
         this.closeAllConn();
       }
     });
-    socket.on("closeMedia", (peerId) => {
+    socket.on('closeMedia', (peerId) => {
       if (this.adminDataConn && this.adminDataConn.peer === peerId) {
         // Close all Media Connections : socket initiated by admin
         this.closeAllConn(true);
       }
     });
-    socket.on("endTest", () => {
+    socket.on('endTest', () => {
       this.closeAllConn();
       const thisIs = this.state.thisIs;
       notify(
         this.msgHolder,
-        "e",
+        'e',
         `<h3>Proctor: ${thisIs} Ended</h3>your Proctor ended your ${thisIs}.${thisIs} will be Submitted Now.<br>In case of any action from your side your response will be rejected.`,
         10000
       );
@@ -1614,22 +1614,22 @@ class ExamComp extends Component {
     // });
 
     //
-    this.peerConn.on("close", () => {
+    this.peerConn.on('close', () => {
       notify(
         this.msgHolder,
-        "e",
-        "<h3>Response Server Connection Lost</h3> - Please maintain a descent Internet Connection.<br>Refresh this Page to resume and reconnect.",
+        'e',
+        '<h3>Response Server Connection Lost</h3> - Please maintain a descent Internet Connection.<br>Refresh this Page to resume and reconnect.',
         60000
       );
       this.peerConn.destroy();
     });
-    this.peerConn.on("disconnected", () => {
+    this.peerConn.on('disconnected', () => {
       setTimeout(() => {
         if (this.peerConn._destroyed)
           notify(
             this.msgHolder,
-            "e",
-            "<h3>Response Server Connection Lost</h3> - Please maintain a descent Internet Connection.<br>Refresh this Page to resume and reconnect.",
+            'e',
+            '<h3>Response Server Connection Lost</h3> - Please maintain a descent Internet Connection.<br>Refresh this Page to resume and reconnect.',
             60000
           );
         else if (this.peerConn._disconnected) this.peerConn.reconnect();
@@ -1668,14 +1668,14 @@ class ExamComp extends Component {
       hours = Math.floor((countDown % 86400) / 3600);
       minutes = Math.floor((countDown % 3600) / 60);
       seconds = Math.floor(countDown % 60);
-      if (minutes / 10 < 1) minutes = "0" + minutes;
-      if (seconds / 10 < 1) seconds = "0" + seconds;
+      if (minutes / 10 < 1) minutes = '0' + minutes;
+      if (seconds / 10 < 1) seconds = '0' + seconds;
       // Display the result in the object
       obj.innerText =
-        (days ? `${days}d ` : "") +
-        (hours ? `${hours}h ` : "") +
-        (minutes ? `${minutes}m ` : "") +
-        (seconds ? `${seconds}s` : "");
+        (days ? `${days}d ` : '') +
+        (hours ? `${hours}h ` : '') +
+        (minutes ? `${minutes}m ` : '') +
+        (seconds ? `${seconds}s` : '');
       if (countDown <= 0) {
         clearInterval(x);
         if (type === 0) {
@@ -1683,18 +1683,18 @@ class ExamComp extends Component {
           this.lateStartInterval = setInterval(() => {
             this.lateStart += 1;
           }, 1000);
-          obj.innerText = "Start";
+          obj.innerText = 'Start';
         } else if (type === 1) {
           this.endTest(true);
           obj.innerText = "Time's Up";
           notify(
             this.msgHolder,
-            "e",
+            'e',
             "<h3>TIME OVER</h3>Your Participation will be Submitted Now.<br>Don't Close the Browser!<br>Be Patient",
             10000
           );
         }
-      } else if (countDown <= 300 && type === 1) obj.style.color = "red";
+      } else if (countDown <= 300 && type === 1) obj.style.color = 'red';
       countDown -= 1;
     }, 1000);
   };
@@ -1705,8 +1705,8 @@ class ExamComp extends Component {
       if (testInfo.ques && !resQuestionnaire) {
         notify(
           this.msgHolder,
-          "e",
-          "<h3>Please Fill the Questionnaire to Start</h3>"
+          'e',
+          '<h3>Please Fill the Questionnaire to Start</h3>'
         );
         this.setState({ toStartShow: 4 });
         return false;
@@ -1716,7 +1716,7 @@ class ExamComp extends Component {
           this.endTest(true);
           notify(
             this.msgHolder,
-            "e",
+            'e',
             "<h3>TIME OVER</h3>Your Participation will be Submitted Now Don't Close the Browser!<br>Be Patient",
             10000
           );
@@ -1724,14 +1724,14 @@ class ExamComp extends Component {
       } else
         notify(
           this.msgHolder,
-          "e",
+          'e',
           `Wait for the ${this.state.thisIs} to Start.`
         );
     } else {
       notify(
         this.msgHolder,
-        "e",
-        "All Verifications are Not Completed.<br>Please complete."
+        'e',
+        'All Verifications are Not Completed.<br>Please complete.'
       );
       this.setState({ verify: 0, toStartShow: 1 });
       // make Verify = 0
@@ -1739,18 +1739,18 @@ class ExamComp extends Component {
   };
   //
   findReqCallback = (confirm) => {
-    return confirm === "fscr"
+    return confirm === 'fscr'
       ? this.openFullscreen
-      : confirm === "usrM" ||
-        confirm === 3 ||
-        confirm === "usrS" ||
-        confirm === 4
-      ? this.testRequirements
-      : this.state.confirmCallback;
+      : confirm === 'usrM' ||
+          confirm === 3 ||
+          confirm === 'usrS' ||
+          confirm === 4
+        ? this.testRequirements
+        : this.state.confirmCallback;
   };
   reqResData = (confirm, testInfo) => {
     const { cameraP, micP, candStream, scrnStream } = this.state;
-    return confirm === "usrM"
+    return confirm === 'usrM'
       ? {
           cam: testInfo.cam,
           cameraP: cameraP,
@@ -1760,65 +1760,65 @@ class ExamComp extends Component {
           candStream: candStream,
           permissionStatus: this.permissionStatus,
         }
-      : confirm === "usrS"
-      ? {
-          win: testInfo.win,
-          scrnStream: scrnStream,
-          getStream: this.getScreenStream,
-        }
-      : null;
+      : confirm === 'usrS'
+        ? {
+            win: testInfo.win,
+            scrnStream: scrnStream,
+            getStream: this.getScreenStream,
+          }
+        : null;
   };
   //
   componentWillUnmount() {
-    window.removeEventListener("resize", this.resizeHandler);
+    window.removeEventListener('resize', this.resizeHandler);
     try {
-      if (!localStorage) console.log("Spam");
+      if (!localStorage) console.log('Spam');
     } catch (err) {
       this.setState({
-        err: "Please enable Cookies and Site Data for this website.<br>Reload website after enabling",
+        err: 'Please enable Cookies and Site Data for this website.<br>Reload website after enabling',
       });
       return false;
     }
   }
   submitErr = (err) => {
     const { passcode, userInfo } = this.state;
-    err = `${err.message.toString() + err.type ? ` - ${err.type}` : ""} - ${
+    err = `${err.message.toString() + err.type ? ` - ${err.type}` : ''} - ${
       userInfo.uname
     } - ${userInfo.email} - ${passcode} - ${err}`;
     storeError(err, userInfo.token);
   };
   componentDidMount() {
     try {
-      if (!localStorage) console.log("Spam");
+      if (!localStorage) console.log('Spam');
     } catch (err) {
       this.setState({
-        err: "Please enable Cookies and Site Data for this website.<br>Reload website after enabling",
+        err: 'Please enable Cookies and Site Data for this website.<br>Reload website after enabling',
       });
       return false;
     }
     // If Google Login
-    const gLogin = localStorage.getItem("gLogin");
+    const gLogin = localStorage.getItem('gLogin');
     if (gLogin) {
       if (gLogin !== window.location.pathname) {
         window.location.replace(gLogin);
-        localStorage.removeItem("gLogin");
+        localStorage.removeItem('gLogin');
       }
     }
     //
-    const userInfo = JSON.parse(document.getElementById("userInfo").innerText);
+    const userInfo = JSON.parse(document.getElementById('userInfo').innerText);
     //
     const myState = { loggedIn: false };
     const loggedIn = userInfo.loggedIn;
     delete userInfo.loggedIn;
     //
-    const localPasscode = localStorage.getItem("passcode");
+    const localPasscode = localStorage.getItem('passcode');
     if (userInfo.passcode) {
       myState.passcode = userInfo.passcode;
-      if (!loggedIn) localStorage.setItem("passcode", userInfo.passcode);
+      if (!loggedIn) localStorage.setItem('passcode', userInfo.passcode);
       delete userInfo.passcode;
     } else if (localPasscode) {
       myState.passcode = localPasscode;
-      localStorage.removeItem("passcode");
+      localStorage.removeItem('passcode');
     }
     //
     if (loggedIn) myState.loggedIn = loggedIn;
@@ -1833,14 +1833,14 @@ class ExamComp extends Component {
     else myState.userInfo = userInfo;
     this.setState(myState);
     //
-    this.socket = io("/");
+    this.socket = io('/');
     // First Time Initiate
     this.resizeHandler();
     this.processDevCheck();
     //
-    window.addEventListener("blur", this.lostFocus);
-    window.addEventListener("resize", this.resizeHandler);
-    window.addEventListener("error", (err) => {
+    window.addEventListener('blur', this.lostFocus);
+    window.addEventListener('resize', this.resizeHandler);
+    window.addEventListener('error', (err) => {
       this.submitErr(err);
     });
   }
@@ -1995,7 +1995,7 @@ class ExamComp extends Component {
           socket={this.socket}
         />
         <main id="examMain">
-          {question[0] === "M" ? (
+          {question[0] === 'M' ? (
             <McqComponent
               crntQIndex={crntQIndex}
               ques={question}
@@ -2006,7 +2006,7 @@ class ExamComp extends Component {
               nextSec={this.nextSec}
             />
           ) : null}
-          {question[0] === "C" ? (
+          {question[0] === 'C' ? (
             <CodingComponent
               myKey={myKey}
               crntQIndex={crntQIndex}
@@ -2024,7 +2024,7 @@ class ExamComp extends Component {
               token={userInfo.token}
             />
           ) : null}
-          {question[0] === "H" ? (
+          {question[0] === 'H' ? (
             <HTMLComponent
               myKey={myKey}
               crntQIndex={crntQIndex}
@@ -2041,8 +2041,8 @@ class ExamComp extends Component {
             />
           ) : null}
           <Navigator
-            id1={question[0] === "M" ? "qNav" : "qNavCd"}
-            id2={question[0] === "M" ? "qBtns" : "qBtnsCd"}
+            id1={question[0] === 'M' ? 'qNav' : 'qNavCd'}
+            id2={question[0] === 'M' ? 'qBtns' : 'qBtnsCd'}
             crntQIndex={crntQIndex}
             sec={sec}
             crntSec={crntSec}

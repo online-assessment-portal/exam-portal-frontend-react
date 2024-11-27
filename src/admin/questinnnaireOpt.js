@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 class Questionnaire extends Component {
   constructor() {
     super();
@@ -60,7 +60,7 @@ class Questionnaire extends Component {
                         className="fa fa-trash-o"
                         aria-hidden="true"
                         onClick={() =>
-                          chngQsnr("alterOpt", 1, crntIndex, index)
+                          chngQsnr('alterOpt', 1, crntIndex, index)
                         }
                       ></i>
                     ) : null}
@@ -73,7 +73,7 @@ class Questionnaire extends Component {
             {qsnr[3] ? (
               <button
                 type="button"
-                onClick={() => chngQsnr("alterOpt", 0, crntIndex)}
+                onClick={() => chngQsnr('alterOpt', 0, crntIndex)}
               >
                 +1
               </button>
@@ -90,7 +90,7 @@ class Questionnaire extends Component {
             <i
               className="fa fa-trash-o"
               aria-hidden="true"
-              onClick={() => chngQsnr("alterQsnr", 1, crntIndex)}
+              onClick={() => chngQsnr('alterQsnr', 1, crntIndex)}
             ></i>
           </td>
         </tr>

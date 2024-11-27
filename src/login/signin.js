@@ -1,12 +1,12 @@
-import React, { PureComponent } from "react";
-import { notify } from "./../common.js";
+import React, { PureComponent } from 'react';
+import { notify } from './../common.js';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 class SignIn extends PureComponent {
   constructor() {
     super();
-    this.state = { signInErr: "", process: false };
+    this.state = { signInErr: '', process: false };
     this.inputPswd = React.createRef();
     //
     this.reqCtr = 0;
@@ -24,7 +24,7 @@ class SignIn extends PureComponent {
       !/\d/g.test(pswd) ||
       !/\W|_/g.test(pswd)
     )
-      return "Password Validation Error : Invalid Format";
+      return 'Password Validation Error : Invalid Format';
     else return false;
   };
   signIn = async (event) => {
@@ -33,8 +33,8 @@ class SignIn extends PureComponent {
     if (this.reqCtr > 5) {
       notify(
         msgHolder,
-        "e",
-        "Reached maximum attempts allowed.<br>Please retry after 15 mins."
+        'e',
+        'Reached maximum attempts allowed.<br>Please retry after 15 mins.'
       );
       return false;
     }
@@ -46,12 +46,12 @@ class SignIn extends PureComponent {
     this.setState({ process: true });
     try {
       const formData = new FormData(event.target);
-      formData.append("_csrf", token);
+      formData.append('_csrf', token);
       const formBody = new URLSearchParams(formData).toString();
       const promise = await fetch(`${apiUrl}/login/signIn/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       this.reqCtr++;
       const response = await promise.json();
@@ -70,7 +70,7 @@ class SignIn extends PureComponent {
             });
           else {
             window.alert(
-              "You must create your username and Fill your name in your profile to continue to the Test.\nWe are redirecting you to the Profile-Page."
+              'You must create your username and Fill your name in your profile to continue to the Test.\nWe are redirecting you to the Profile-Page.'
             );
             return this.props.setMainCompState({
               action: 6,
@@ -83,19 +83,19 @@ class SignIn extends PureComponent {
           signInErr: response.error.message,
           process: false,
         });
-      } else notify(msgHolder, "e", "");
+      } else notify(msgHolder, 'e', '');
       this.setState({ process: false });
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "SERVER Connection Error<br>Check your Internet Connection"
+        'e',
+        'SERVER Connection Error<br>Check your Internet Connection'
       );
       this.setState({ process: false });
     }
   };
   componentDidMount() {
-    document.title = "Sign-In";
+    document.title = 'Sign-In';
   }
   render() {
     const { process, signInErr } = this.state;
@@ -175,9 +175,9 @@ class SignIn extends PureComponent {
               disabled={process ? true : false}
               onClick={() => {
                 this.setState({ process: true });
-                localStorage.setItem("gLogin", window.location.pathname);
+                localStorage.setItem('gLogin', window.location.pathname);
                 window.location.replace(
-                  "https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20profile&response_type=code&client_id=1025872685182-o5jdqap12eg6d9t06sh5nqqdnj8she8s.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.cf%2Fgsign%2Fgoogle-login"
+                  'https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20profile&response_type=code&client_id=1025872685182-o5jdqap12eg6d9t06sh5nqqdnj8she8s.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.cf%2Fgsign%2Fgoogle-login'
                 );
               }}
             >

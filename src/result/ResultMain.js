@@ -1,17 +1,17 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // JS
-import LoginComp from "./../login/loginComp";
-import NavBar from "./../navbar";
-import ReqResponse from "./../reqResponse.js";
-import Preview from "./showPreview";
-import Scorecard from "./scoreCard.js";
-import McqRes from "./showResMcq";
-import CodingRes from "./showResCoding";
-import WebProgRes from "./showResWebProg";
-import ResNavigator from "./responseNavigator";
-import { notify } from "./../common.js";
+import LoginComp from './../login/loginComp';
+import NavBar from './../navbar';
+import ReqResponse from './../reqResponse.js';
+import Preview from './showPreview';
+import Scorecard from './scoreCard.js';
+import McqRes from './showResMcq';
+import CodingRes from './showResCoding';
+import WebProgRes from './showResWebProg';
+import ResNavigator from './responseNavigator';
+import { notify } from './../common.js';
 //
-import "./layout.css";
+import './layout.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -20,14 +20,14 @@ class ResultMain extends Component {
     super();
     const stateObj = {
       loggedIn: false,
-      cover: "cover",
+      cover: 'cover',
       action: -1,
       shwExmCode: null,
       crntQIndex: 0,
       previewData: -1,
-      theme: "chrome",
+      theme: 'chrome',
     };
-    const themeStore = localStorage.getItem("theme");
+    const themeStore = localStorage.getItem('theme');
     if (themeStore) stateObj.theme = themeStore;
     this.state = stateObj;
     //
@@ -35,11 +35,11 @@ class ResultMain extends Component {
     this.msgHolder = React.createRef();
     //
     this.showStatus = [
-      "Not Visited Question",
-      "Not Answered Question",
-      "Not Answered but Marked for Review",
-      "Answer & Marked for Review Question : was evaluated",
-      "Answered Question",
+      'Not Visited Question',
+      'Not Answered Question',
+      'Not Answered but Marked for Review',
+      'Answer & Marked for Review Question : was evaluated',
+      'Answered Question',
     ];
   }
   setMainCompState = (obj) => {
@@ -51,9 +51,9 @@ class ResultMain extends Component {
       if (userInfo) token = userInfo.token;
       else token = this.state.userInfo.token;
       const promise = await fetch(`${apiUrl}/cand/resultPre/`, {
-        method: "POST",
+        method: 'POST',
         body: `_csrf=${token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       //
@@ -72,20 +72,20 @@ class ResultMain extends Component {
         if (Object.keys(data).length === 0)
           notify(
             this.msgHolder,
-            "e",
-            "<h3>No Result / Participation Found for this Account.</h3>If you think this is an Error at our end,<br>you can Contact us 24 x 7.",
+            'e',
+            '<h3>No Result / Participation Found for this Account.</h3>If you think this is an Error at our end,<br>you can Contact us 24 x 7.',
             10000
           );
         else nState.action = 0;
         this.setState(nState);
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "SERVER Connection Error<br>Check your Internet Connection"
+        'e',
+        'SERVER Connection Error<br>Check your Internet Connection'
       );
     }
   };
@@ -149,22 +149,22 @@ class ResultMain extends Component {
         }
       }
       const promise = await fetch(`${apiUrl}/cand/showResult/`, {
-        method: "POST",
+        method: 'POST',
         body: `passcode=${passcode}&_csrf=${this.state.userInfo.token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         this.oldRequests.push({ passcode: passcode, response: response });
         this.showResponse(response);
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "SERVER Connection Error<br>Check your Internet Connection"
+        'e',
+        'SERVER Connection Error<br>Check your Internet Connection'
       );
     }
   };
@@ -174,22 +174,22 @@ class ResultMain extends Component {
   reqLogout = async () => {
     try {
       let promise = await fetch(`${apiUrl}/logout/`, {
-        method: "POST",
+        method: 'POST',
         body: `_csrf=${this.state.userInfo.token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
-        notify(this.msgHolder, "s", response.msg);
+        notify(this.msgHolder, 's', response.msg);
         this.setState({ loggedIn: false });
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "Something went wrong.<br>OR<br>Unable to connect to Server."
+        'e',
+        'Something went wrong.<br>OR<br>Unable to connect to Server.'
       );
     }
   };
@@ -198,7 +198,7 @@ class ResultMain extends Component {
     if (previewData === -1 && loggedIn) this.fetchPreview();
   }
   componentDidMount() {
-    const userInfo = JSON.parse(document.getElementById("userInfo").innerText);
+    const userInfo = JSON.parse(document.getElementById('userInfo').innerText);
     if (userInfo.loggedIn) this.fetchPreview(userInfo);
   }
   render() {
@@ -287,7 +287,7 @@ class ResultMain extends Component {
         {cover === false ? null : <ReqResponse wh={cover} />}
         <div id="msgHolder" ref={this.msgHolder}></div>
         <main id="resultMain">
-          {type === "M" ? (
+          {type === 'M' ? (
             <McqRes
               crntQIndex={crntQIndex}
               response={response[crntQIndex]}
@@ -297,7 +297,7 @@ class ResultMain extends Component {
               //
               crctOpt={crctOptArr[crntQIndex]}
             />
-          ) : type === "C" ? (
+          ) : type === 'C' ? (
             <CodingRes
               crntQIndex={crntQIndex}
               response={response[crntQIndex]}
@@ -308,10 +308,10 @@ class ResultMain extends Component {
               //
               tcR={tcRes[ques.qIndex]}
               cdLangId={cdLangId[ques.qIndex]}
-              exmnrM={exmnrM ? exmnrM[ques.qIndex + 1] : ""}
-              exmnrC={exmnrC ? exmnrC[ques.qIndex + 1] : ""}
+              exmnrM={exmnrM ? exmnrM[ques.qIndex + 1] : ''}
+              exmnrC={exmnrC ? exmnrC[ques.qIndex + 1] : ''}
             />
-          ) : type === "H" ? (
+          ) : type === 'H' ? (
             <WebProgRes
               crntQIndex={crntQIndex}
               response={response[crntQIndex]}
@@ -319,8 +319,8 @@ class ResultMain extends Component {
               ques={ques}
               theme={theme}
               //
-              exmnrM={exmnrM ? exmnrM[ques.qIndex + 1] : ""}
-              exmnrC={exmnrC ? exmnrC[ques.qIndex + 1] : ""}
+              exmnrM={exmnrM ? exmnrM[ques.qIndex + 1] : ''}
+              exmnrC={exmnrC ? exmnrC[ques.qIndex + 1] : ''}
             />
           ) : null}
           <ResNavigator

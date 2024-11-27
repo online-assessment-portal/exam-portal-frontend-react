@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { io } from "socket.io-client";
-import { notify } from "./../common.js";
-import { dateTimeFormat } from "./../helpers/dateTimeFormat";
+import React, { Component } from 'react';
+import { io } from 'socket.io-client';
+import { notify } from './../common.js';
+import { dateTimeFormat } from './../helpers/dateTimeFormat';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -11,14 +11,14 @@ class Invite extends Component {
     this.state = {
       queue: [],
       status: [],
-      mailSub: "",
-      mailImg: "",
-      extra: "",
-      close: "Regards<br>Team Shred Test",
-      name: "Sachin Kumar",
-      desig: "Admin Shred Test",
-      mobno: "8529493017",
-      mail: "sachin@shredtest.cf",
+      mailSub: '',
+      mailImg: '',
+      extra: '',
+      close: 'Regards<br>Team Shred Test',
+      name: 'Sachin Kumar',
+      desig: 'Admin Shred Test',
+      mobno: '8529493017',
+      mail: 'sachin@shredtest.cf',
       instr: false,
       // This is email of mail account
       mailAccKey: Object.keys(props.mailAcc)[0],
@@ -35,9 +35,9 @@ class Invite extends Component {
     const { passcode, msgHolder, token } = this.props;
     try {
       const promise = await fetch(`${apiUrl}/invite/allInvites/`, {
-        method: "POST",
+        method: 'POST',
         body: `passcode=${passcode}&_csrf=${token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
@@ -53,21 +53,21 @@ class Invite extends Component {
           this.setState({ queue: queue, status: status });
         }
         if (newList.length)
-          notify(msgHolder, "s", `Total Sent Mails-: ${newList.length}`);
-      } else if (response.error) notify(msgHolder, "e", response.error.message);
-      else notify(msgHolder, "e", "");
+          notify(msgHolder, 's', `Total Sent Mails-: ${newList.length}`);
+      } else if (response.error) notify(msgHolder, 'e', response.error.message);
+      else notify(msgHolder, 'e', '');
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "Something went wrong.<br>OR<br>Unable to connect to Server."
+        'e',
+        'Something went wrong.<br>OR<br>Unable to connect to Server.'
       );
     }
   };
   createQueue = () => {
     const { msgHolder } = this.props;
-    const newMails = this.mailWriter.current.value.split(",");
-    this.mailWriter.current.value = "";
+    const newMails = this.mailWriter.current.value.split(',');
+    this.mailWriter.current.value = '';
     //
     let { queue, status } = this.state;
     const newList = [];
@@ -75,9 +75,9 @@ class Invite extends Component {
       if (this.validateEmail(each)) {
         if (queue.indexOf(each) === -1 && newList.indexOf(each) === -1)
           newList.push(each);
-        else notify(msgHolder, "e", `Duplicate Rejected.<br>Email: ${each}`);
+        else notify(msgHolder, 'e', `Duplicate Rejected.<br>Email: ${each}`);
       } else {
-        if (each) notify(msgHolder, "e", `Invalid Email:<br>${each}`);
+        if (each) notify(msgHolder, 'e', `Invalid Email:<br>${each}`);
       }
     });
     //
@@ -86,10 +86,10 @@ class Invite extends Component {
     this.setState({ queue: queue, status: status });
   };
   mailErr = (status) => {
-    let str = "";
-    if (status === 2) str = "Failed";
-    else if (status === 3) str = "Invalid Recipient";
-    else if (status === 4) str = "Mailer A/C Auth Failed";
+    let str = '';
+    if (status === 2) str = 'Failed';
+    else if (status === 3) str = 'Invalid Recipient';
+    else if (status === 4) str = 'Mailer A/C Auth Failed';
     return str;
   };
   intiateMail = async (index) => {
@@ -97,22 +97,22 @@ class Invite extends Component {
     // -1 send to all
     const { passcode, mailAcc, msgHolder, token } = this.props;
     const formData = new FormData();
-    formData.append("mailBody", this.mailHTML.current.innerHTML);
-    formData.append("from", mailAccKey);
+    formData.append('mailBody', this.mailHTML.current.innerHTML);
+    formData.append('from', mailAccKey);
     //
     const account = mailAcc[mailAccKey];
-    formData.append("sender", account.name);
-    formData.append("token", account.token);
+    formData.append('sender', account.name);
+    formData.append('token', account.token);
     //
-    formData.append("mailSub", mailSub);
-    formData.append("passcode", passcode);
-    formData.append("myHold", this.socket.id);
-    formData.append("_csrf", token);
+    formData.append('mailSub', mailSub);
+    formData.append('passcode', passcode);
+    formData.append('myHold', this.socket.id);
+    formData.append('_csrf', token);
     if (index === -1) {
-      formData.append("queue", JSON.stringify(queue));
+      formData.append('queue', JSON.stringify(queue));
       this.setState({ status: new Array(queue.length).fill(0) });
     } else {
-      formData.append("queue", `["${queue[index]}"]`);
+      formData.append('queue', `["${queue[index]}"]`);
       this.setState((prevState) => {
         prevState.status[index] = 0;
         return prevState;
@@ -121,20 +121,20 @@ class Invite extends Component {
     try {
       const formBody = new URLSearchParams(formData).toString();
       const promise = await fetch(`${apiUrl}/invite/mail/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true)
-        notify(msgHolder, "s", response.msg);
-      else if (response.error) notify(msgHolder, "e", response.error.message);
-      else notify(msgHolder, "e", "");
+        notify(msgHolder, 's', response.msg);
+      else if (response.error) notify(msgHolder, 'e', response.error.message);
+      else notify(msgHolder, 'e', '');
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "Something went wrong.<br>OR<br>Unable to connect to Server."
+        'e',
+        'Something went wrong.<br>OR<br>Unable to connect to Server.'
       );
     }
   };
@@ -169,7 +169,7 @@ class Invite extends Component {
               <label htmlFor={id}>{each.name}</label>
             </td>
             <td>
-              <label htmlFor={id}>{each.token ? "GMail" : "Mail-Server"}</label>
+              <label htmlFor={id}>{each.token ? 'GMail' : 'Mail-Server'}</label>
             </td>
           </tr>
         );
@@ -204,35 +204,35 @@ class Invite extends Component {
     let durStr;
     if (dur > 60) {
       durStr = Math.trunc(dur / 60);
-      durStr += durStr > 1 ? " hrs" : " hr";
+      durStr += durStr > 1 ? ' hrs' : ' hr';
       const mod = dur % 60;
       if (mod) {
-        durStr += " " + mod;
-        durStr += mod > 1 ? " mins" : " min";
+        durStr += ' ' + mod;
+        durStr += mod > 1 ? ' mins' : ' min';
       }
-    } else durStr = dur + " mins";
+    } else durStr = dur + ' mins';
     this.setState({
-      mailSub: `${testInfo.type === 1 ? "Test" : "Event"} Invitation || ${
+      mailSub: `${testInfo.type === 1 ? 'Test' : 'Event'} Invitation || ${
         testInfo.org
       } || ${testInfo.title}`,
       durStr: durStr,
     });
     // CHANGE
-    this.socket = io("/");
-    this.socket.on("mailStatus", (data) => {
+    this.socket = io('/');
+    this.socket.on('mailStatus', (data) => {
       this.setStatus(data);
     });
-    this.socket.on("write", (data) => {
+    this.socket.on('write', (data) => {
       const textArea = this.mailWriter.current;
       textArea.value += `${data.show + data.status[0]}\r\n`;
       this.setStatus(data.status);
     });
-    this.socket.on("notify", (data) => {
+    this.socket.on('notify', (data) => {
       const { msgHolder } = this.props;
-      if (data.type === "e") notify(msgHolder, "e", data.msg);
-      else notify(msgHolder, "s", data.msg);
+      if (data.type === 'e') notify(msgHolder, 'e', data.msg);
+      else notify(msgHolder, 's', data.msg);
     });
-    this.socket.on("cancelRest", () => {
+    this.socket.on('cancelRest', () => {
       let { status } = this.state;
       status.forEach((each, i) => {
         if (each === 0) {
@@ -388,33 +388,33 @@ class Invite extends Component {
           <button
             type="button"
             className="btnPrimary"
-            style={{ float: "right" }}
+            style={{ float: 'right' }}
             onClick={this.createQueue}
           >
-            {queue.length ? "Add to Queue" : "Create Queue"}
+            {queue.length ? 'Add to Queue' : 'Create Queue'}
           </button>
           <div ref={this.mailHTML}>
-            <table width="600" style={{ fontSize: "16px" }}>
-              <thead style={{ textAlign: "center" }}>
+            <table width="600" style={{ fontSize: '16px' }}>
+              <thead style={{ textAlign: 'center' }}>
                 <tr>
                   <th
                     style={{
-                      display: "inline-flex",
-                      textAlign: "left",
-                      marginBottom: "3vh",
-                      borderBottom: "2px solid gainsboro",
+                      display: 'inline-flex',
+                      textAlign: 'left',
+                      marginBottom: '3vh',
+                      borderBottom: '2px solid gainsboro',
                     }}
                   >
                     <img
                       src={testInfo.img}
                       alt="rf-Dyu-N12-Ap"
                       border="0"
-                      style={{ height: "5vh", width: "5vh" }}
+                      style={{ height: '5vh', width: '5vh' }}
                     ></img>
                     <h2
                       style={{
                         margin: 0,
-                        marginLeft: "5px",
+                        marginLeft: '5px',
                       }}
                     >
                       {testInfo.org}
@@ -424,22 +424,22 @@ class Invite extends Component {
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ paddingBottom: "2vh" }}>
+                  <td style={{ paddingBottom: '2vh' }}>
                     Hi, ((=CandidateEmail=))<br></br>Hope this mail finds you
                     well !!
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    You are invited to{" "}
-                    {type === 1 ? "take Test" : "participate in the Event"}.
+                    You are invited to{' '}
+                    {type === 1 ? 'take Test' : 'participate in the Event'}.
                   </td>
                 </tr>
                 {mailImg ? (
                   <tr>
                     <td align="center" colSpan="2">
                       <img
-                        style={{ maxHeight: "40vh" }}
+                        style={{ maxHeight: '40vh' }}
                         src={mailImg}
                         alt="unreachableImg"
                         border="0"
@@ -449,15 +449,15 @@ class Invite extends Component {
                 ) : null}
                 <tr
                   style={{
-                    width: "100%",
-                    backgroundColor: "rgba(220, 220, 220, 0.4)",
+                    width: '100%',
+                    backgroundColor: 'rgba(220, 220, 220, 0.4)',
                   }}
                 >
-                  <td align="center" style={{ padding: "6vh 0" }}>
+                  <td align="center" style={{ padding: '6vh 0' }}>
                     <table
                       style={{
-                        borderCollapse: "collapse",
-                        fontSize: "17px",
+                        borderCollapse: 'collapse',
+                        fontSize: '17px',
                       }}
                     >
                       <thead>
@@ -465,23 +465,23 @@ class Invite extends Component {
                           <th
                             colSpan="2"
                             style={{
-                              color: "#0074d9",
+                              color: '#0074d9',
                             }}
                           >
-                            {type === 1 ? "Test" : "Event"} Information
+                            {type === 1 ? 'Test' : 'Event'} Information
                           </th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td>Title</td>
-                          <td style={{ letterSpacing: "1px" }}>
+                          <td style={{ letterSpacing: '1px' }}>
                             <b>{testInfo.title}</b>
                           </td>
                         </tr>
                         <tr>
                           <td>Passcode</td>
-                          <td style={{ letterSpacing: "2px" }}>
+                          <td style={{ letterSpacing: '2px' }}>
                             <b>{passcode}</b>
                           </td>
                         </tr>
@@ -490,12 +490,12 @@ class Invite extends Component {
                           <td>{strtTm}</td>
                         </tr>
                         <tr>
-                          <td>{isFixedDur ? "Entry Closes" : "Ends"} At</td>
+                          <td>{isFixedDur ? 'Entry Closes' : 'Ends'} At</td>
                           <td>{endTm}</td>
                         </tr>
                         <tr>
-                          <td>{isFixedDur ? "your " : ""}Duration</td>
-                          <td style={{ textAlign: "center" }}>{durStr}</td>
+                          <td>{isFixedDur ? 'your ' : ''}Duration</td>
+                          <td style={{ textAlign: 'center' }}>{durStr}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -504,14 +504,14 @@ class Invite extends Component {
                 <tr>
                   <td
                     style={{
-                      textAlign: "center",
-                      backgroundColor: "rgb(255, 199, 228)",
-                      padding: "2vh 5px",
+                      textAlign: 'center',
+                      backgroundColor: 'rgb(255, 199, 228)',
+                      padding: '2vh 5px',
                     }}
                   >
-                    This {type === 1 ? "Test" : "Event"} is of{" "}
+                    This {type === 1 ? 'Test' : 'Event'} is of{' '}
                     {isFixedDur
-                      ? "Fixed Duration, your countdown will start as soon as you join and will end after the stated duration no matter you were active for that Time or not."
+                      ? 'Fixed Duration, your countdown will start as soon as you join and will end after the stated duration no matter you were active for that Time or not.'
                       : `fixed time-frame and it will end on ${endTm.slice(
                           0,
                           10
@@ -521,14 +521,14 @@ class Invite extends Component {
                 <tr>
                   <td
                     style={{
-                      margin: "2vh 0",
-                      padding: "4vh 10px",
-                      textAlign: "center",
-                      backgroundColor: "rgb(143, 238, 255)",
+                      margin: '2vh 0',
+                      padding: '4vh 10px',
+                      textAlign: 'center',
+                      backgroundColor: 'rgb(143, 238, 255)',
                     }}
                   >
-                    Please click on the below{" "}
-                    {type === 1 ? "Take Test" : "Participate"} button at{" "}
+                    Please click on the below{' '}
+                    {type === 1 ? 'Take Test' : 'Participate'} button at{' '}
                     {strtTm.slice(-8)} to start.<br></br>
                     <br></br>
                     <a
@@ -537,7 +537,7 @@ class Invite extends Component {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {type === 1 ? "Take Test" : "Participate"}
+                      {type === 1 ? 'Take Test' : 'Participate'}
                     </a>
                     <br></br>
                     <br></br>If the button doesn't work click on the below link
@@ -554,20 +554,20 @@ class Invite extends Component {
                     <br></br>
                     {isOpen
                       ? `or else you manually login to the ${
-                          type === 1 ? "Test" : "Event"
+                          type === 1 ? 'Test' : 'Event'
                         } using the
-										${type === 1 ? "Test" : "Event"} Passcode`
+										${type === 1 ? 'Test' : 'Event'} Passcode`
                       : null}
                   </td>
                 </tr>
                 <tr>
                   <td
                     style={{
-                      textAlign: "center",
-                      backgroundColor: "rgb(255, 199, 228)",
-                      borderTop: "3vh solid white",
-                      borderBottom: "3vh solid white",
-                      padding: "2vh 5px",
+                      textAlign: 'center',
+                      backgroundColor: 'rgb(255, 199, 228)',
+                      borderTop: '3vh solid white',
+                      borderBottom: '3vh solid white',
+                      padding: '2vh 5px',
                     }}
                   >
                     Please note this is a Private Link. In case of duplicate
@@ -579,10 +579,10 @@ class Invite extends Component {
                   <tr>
                     <td
                       style={{
-                        backgroundColor: "rgb(255, 199, 228)",
-                        borderTop: "3vh solid white",
-                        borderBottom: "3vh solid white",
-                        padding: "2vh 5px",
+                        backgroundColor: 'rgb(255, 199, 228)',
+                        borderTop: '3vh solid white',
+                        borderBottom: '3vh solid white',
+                        padding: '2vh 5px',
                       }}
                       dangerouslySetInnerHTML={{
                         __html: extra,
@@ -591,8 +591,8 @@ class Invite extends Component {
                   </tr>
                 ) : null}
                 {instr ? (
-                  <tr style={{ backgroundColor: "rgb(255, 199, 228)" }}>
-                    <td style={{ padding: "2vh 10px" }}>
+                  <tr style={{ backgroundColor: 'rgb(255, 199, 228)' }}>
+                    <td style={{ padding: '2vh 10px' }}>
                       <p>
                         <b>Instructions</b>
                       </p>
@@ -609,10 +609,10 @@ class Invite extends Component {
                         </li>
                         <li>Maintain a stable Internet Connection.</li>
                         <li>
-                          You may clear your browsing data before Start of the{" "}
-                          {type === 1 ? "Test" : "Event"}.<br></br>Never perform
+                          You may clear your browsing data before Start of the{' '}
+                          {type === 1 ? 'Test' : 'Event'}.<br></br>Never perform
                           any action with your Browser or its Settings during
-                          the {type === 1 ? "Test" : "Event"}, you will loose
+                          the {type === 1 ? 'Test' : 'Event'}, you will loose
                           your responses by doing so.
                         </li>
                         <li>
@@ -634,9 +634,9 @@ class Invite extends Component {
                     </td>
                   </tr>
                 ) : null}
-                <tr style={{ color: "rgb(134, 36, 0)" }}>
+                <tr style={{ color: 'rgb(134, 36, 0)' }}>
                   <td
-                    style={{ paddingTop: "3vh" }}
+                    style={{ paddingTop: '3vh' }}
                     dangerouslySetInnerHTML={{
                       __html: close,
                     }}
@@ -652,7 +652,7 @@ class Invite extends Component {
                 </tr>
                 <tr>
                   <td
-                    style={{ textDecoration: "underline blue" }}
+                    style={{ textDecoration: 'underline blue' }}
                     dangerouslySetInnerHTML={{
                       __html: name,
                     }}
@@ -660,7 +660,7 @@ class Invite extends Component {
                 </tr>
                 <tr>
                   <td
-                    style={{ color: "rgb(54, 54, 54)" }}
+                    style={{ color: 'rgb(54, 54, 54)' }}
                     dangerouslySetInnerHTML={{
                       __html: desig,
                     }}
@@ -707,14 +707,14 @@ class Invite extends Component {
                 <tr>
                   <td
                     style={{
-                      borderTop: "3vh solid white",
-                      backgroundColor: "gainsboro",
-                      textAlign: "center",
-                      padding: "2vh 5px",
+                      borderTop: '3vh solid white',
+                      backgroundColor: 'gainsboro',
+                      textAlign: 'center',
+                      padding: '2vh 5px',
                     }}
                   >
                     I want to stop receiving any mails from this mail Address
-                    <br></br> and I want to{" "}
+                    <br></br> and I want to{' '}
                     <a
                       href=" ((=UnsubLink=))"
                       target="_blank"
@@ -822,7 +822,7 @@ class Invite extends Component {
               <input
                 type="checkbox"
                 id="inst"
-                style={{ width: "unset" }}
+                style={{ width: 'unset' }}
                 defaultChecked={instr ? true : false}
                 onChange={(e) => {
                   if (e.target.checked) this.setState({ instr: true });

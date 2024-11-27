@@ -1,42 +1,42 @@
-import React, { Component } from "react";
-import { notify } from "./common";
+import React, { Component } from 'react';
+import { notify } from './common';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 class HeadAuth extends Component {
   constructor() {
     super();
-    this.state = { token: "" };
+    this.state = { token: '' };
     this.msgHolder = React.createRef();
   }
   addAdmin = async (event) => {
     event.preventDefault();
     try {
       const formData = new FormData(event.target);
-      formData.append("_csrf", this.state.token);
+      formData.append('_csrf', this.state.token);
       const formBody = new URLSearchParams(formData).toString();
       const promise = await fetch(`${apiUrl}/helloHead/addAdmin/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
-        notify(this.msgHolder, "s", response.msg);
+        notify(this.msgHolder, 's', response.msg);
         event.target.reset();
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "Something went wrong.<br>OR<br>Unable to connect to Server."
+        'e',
+        'Something went wrong.<br>OR<br>Unable to connect to Server.'
       );
     }
   };
   componentDidMount() {
-    const userInfo = JSON.parse(document.getElementById("userInfo").innerText);
+    const userInfo = JSON.parse(document.getElementById('userInfo').innerText);
     this.setState({ token: userInfo.token });
   }
   render() {

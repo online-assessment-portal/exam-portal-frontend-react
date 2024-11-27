@@ -1,71 +1,71 @@
 button {
-	font-size: 18px;
-	border-radius: 3px;
-	font-family: "Roboto", sans-serif;
-	outline: none;
+  font-size: 18px;
+  border-radius: 3px;
+  font-family: 'Roboto', sans-serif;
+  outline: none;
 }
 button:hover {
-	cursor: pointer;
-	transition: all 200ms ease;
+  cursor: pointer;
+  transition: all 200ms ease;
 }
 .btnPrimary {
-	border: 0;
-	padding: 4px 10px;
-	font-size: larger;
-	color: #fff;
-	background-color: #0074d9;
+  border: 0;
+  padding: 4px 10px;
+  font-size: larger;
+  color: #fff;
+  background-color: #0074d9;
 }
 .btnPrimary:hover {
-	background-color: #0066c0;
+  background-color: #0066c0;
 }
 .btnSecondary {
-	padding: 4px 8px;
-	border: 2px solid rgba(128, 128, 128, 0.35);
+  padding: 4px 8px;
+  border: 2px solid rgba(128, 128, 128, 0.35);
 }
 .btnSecondary:hover {
-	border: 2px solid rgba(128, 128, 128, 0.5);
+  border: 2px solid rgba(128, 128, 128, 0.5);
 }
 /* Border None */
 #mcqContainer > button#mark {
-	border: none;
+  border: none;
 }
 /* TopBar */
 #topbar > button {
-	background: transparent;
+  background: transparent;
 }
 #topbar > button > i {
-	color: rgb(73, 73, 73);
+  color: rgb(73, 73, 73);
 }
 /* MCQs Buttons */
 #mcqContainer > button#mark {
-	z-index: 2;
-	margin-left: 10px;
-	background-color: transparent;
-	transform: rotateZ(45deg);
-	float: right;
-	/* border: 1px solid red; */
+  z-index: 2;
+  margin-left: 10px;
+  background-color: transparent;
+  transform: rotateZ(45deg);
+  float: right;
+  /* border: 1px solid red; */
 }
 .fa-thumb-tack {
-	z-index: 8;
-	font-size: x-large;
-	color: rgb(0, 191, 255);
+  z-index: 8;
+  font-size: x-large;
+  color: rgb(0, 191, 255);
 }
 #qControls {
-	margin-top: 5vh;
-	padding-bottom: 8vh;
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
+  margin-top: 5vh;
+  padding-bottom: 8vh;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 #qControls > div:nth-child(2) {
-	min-width: 28%;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
+  min-width: 28%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 #qControls button {
-	letter-spacing: 1px;
+  letter-spacing: 1px;
 }
 /* #qControls div:first-child button {
 	padding: 4px 8px;
@@ -75,52 +75,52 @@ button:hover {
 } */
 /* Coding Buttons */
 #executeBtn {
-	font-size: 20px;
-	padding: 4px 12px;
-	letter-spacing: 1px;
-	color: white;
-	border: 1px solid rgb(59, 19, 0);
-	background-color: rgb(141, 45, 1);
+  font-size: 20px;
+  padding: 4px 12px;
+  letter-spacing: 1px;
+  color: white;
+  border: 1px solid rgb(59, 19, 0);
+  background-color: rgb(141, 45, 1);
 }
 #executeBtn:hover {
-	background-color: rgb(110, 35, 0);
+  background-color: rgb(110, 35, 0);
 }
 #submitBtn,
 #executeBtn {
-	float: right;
-	margin-top: 10px;
+  float: right;
+  margin-top: 10px;
 }
 .fa-spinner {
-	margin-left: 5px;
-	animation: rotating 2s linear infinite !important;
+  margin-left: 5px;
+  animation: rotating 2s linear infinite !important;
 }
 @keyframes rotating {
-	0% {
-		-webkit-transform: rotate(0deg);
-		transform: rotate(0deg);
-	}
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
 
-	100% {
-		-webkit-transform: rotate(359deg);
-		transform: rotate(359deg);
-	}
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
 }
 /* HTML Buttons */
 @media only screen and (max-width: 992px) {
-	#qControls > div:nth-child(2) {
-		min-width: 40%;
-	}
+  #qControls > div:nth-child(2) {
+    min-width: 40%;
+  }
 }
 @media only screen and (max-width: 500px) {
-	#qControls > div:nth-child(2) {
-		min-width: 50%;
-	}
+  #qControls > div:nth-child(2) {
+    min-width: 50%;
+  }
 }
 @media only screen and (max-width: 380px) {
-	#qControls > div:nth-child(2) {
-		width: 95%;
-	}
-	#qControls div:nth-child(2) {
-		margin-top: 3vh;
-	}
+  #qControls > div:nth-child(2) {
+    width: 95%;
+  }
+  #qControls div:nth-child(2) {
+    margin-top: 3vh;
+  }
 }

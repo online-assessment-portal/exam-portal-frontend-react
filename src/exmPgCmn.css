@@ -1,45 +1,45 @@
 #ques p > span,
 #quesCode p > span,
 #cdContTop span {
-	color: gray;
-	margin-left: 10px;
+  color: gray;
+  margin-left: 10px;
 }
 .ace_editor {
-	box-sizing: content-box;
+  box-sizing: content-box;
 }
 .dragMeH,
 #dragMeV {
-	background-color: rgb(199, 199, 199);
+  background-color: rgb(199, 199, 199);
 }
 .dragMeH {
-	min-height: 100%;
-	min-width: 5px;
-	cursor: ew-resize;
-	user-select: none;
+  min-height: 100%;
+  min-width: 5px;
+  cursor: ew-resize;
+  user-select: none;
 }
 #dragMeV {
-	width: 100%;
-	height: 4px;
-	cursor: ns-resize;
-	user-select: none;
+  width: 100%;
+  height: 4px;
+  cursor: ns-resize;
+  user-select: none;
 }
 #cdContTop .fa-refresh,
 #mainControl .fa-refresh {
-	color: grey;
-	cursor: pointer;
+  color: grey;
+  cursor: pointer;
 }
 .fa-cog {
-	color: rgb(0, 174, 255);
-	font-size: larger;
-	cursor: pointer;
+  color: rgb(0, 174, 255);
+  font-size: larger;
+  cursor: pointer;
 }
 /* Check Page CSS */
 .editorControl td {
-	text-align: left;
-	border-color: gainsboro;
+  text-align: left;
+  border-color: gainsboro;
 }
 .editorControl tr:first-child td {
-	text-align: center;
+  text-align: center;
 }
 /* .editorControl {
 	width: 100%;
@@ -50,36 +50,36 @@
 	flex-wrap: wrap;
 } */
 .editorControl label {
-	font-size: medium;
-	font-family: "Noto Sans JP", sans-serif;
+  font-size: medium;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 .editorControl optgroup {
-	color: lightslategray;
+  color: lightslategray;
 }
 .editorControl select {
-	max-height: 10vh;
-	size: 4 !important;
+  max-height: 10vh;
+  size: 4 !important;
 }
 .editorControl select,
 .editorControl option {
-	width: 100%;
-	height: 30px;
-	padding: 3px 5px 5px;
-	font-family: "Roboto", sans-serif;
-	font-size: medium;
-	color: whitesmoke;
-	background-color: black;
-	border: none;
-	border-radius: 3px;
-	cursor: pointer;
+  width: 100%;
+  height: 30px;
+  padding: 3px 5px 5px;
+  font-family: 'Roboto', sans-serif;
+  font-size: medium;
+  color: whitesmoke;
+  background-color: black;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
 }
 .editorControl select:focus {
-	border: none;
-	outline: none;
+  border: none;
+  outline: none;
 }
 @media only screen and (max-width: 768px) {
-	.dragMeH,
-	#dragMeV {
-		display: none;
-	}
+  .dragMeH,
+  #dragMeV {
+    display: none;
+  }
 }

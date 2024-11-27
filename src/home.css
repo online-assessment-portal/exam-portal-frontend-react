@@ -1,310 +1,317 @@
 #homeNav {
-	position: sticky;
-	top: 0;
-	animation: fadeIn 1s ease;
+  position: sticky;
+  top: 0;
+  animation: fadeIn 1s ease;
 }
 #homeNav #brand-logo {
-	padding: unset;
+  padding: unset;
 }
 #homeNav #brand-text {
-	font-weight: bold;
+  font-weight: bold;
 }
 #homeNav-links {
-	display: inline-flex;
-	align-items: center;
+  display: inline-flex;
+  align-items: center;
 }
 .fa-bars {
-	display: none;
+  display: none;
 }
 #homeNav-links li {
-	margin-left: 30px;
-	list-style-type: none;
-	white-space: nowrap;
+  margin-left: 30px;
+  list-style-type: none;
+  white-space: nowrap;
 }
 #homeNav-links a {
-	position: relative;
-	color: rgba(0, 0, 0, 0.7);
-	text-decoration: none;
+  position: relative;
+  color: rgba(0, 0, 0, 0.7);
+  text-decoration: none;
 }
 @media only screen and (max-width: 800px) {
-	#homeNav-links {
-		z-index: 100;
-		position: absolute;
-		flex-direction: column;
-		display: none;
-		padding: 0;
-		width: 100%;
-		margin: 0;
-		left: 0;
-		background: rgba(0, 0, 0, 0.95);
-		/* animation: fadeInDown 300ms; */
-		animation-duration: 300ms;
-	}
-	#homeNav-links li {
-		margin: 0;
-		margin-top: 1vh;
-		/* border: 1px solid white; */
-	}
-	#homeNav .fa-bars,
-	#homeNav .fa-times {
-		display: block;
-		color: white;
-		font-size: larger;
-		/* z-index: 110; */
-	}
-	#homeNav-links a {
-		color: white;
-		text-shadow: 2px 2px 10px red;
-	}
-	#homeNav-links li {
-		margin-bottom: 2vh;
-	}
-	#homeNav-links li:first-child {
-		margin-top: 3vh;
-	}
-	#homeNav-links button {
-		margin: 0;
-	}
-	#homeNav-links li:last-child {
-		margin-bottom: 4vh;
-	}
+  #homeNav-links {
+    z-index: 100;
+    position: absolute;
+    flex-direction: column;
+    display: none;
+    padding: 0;
+    width: 100%;
+    margin: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.95);
+    /* animation: fadeInDown 300ms; */
+    animation-duration: 300ms;
+  }
+  #homeNav-links li {
+    margin: 0;
+    margin-top: 1vh;
+    /* border: 1px solid white; */
+  }
+  #homeNav .fa-bars,
+  #homeNav .fa-times {
+    display: block;
+    color: white;
+    font-size: larger;
+    /* z-index: 110; */
+  }
+  #homeNav-links a {
+    color: white;
+    text-shadow: 2px 2px 10px red;
+  }
+  #homeNav-links li {
+    margin-bottom: 2vh;
+  }
+  #homeNav-links li:first-child {
+    margin-top: 3vh;
+  }
+  #homeNav-links button {
+    margin: 0;
+  }
+  #homeNav-links li:last-child {
+    margin-bottom: 4vh;
+  }
 }
 @media only screen and (min-width: 800px) {
-	#homeNav ul li a:before {
-		content: "";
-		position: absolute;
-		top: 25px;
-		width: 100%;
-		height: 1.5px;
-		background-color: #fff;
-		visibility: hidden;
-		transform: scaleX(0);
-		transition: transform 0.3s ease-in-out;
-	}
-	#homeNav ul li a:focus:before,
-	#homeNav ul li a:hover:before {
-		visibility: visible;
-		transform: scaleX(1);
-	}
+  #homeNav ul li a:before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    width: 100%;
+    height: 1.5px;
+    background-color: #fff;
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-in-out;
+  }
+  #homeNav ul li a:focus:before,
+  #homeNav ul li a:hover:before {
+    visibility: visible;
+    transform: scaleX(1);
+  }
 }
 #home {
-	animation: fadeIn 1.5s ease;
-	display: none;
+  animation: fadeIn 1.5s ease;
+  display: none;
 }
 #home section {
-	min-height: 92vh;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	font-family: "Roboto", sans-serif;
-	background-color: rgb(255, 255, 240);
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+  background-color: rgb(255, 255, 240);
 }
 #home h1,
 #home h2 {
-	font-family: "Noto Sans JP", sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 #home #top {
-	min-height: 105vh;
-	background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.01)),
-		url("./sbg.png") no-repeat center center fixed;
-	color: white;
-	background-size: cover;
-	border-bottom: 10px solid;
-	border-image: linear-gradient(to right, purple, rgba(0, 0, 0, 0)) 1 1 100%;
-	border-bottom-left-radius: 50% 10%;
-	border-bottom-right-radius: 50% 10%;
+  min-height: 105vh;
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.01)),
+    url('./sbg.png') no-repeat center center fixed;
+  color: white;
+  background-size: cover;
+  border-bottom: 10px solid;
+  border-image: linear-gradient(to right, purple, rgba(0, 0, 0, 0)) 1 1 100%;
+  border-bottom-left-radius: 50% 10%;
+  border-bottom-right-radius: 50% 10%;
 }
 #topCont {
-	padding: 5vh 3rem;
-	text-align: center;
-	font-weight: lighter;
-	border-radius: 3px;
-	background-color: rgba(0, 0, 0, 0.77);
-	box-shadow: 0 0 15px black, 0 0 20px gray, 0 0 50px gray;
-	animation: pulse 1s linear 0.5s;
+  padding: 5vh 3rem;
+  text-align: center;
+  font-weight: lighter;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.77);
+  box-shadow:
+    0 0 15px black,
+    0 0 20px gray,
+    0 0 50px gray;
+  animation: pulse 1s linear 0.5s;
 }
 #topCont > * {
-	margin-top: 3vh;
+  margin-top: 3vh;
 }
 #topCont > p:nth-child(2) {
-	margin-top: 1vh;
+  margin-top: 1vh;
 }
 #topCont h1 {
-	font-weight: lighter;
-	font-size: xx-large;
+  font-weight: lighter;
+  font-size: xx-large;
 }
 #topCont h2 {
-	margin: 3vh 0;
-	font-weight: lighter;
-	font-size: larger;
+  margin: 3vh 0;
+  font-weight: lighter;
+  font-size: larger;
 }
 #topCont p:last-child {
-	margin-top: 1vh;
+  margin-top: 1vh;
 }
 #topCont button {
-	cursor: pointer;
-	margin-top: 1vh;
-	padding: 3px 8px;
-	border-radius: 3px;
-	text-decoration: none;
-	color: white;
-	letter-spacing: 1.2px;
-	font-family: "Noto Sans JP", sans-serif;
-	background-color: #146300;
-	border-radius: 3px;
-	border: 2px solid #146300;
-	outline: none;
+  cursor: pointer;
+  margin-top: 1vh;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-decoration: none;
+  color: white;
+  letter-spacing: 1.2px;
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: #146300;
+  border-radius: 3px;
+  border: 2px solid #146300;
+  outline: none;
 }
 #topCont button:hover {
-	background-color: #105000;
+  background-color: #105000;
 }
 /*  */
 #home section > h2 {
-	margin: 5vh 0;
+  margin: 5vh 0;
 }
 .types {
-	padding-top: 4vh;
+  padding-top: 4vh;
 }
 .types h2 {
-	text-decoration: underline red;
+  text-decoration: underline red;
 }
 .types > div {
-	display: inline-flex;
-	justify-content: space-evenly;
-	height: 100%;
-	width: 95%;
-	margin-bottom: 10vh;
+  display: inline-flex;
+  justify-content: space-evenly;
+  height: 100%;
+  width: 95%;
+  margin-bottom: 10vh;
 }
 .types > div:nth-child(2) {
-	margin-bottom: 10vh;
+  margin-bottom: 10vh;
 }
 #order {
-	margin-top: 10vh;
+  margin-top: 10vh;
 }
 .typeInfo {
-	min-width: 30%;
-	max-width: 35%;
-	padding: 2vh 15px;
-	border-radius: 3px;
-	background-color: rgb(247, 247, 247);
-	box-shadow: 0 0 10px gray, 0 0 20px gray, 0 0 50px gray;
+  min-width: 30%;
+  max-width: 35%;
+  padding: 2vh 15px;
+  border-radius: 3px;
+  background-color: rgb(247, 247, 247);
+  box-shadow:
+    0 0 10px gray,
+    0 0 20px gray,
+    0 0 50px gray;
 }
 .typeInfo > h4 {
-	font-size: larger;
-	text-align: center;
-	text-decoration: 2px underline blue;
-	margin-bottom: 2vh;
+  font-size: larger;
+  text-align: center;
+  text-decoration: 2px underline blue;
+  margin-bottom: 2vh;
 }
 .typeInfo > ul {
-	padding-left: 1.5vw;
+  padding-left: 1.5vw;
 }
 .typeInfo li {
-	margin-top: 1vh;
+  margin-top: 1vh;
 }
 #home section#pricing {
-	min-height: unset;
+  min-height: unset;
 }
 #contact h2 {
-	text-decoration: underline gray;
+  text-decoration: underline gray;
 }
 #contactForm {
-	display: flex;
-	min-width: 50%;
-	flex-direction: column;
-	margin-bottom: 3vh;
+  display: flex;
+  min-width: 50%;
+  flex-direction: column;
+  margin-bottom: 3vh;
 }
 #contactForm label {
-	margin-top: 2.5vh;
-	margin-bottom: 0.2vh;
-	color: gray;
+  margin-top: 2.5vh;
+  margin-bottom: 0.2vh;
+  color: gray;
 }
 #contactForm input,
 #contactForm textarea {
-	padding: 4px 5px;
-	font-size: large;
-	outline: 0;
-	font-family: "Roboto", sans-serif;
-	border: 1px solid grey;
+  padding: 4px 5px;
+  font-size: large;
+  outline: 0;
+  font-family: 'Roboto', sans-serif;
+  border: 1px solid grey;
 }
 #contactForm input:focus,
 #contactForm textarea:focus {
-	border: 1px solid rgb(28, 171, 219);
-	transition: border 250ms ease-in;
+  border: 1px solid rgb(28, 171, 219);
+  transition: border 250ms ease-in;
 }
 #contactForm button {
-	margin-top: 3vh;
+  margin-top: 3vh;
 }
 footer {
-	padding: 2vh 0;
-	background-color: blanchedalmond;
-	display: flex;
-	justify-content: center;
-	font-family: "Noto Sans JP", sans-serif;
+  padding: 2vh 0;
+  background-color: blanchedalmond;
+  display: flex;
+  justify-content: center;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 footer h4 {
-	display: inline-flex;
-	align-items: center;
+  display: inline-flex;
+  align-items: center;
 }
 @media only screen and (max-width: 800px) {
-	#homeNav {
-		position: unset;
-	}
-	#home ul {
-		margin-left: -0.8em;
-	}
-	#homeNav ul {
-		margin-left: 0;
-	}
+  #homeNav {
+    position: unset;
+  }
+  #home ul {
+    margin-left: -0.8em;
+  }
+  #homeNav ul {
+    margin-left: 0;
+  }
 }
 
 @media only screen and (max-width: 768px) {
-	#home h1 {
-		font-size: x-large;
-	}
-	#home h2,
-	.typeInfo > h4 {
-		font-size: medium;
-	}
-	#home #top {
-		background-size: contain;
-	}
-	.types > div {
-		flex-direction: column;
-	}
-	.typeInfo {
-		max-width: 100%;
-	}
-	.types > div > div:last-child {
-		margin-top: 10vh;
-	}
-	.typeInfo > ul {
-		list-style-type: none;
-	}
-	.typeInfo li {
-		margin-top: 2vh;
-	}
-	.typeInfo li::before {
-		content: "";
-	}
-	.types:nth-last-child(2) .typeInfo {
-		max-width: 100%;
-	}
-	#contactForm {
-		min-width: 65%;
-	}
+  #home h1 {
+    font-size: x-large;
+  }
+  #home h2,
+  .typeInfo > h4 {
+    font-size: medium;
+  }
+  #home #top {
+    background-size: contain;
+  }
+  .types > div {
+    flex-direction: column;
+  }
+  .typeInfo {
+    max-width: 100%;
+  }
+  .types > div > div:last-child {
+    margin-top: 10vh;
+  }
+  .typeInfo > ul {
+    list-style-type: none;
+  }
+  .typeInfo li {
+    margin-top: 2vh;
+  }
+  .typeInfo li::before {
+    content: '';
+  }
+  .types:nth-last-child(2) .typeInfo {
+    max-width: 100%;
+  }
+  #contactForm {
+    min-width: 65%;
+  }
 }
 @media only screen and (max-width: 450px) {
-	#home #top {
-		min-height: 85vh;
-	}
-	#home h1 {
-		font-size: large;
-	}
-	#contactForm {
-		min-width: 85%;
-	}
-	footer h4 {
-		font-size: small;
-	}
+  #home #top {
+    min-height: 85vh;
+  }
+  #home h1 {
+    font-size: large;
+  }
+  #contactForm {
+    min-width: 85%;
+  }
+  footer h4 {
+    font-size: small;
+  }
 }

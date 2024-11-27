@@ -1,68 +1,68 @@
 main#feedback {
-	min-height: 92vh;
-	padding: 0 4vw;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+  min-height: 92vh;
+  padding: 0 4vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 main#feedback > div {
-	display: inline-flex;
-	align-items: center;
+  display: inline-flex;
+  align-items: center;
 }
 main#feedback h2,
 main#feedback h4,
 main#feedback p {
-	font-family: "Noto Sans JP", sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 main#feedback h4,
 main#feedback p {
-	font-size: 17px;
-	text-align: center;
+  font-size: 17px;
+  text-align: center;
 }
 main#feedback > h4 {
-	color: gray;
-	font-weight: normal;
+  color: gray;
+  font-weight: normal;
 }
 main#feedback > div:first-child {
-	margin-bottom: 2vh;
+  margin-bottom: 2vh;
 }
 main#feedback > div:first-child h4 {
-	margin: 0;
-	color: rgba(128, 128, 128, 0.678);
+  margin: 0;
+  color: rgba(128, 128, 128, 0.678);
 }
 #feedbackForm {
-	margin-top: 3vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+  margin-top: 3vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 #feedbackForm > textarea {
-	line-height: 22px;
-	width: 500px;
-	max-width: 90vw;
-	resize: none;
+  line-height: 22px;
+  width: 500px;
+  max-width: 90vw;
+  resize: none;
 }
 #feedbackForm > textarea::placeholder {
-	opacity: 0.64;
+  opacity: 0.64;
 }
 main#feedback > p {
-	max-width: 480px;
-	margin-top: 4vh;
+  max-width: 480px;
+  margin-top: 4vh;
 }
 #feedbackForm button {
-	margin-top: 2vh;
+  margin-top: 2vh;
 }
 @media only screen and (max-width: 768px) {
-	main#feedback h2 {
-		font-size: large;
-	}
-	main#feedback h4 {
-		font-size: medium;
-	}
+  main#feedback h2 {
+    font-size: large;
+  }
+  main#feedback h4 {
+    font-size: medium;
+  }
 }
 @media only screen and (max-width: 650px) {
-	main#feedback p {
-		font-size: small;
-	}
+  main#feedback p {
+    font-size: small;
+  }
 }
