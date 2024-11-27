@@ -223,7 +223,6 @@ class Invite extends Component {
     });
     // CHANGE
     this.socket = io('/');
-    console.log('this.socket ', this.socket.id);
     this.socket.on('mailStatus', (data) => {
       this.setStatus(data);
     });
@@ -292,7 +291,6 @@ class Invite extends Component {
             <tr>
               <td colSpan="4"></td>
               <td>
-                c
                 <a href="https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fmail.google.com&response_type=code&client_id=57505295086-q2oetegjoq46igu7cs0itm6vq0oanptr.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.coderadiant.com%2Finvite%2FsetupMailer">
                   Add New Gmail
                 </a>
