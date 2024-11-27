@@ -15,7 +15,7 @@ import './exmPgH.css';
 import './htmlEditor.css';
 import './notify.css';
 //
-import { checkDev } from './detectDev';
+// import { checkDev } from './detectDev';
 //
 import { storeError, notify, cjoinQbank } from './common.js';
 //
