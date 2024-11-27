@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // import "./about.css";
-import "./home.css";
-import logo from "./favicon-32x32.png";
-import { notify, storeError } from "./common.js";
+import './home.css';
+import logo from './favicon-32x32.png';
+import { notify, storeError } from './common.js';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -16,37 +16,37 @@ class Home extends Component {
   toggleNavBar = (event) => {
     const target = event.target;
     const style = this.navLinks.current.style;
-    if (style.display === "flex") {
+    if (style.display === 'flex') {
       setTimeout(() => {
-        style.display = "none";
+        style.display = 'none';
       }, 280);
-      style.animationName = "fadeOutUp";
-      target.className = "fa fa-bars";
+      style.animationName = 'fadeOutUp';
+      target.className = 'fa fa-bars';
     } else {
-      style.display = "flex";
-      style.animationName = "fadeInDown";
-      target.className = "fa fa-times";
+      style.display = 'flex';
+      style.animationName = 'fadeInDown';
+      target.className = 'fa fa-times';
     }
   };
   reqLogout = async () => {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
-        method: "POST",
+        method: 'POST',
         body: `_csrf=${this.state.token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         this.setState({ loggedIn: false });
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       storeError(error, this.state.token);
       notify(
         this.msgHolder,
-        "e",
-        "Something went wrong.<br>OR<br>Unable to connect to Server."
+        'e',
+        'Something went wrong.<br>OR<br>Unable to connect to Server.'
       );
     }
   };
@@ -56,34 +56,34 @@ class Home extends Component {
     //
     const formData = new FormData(event.target);
     const token = this.state.token;
-    formData.append("_csrf", token);
+    formData.append('_csrf', token);
     try {
       const promise = await fetch(`${apiUrl}/proctor/contact/`, {
-        method: "POST",
+        method: 'POST',
         body: new URLSearchParams(formData).toString(),
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         event.target.reset();
         notify(
           this.msgHolder,
-          "s",
-          "Received<br>One from our Team will get back to you ASAP."
+          's',
+          'Received<br>One from our Team will get back to you ASAP.'
         );
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
+        notify(this.msgHolder, 'e', response.error.message);
       else {
         this.setState({
-          reqErr: "Something went wrong: Unable to Process your Request",
+          reqErr: 'Something went wrong: Unable to Process your Request',
         });
-        notify(this.msgHolder, "e", "", 10000);
+        notify(this.msgHolder, 'e', '', 10000);
       }
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "SERVER Connection Error<br>Check your Internet Connection"
+        'e',
+        'SERVER Connection Error<br>Check your Internet Connection'
       );
     } finally {
       this.setState({ process: false });
@@ -95,19 +95,19 @@ class Home extends Component {
         navigator.userAgent
       );
     if (isMobile) {
-      const navBar = document.getElementsByTagName("nav")[0];
+      const navBar = document.getElementsByTagName('nav')[0];
       setTimeout(() => {
-        this.navLinks.current.style.top = navBar.offsetHeight + 2 + "px";
+        this.navLinks.current.style.top = navBar.offsetHeight + 2 + 'px';
       }, 1000);
     }
-    const pgData = JSON.parse(document.getElementById("userInfo").innerText);
+    const pgData = JSON.parse(document.getElementById('userInfo').innerText);
     const myState = { token: pgData.token };
     if (pgData.loggedIn) myState.loggedIn = true;
     this.setState(myState);
-    window.addEventListener("load", () => {
-      document.getElementsByTagName("main")[0].style.display = "block";
+    window.addEventListener('load', () => {
+      document.getElementsByTagName('main')[0].style.display = 'block';
     });
-    window.addEventListener("error", (err) => {
+    window.addEventListener('error', (err) => {
       storeError(err, pgData.token);
     });
   }
@@ -144,12 +144,12 @@ class Home extends Component {
                   loggedIn
                     ? this.reqLogout
                     : () => {
-                        window.location.assign("/profile");
+                        window.location.assign('/profile');
                       }
                 }
                 disabled={process ? true : false}
               >
-                {loggedIn ? "Log-out" : "Sign-In"}
+                {loggedIn ? 'Log-out' : 'Sign-In'}
               </button>
             </li>
           </ul>
@@ -213,13 +213,13 @@ class Home extends Component {
                   selection of questions from Question Bank.
                 </li>
                 <li>
-                  Option for <b>Media Proctoring</b> (webCam/Microphone) and{" "}
+                  Option for <b>Media Proctoring</b> (webCam/Microphone) and{' '}
                   <b>Screen Proctoring</b>.
                 </li>
                 <li>Ability to detect Script Tampering.</li>
                 <li>
-                  Highly Trained AI based model to{" "}
-                  <b>detect any Test Tampering</b> &amp;{" "}
+                  Highly Trained AI based model to{' '}
+                  <b>detect any Test Tampering</b> &amp;{' '}
                   <b>proctor stream tampering</b>.
                 </li>
                 <li>
@@ -227,7 +227,7 @@ class Home extends Component {
                   second.
                 </li>
                 <li>
-                  Special Feature that tries to{" "}
+                  Special Feature that tries to{' '}
                   <b>Handle inabilities of System/PC</b> to a greater extent
                   during final submit of responses.
                 </li>
@@ -284,7 +284,7 @@ class Home extends Component {
                 <li>Different questions can be in different language.</li>
                 <li>Can add unlimited example input and output.</li>
                 <li>
-                  Option for Fixed <b>Upper Readable</b> and{" "}
+                  Option for Fixed <b>Upper Readable</b> and{' '}
                   <b>Lower Readable</b> Codes.
                 </li>
                 <li>
@@ -301,7 +301,7 @@ class Home extends Component {
               <h4>WebProgramming</h4>
               <ul>
                 <li>
-                  HTML + CSS + JS.<br></br>(Can be compiled both{" "}
+                  HTML + CSS + JS.<br></br>(Can be compiled both{' '}
                   <u>in Combination</u> and / or <u>Independently</u>)
                 </li>
                 <li>

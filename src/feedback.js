@@ -1,9 +1,9 @@
-import React, { PureComponent } from "react";
-import NavBar from "./navbar";
-import logo from "./favicon-32x32.png";
-import { notify } from "./common.js";
+import React, { PureComponent } from 'react';
+import NavBar from './navbar';
+import logo from './favicon-32x32.png';
+import { notify } from './common.js';
 //
-import "./feedback.css";
+import './feedback.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -17,7 +17,7 @@ class FeedbackForm extends PureComponent {
   exitFeedback = () => {
     setTimeout(() => {
       window.close();
-      window.location.assign("/");
+      window.location.assign('/');
     }, 10000);
     const fEle = document.fullscreenElement;
     if (fEle) document.exitFullscreen();
@@ -27,8 +27,8 @@ class FeedbackForm extends PureComponent {
     if (!this.feedback.current.value) {
       notify(
         this.msgHolder,
-        "s",
-        "Feedback Skipped.<br>For security of submission please logout and then close this TAB",
+        's',
+        'Feedback Skipped.<br>For security of submission please logout and then close this TAB',
         100000
       );
       this.exitFeedback();
@@ -37,40 +37,40 @@ class FeedbackForm extends PureComponent {
     this.setState({ process: true });
     const { passcode, token } = this.props;
     const formData = new FormData(event.target);
-    formData.append("passcode", passcode);
-    formData.append("_csrf", token);
+    formData.append('passcode', passcode);
+    formData.append('_csrf', token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/cand/feedback/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         event.target.reset();
         notify(
           this.msgHolder,
-          "s",
-          "Feedback Received.<br>We assure you more better experience next time.<br>For security of submission please logout and then close this TAB",
+          's',
+          'Feedback Received.<br>We assure you more better experience next time.<br>For security of submission please logout and then close this TAB',
           100000
         );
         this.exitFeedback();
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection"
+        'e',
+        '&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection'
       );
     } finally {
       this.setState({ process: false });
     }
   };
   componentDidMount() {
-    document.title = "Feedback";
+    document.title = 'Feedback';
   }
   render() {
     const { process } = this.state;

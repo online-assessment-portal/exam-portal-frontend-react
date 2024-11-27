@@ -11,12 +11,12 @@ function hideMsg(msgHolder, node) {
   crntHide = node;
   //
   const style = node.style;
-  style.padding = "0.1px";
+  style.padding = '0.1px';
   style.marginTop = 0;
   style.maxHeight = 0;
   style.minHeight = 0;
-  style.transition = "all 200ms linear";
-  node.style.animation = "fadeOutUp 300ms ease-out";
+  style.transition = 'all 200ms linear';
+  node.style.animation = 'fadeOutUp 300ms ease-out';
   setTimeout(() => {
     // Check id node to be removed exists in Message Holder
     if (node.parentNode === msgHolder) msgHolder.removeChild(node);
@@ -27,9 +27,9 @@ function hideMsg(msgHolder, node) {
 function notify(msgHolder, what, msg, time = 5000) {
   msgHolder = msgHolder.current;
   if (!msgHolder) return false;
-  const ele = document.createElement("div");
-  if (what === "s") ele.className = "msgS";
-  else ele.className = "msgE";
+  const ele = document.createElement('div');
+  if (what === 's') ele.className = 'msgS';
+  else ele.className = 'msgE';
   if (msg) ele.innerHTML = `<p>${msg}</p>`;
   else
     ele.innerHTML =
@@ -38,61 +38,61 @@ function notify(msgHolder, what, msg, time = 5000) {
   const timeOut = setTimeout(() => {
     hideMsg(msgHolder, ele);
   }, time);
-  ele.addEventListener("mouseleave", () => mouseHide(msgHolder, ele, timeOut));
-  ele.addEventListener("click", () => mouseHide(msgHolder, ele, timeOut));
+  ele.addEventListener('mouseleave', () => mouseHide(msgHolder, ele, timeOut));
+  ele.addEventListener('click', () => mouseHide(msgHolder, ele, timeOut));
 }
 function cjoinQbank(resp, dictFlow) {
   const myDict = [
-    "testOnCmnd",
-    "isEventAuth",
-    "liveCmnd",
-    "myPick",
-    "lastPick",
-    "handleVio",
-    "ckOrder",
-    "pullOff",
-    "pushRes",
-    "qContent",
-    "prebuild",
-    "attempt",
-    "review",
-    "green",
-    "yellow",
-    "clear",
-    "check",
-    "mark",
-    "pnpOs",
-    "virtualize",
-    "keepTrack",
-    "freeView",
-    "testOffCmnd",
-    "negCand",
-    "clearResp",
-    "messPre",
-    "bearPull",
-    "reAlloc",
-    "freeMaloc",
-    "vmClear",
-    "forceEnd",
-    "rebuild",
-    "postbuild",
-    "shuffle",
-    "deGrade",
-    "upGrade",
-    "poctoC",
-    "invigC",
-    "shieldFact",
-    "browserR",
-    "camView",
-    "clearAngle",
-    "micPober",
-    "shareScr",
-    "reShare",
-    "holdTest",
-    "cancelTest",
-    "hackP",
-    "myCha",
-    "careFlow",
+    'testOnCmnd',
+    'isEventAuth',
+    'liveCmnd',
+    'myPick',
+    'lastPick',
+    'handleVio',
+    'ckOrder',
+    'pullOff',
+    'pushRes',
+    'qContent',
+    'prebuild',
+    'attempt',
+    'review',
+    'green',
+    'yellow',
+    'clear',
+    'check',
+    'mark',
+    'pnpOs',
+    'virtualize',
+    'keepTrack',
+    'freeView',
+    'testOffCmnd',
+    'negCand',
+    'clearResp',
+    'messPre',
+    'bearPull',
+    'reAlloc',
+    'freeMaloc',
+    'vmClear',
+    'forceEnd',
+    'rebuild',
+    'postbuild',
+    'shuffle',
+    'deGrade',
+    'upGrade',
+    'poctoC',
+    'invigC',
+    'shieldFact',
+    'browserR',
+    'camView',
+    'clearAngle',
+    'micPober',
+    'shareScr',
+    'reShare',
+    'holdTest',
+    'cancelTest',
+    'hackP',
+    'myCha',
+    'careFlow',
   ];
   // Join qBank in order
   const dictOrder = JSON.parse(dictFlow);
@@ -100,7 +100,7 @@ function cjoinQbank(resp, dictFlow) {
   dictOrder.forEach((each) => {
     sflDict.push(myDict[each]);
   });
-  let qBank = "";
+  let qBank = '';
   for (let i = 0; i < sflDict.length; i++) {
     const pieces = resp[sflDict[i]];
     if (!pieces) break;
@@ -114,37 +114,37 @@ function makeDateTimeReadable(recDate) {
   if (recDate) dateObj = new Date(recDate);
   else dateObj = new Date();
   const year = dateObj.getFullYear();
-  const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
-  const date = ("0" + dateObj.getDate()).slice(-2);
+  const month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+  const date = ('0' + dateObj.getDate()).slice(-2);
   let hours = dateObj.getHours();
-  const minutes = ("0" + dateObj.getMinutes()).slice(-2);
-  let str = date + "-" + month + "-" + year + " ";
+  const minutes = ('0' + dateObj.getMinutes()).slice(-2);
+  let str = date + '-' + month + '-' + year + ' ';
   //
-  let ampm = "AM";
+  let ampm = 'AM';
   //
   if (hours > 12) {
     hours -= 12;
-    ampm = "PM";
+    ampm = 'PM';
   } else if (hours === 0) hours = 12;
-  str += ("0" + hours).slice(-2);
+  str += ('0' + hours).slice(-2);
   //
-  str += ":" + minutes + " " + ampm;
+  str += ':' + minutes + ' ' + ampm;
   return str;
 }
 async function storeError(err, token) {
   if (!token) return false;
   const formData = new FormData();
-  formData.append("error", err);
-  formData.append("_csrf", token);
+  formData.append('error', err);
+  formData.append('_csrf', token);
   const formBody = new URLSearchParams(formData).toString();
   try {
     await fetch(`${apiUrl}/cand/mystore/`, {
-      method: "POST",
+      method: 'POST',
       body: formBody,
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
   } catch (error) {
-    console.log("SpamD");
+    console.log('SpamD');
   }
 }
 function isInViewport(element) {

@@ -1,6 +1,6 @@
-import React, { PureComponent } from "react";
-import { notify } from "./common";
-import { makeDateTimeReadable } from "./common";
+import React, { PureComponent } from 'react';
+import { notify } from './common';
+import { makeDateTimeReadable } from './common';
 class Facilitate extends PureComponent {
   constructor(props) {
     super();
@@ -9,7 +9,7 @@ class Facilitate extends PureComponent {
       show: 1, // 0 to show none 1-Show BroadCast 2-Show Candidate
     };
     this.showing = 0;
-    this.answerStream = "cam";
+    this.answerStream = 'cam';
     //
     this.exmTmObj = new Date(props.time).getTime();
     //
@@ -32,20 +32,20 @@ class Facilitate extends PureComponent {
       const canvas = this.canvas.current;
       canvas.width = myWidth;
       canvas.height = myHeight;
-      const context = canvas.getContext("2d");
+      const context = canvas.getContext('2d');
       context.drawImage(target, 0, 0);
       //
-      const base64image = canvas.toDataURL().split(";base64,")[1];
-      const name = email + " " + makeDateTimeReadable();
+      const base64image = canvas.toDataURL().split(';base64,')[1];
+      const name = email + ' ' + makeDateTimeReadable();
       const formData = new FormData();
-      formData.append("key", imgUpKey);
-      formData.append("image", base64image);
-      formData.append("name", name);
+      formData.append('key', imgUpKey);
+      formData.append('image', base64image);
+      formData.append('name', name);
       const formBody = new URLSearchParams(formData);
-      await fetch("https://api.imgbb.com/1/upload", {
-        method: "POST",
+      await fetch('https://api.imgbb.com/1/upload', {
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
     } catch (error) {
       console.log(error);
@@ -55,7 +55,7 @@ class Facilitate extends PureComponent {
     event.preventDefault();
     if (this.nRClick) return;
     const { notify, msgHolder } = this.props;
-    notify(msgHolder, "e", "Not Allowed");
+    notify(msgHolder, 'e', 'Not Allowed');
     this.nRClick = true;
     setTimeout(() => {
       this.nRClick = false;
@@ -63,29 +63,29 @@ class Facilitate extends PureComponent {
   };
   styleDropDown = (style, eventHandler) => {
     // Set Height of Dropdown
-    style.top = this.topBar.current.clientHeight + "px";
-    if (style.display === "flex") {
-      style.animation = "fadeOutRight 300ms ease-in";
+    style.top = this.topBar.current.clientHeight + 'px';
+    if (style.display === 'flex') {
+      style.animation = 'fadeOutRight 300ms ease-in';
       setTimeout(() => {
-        style.display = "none";
+        style.display = 'none';
       }, 280);
-      document.removeEventListener("scroll", eventHandler);
+      document.removeEventListener('scroll', eventHandler);
     } else {
-      style.display = "flex";
-      style.animation = "fadeInRight 300ms ease-in";
-      document.addEventListener("scroll", eventHandler);
+      style.display = 'flex';
+      style.animation = 'fadeInRight 300ms ease-in';
+      document.addEventListener('scroll', eventHandler);
     }
     setTimeout(() => {
-      style.animation = "none";
+      style.animation = 'none';
     }, 280);
   };
   showBroadcast = () => {
-    if (this.candidate.current.style.display === "flex") this.showCand();
+    if (this.candidate.current.style.display === 'flex') this.showCand();
     const style = this.broadcast.current.style;
     this.styleDropDown(style, this.showBroadcast);
   };
   showCand = () => {
-    if (this.broadcast.current.style.display === "flex") this.showBroadcast();
+    if (this.broadcast.current.style.display === 'flex') this.showBroadcast();
     const style = this.candidate.current.style;
     this.styleDropDown(style, this.showCand);
   };
@@ -103,38 +103,38 @@ class Facilitate extends PureComponent {
     const vidDIV = icon.parentElement.style;
     //
     const style = vidEle.style;
-    style.animation = "none";
+    style.animation = 'none';
     // To Hide
     if (!icon.style.display) {
-      vidDIV.transitionDuration = "300ms";
+      vidDIV.transitionDuration = '300ms';
       //
       // icon.className = "fa fa-angle-down";
-      icon.style.transform = "rotate(180deg)";
-      icon.style.display = "unset";
+      icon.style.transform = 'rotate(180deg)';
+      icon.style.display = 'unset';
       //
-      style.animation = "fadeOutUp 300ms ease-in";
+      style.animation = 'fadeOutUp 300ms ease-in';
       setTimeout(() => {
-        style.visibility = "hidden";
+        style.visibility = 'hidden';
         //
-        vidDIV.maxHeight = "max-content";
+        vidDIV.maxHeight = 'max-content';
       }, 280);
       setTimeout(() => {
-        vidEle.className = "hideVideo";
+        vidEle.className = 'hideVideo';
       }, 300);
       //
       tm = 420;
     } else {
       vidDIV.transitionDuration = 0;
-      vidDIV.maxHeight = "15vh";
+      vidDIV.maxHeight = '15vh';
       // To Show
       // icon.className = "fa fa-angle-up";
-      icon.style.transform = "rotate(0deg)";
-      icon.style.display = "";
+      icon.style.transform = 'rotate(0deg)';
+      icon.style.display = '';
       //
-      style.animation = "fadeInDown 250ms ease-out 200ms";
-      vidEle.className = "";
+      style.animation = 'fadeInDown 250ms ease-out 200ms';
+      vidEle.className = '';
       setTimeout(() => {
-        style.visibility = "visible";
+        style.visibility = 'visible';
       }, 220);
     }
     //
@@ -145,11 +145,11 @@ class Facilitate extends PureComponent {
         (this.vidEle1 ? this.vidEle1.className : true) &&
         (this.vidEle2 ? this.vidEle2.className : true)
       ) {
-        topBar.className = "flxCntr";
-        candDiv.className = "flxCntr";
+        topBar.className = 'flxCntr';
+        candDiv.className = 'flxCntr';
       } else {
-        topBar.className = "flxStrt";
-        candDiv.className = "flxStrt";
+        topBar.className = 'flxStrt';
+        candDiv.className = 'flxStrt';
       }
     }, tm);
   };
@@ -180,35 +180,35 @@ class Facilitate extends PureComponent {
     timer(1, this.liveTimer.current);
     //
     initatePeerConn();
-    socket.on("connect", () => {
+    socket.on('connect', () => {
       const ele = this.showConn.current;
       if (ele) {
-        ele.style.color = "rgb(45, 209, 135)";
-        notify(msgHolder, "s", "Back Online");
+        ele.style.color = 'rgb(45, 209, 135)';
+        notify(msgHolder, 's', 'Back Online');
       }
     });
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
       const ele = this.showConn.current;
       if (ele) {
-        ele.style.color = "red";
-        notify(msgHolder, "e", "<h3>Offline</h3>");
+        ele.style.color = 'red';
+        notify(msgHolder, 'e', '<h3>Offline</h3>');
       }
     });
     //
     //
-    socket.on("recBroadcast", (data) => {
-      const old = localStorage.getItem("broadcastStore");
+    socket.on('recBroadcast', (data) => {
+      const old = localStorage.getItem('broadcastStore');
       let newStore = [data.msg];
       if (old) newStore = [...newStore, ...JSON.parse(old)];
-      localStorage.setItem("broadcastStore", JSON.stringify(newStore));
+      localStorage.setItem('broadcastStore', JSON.stringify(newStore));
       this.setState({ broadcasts: newStore });
-      if (this.broadcast.current.style.display !== "flex")
-        notify(msgHolder, "s", `You have a new Broadcast Message`, 10000);
+      if (this.broadcast.current.style.display !== 'flex')
+        notify(msgHolder, 's', `You have a new Broadcast Message`, 10000);
     });
-    const oldBroad = JSON.parse(localStorage.getItem("broadcastStore"));
+    const oldBroad = JSON.parse(localStorage.getItem('broadcastStore'));
     if (oldBroad) this.setState({ broadcasts: oldBroad });
     // Right Click
-    document.addEventListener("contextmenu", this.rightClickHandler);
+    document.addEventListener('contextmenu', this.rightClickHandler);
   }
   render() {
     const { broadcasts } = this.state;
@@ -226,7 +226,7 @@ class Facilitate extends PureComponent {
         <div
           ref={this.topBar}
           id="topbar"
-          className={candStream || scrnStream ? "flxStrt" : "flxCntr"}
+          className={candStream || scrnStream ? 'flxStrt' : 'flxCntr'}
         >
           <div>
             <img src={testInfo.img} alt="orgImg" srcSet=""></img>
@@ -241,7 +241,7 @@ class Facilitate extends PureComponent {
           <div
             ref={this.candDiv}
             id="candDiv"
-            className={candStream || scrnStream ? "flxStrt" : "flxCntr"}
+            className={candStream || scrnStream ? 'flxStrt' : 'flxCntr'}
           >
             <i
               className="fa fa-envelope-o"
@@ -344,7 +344,7 @@ class Facilitate extends PureComponent {
             <span
               ref={this.showConn}
               // className={"showGreen"}
-              style={{ color: "rgb(16, 199, 16)" }}
+              style={{ color: 'rgb(16, 199, 16)' }}
               title="Shows your Server Connection Status"
             >
               &#9679;

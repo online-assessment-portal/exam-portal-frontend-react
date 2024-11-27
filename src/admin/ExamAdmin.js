@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 // JS
-import NavBar from "./../navbar";
-import QBankPrepare from "./QBankPrepare";
-import PrepareResult from "./PrepareResult";
-import FillInfo from "./fillInfo";
-import Invite from "./inviteComp";
-import { notify } from "./../common.js";
+import NavBar from './../navbar';
+import QBankPrepare from './QBankPrepare';
+import PrepareResult from './PrepareResult';
+import FillInfo from './fillInfo';
+import Invite from './inviteComp';
+import { notify } from './../common.js';
 //
-import { dateTimeFormat } from "./../helpers/dateTimeFormat";
+import { dateTimeFormat } from './../helpers/dateTimeFormat';
 //
-import "./layout.css";
+import './layout.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -26,7 +26,7 @@ class ExamAdmin extends Component {
       open: true,
       isFixedDur: false,
       dur: null,
-      passcode: "",
+      passcode: '',
       testInfo: null,
       qBank: [],
       crctOptArr: [],
@@ -44,7 +44,7 @@ class ExamAdmin extends Component {
     const formDataArr = [...formData.entries()];
     const urlenc = formDataArr
       .map((x) => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`)
-      .join("&");
+      .join('&');
     return urlenc;
   };
   authAdmin = async (event = false, token) => {
@@ -55,19 +55,19 @@ class ExamAdmin extends Component {
     let formData;
     if (event) formData = new FormData(event.target);
     else formData = new FormData();
-    formData.append("_csrf", token);
+    formData.append('_csrf', token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/admin/authAdmin/`, {
-        method: "POST",
-        body: formBody ? formBody : "",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: 'POST',
+        body: formBody ? formBody : '',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         if (response.notify) {
           delete response.notify;
-          notify(this.msgHolder, "s", response.notify);
+          notify(this.msgHolder, 's', response.notify);
         }
         const last10Test = response.last10Test;
         last10Test.forEach((each, index) => {
@@ -83,19 +83,19 @@ class ExamAdmin extends Component {
       } else if (response.error)
         this.setState({ loggedIn: response.error.message });
       // notify(this.msgHolder, "e", );
-      else notify(this.msgHolder, "e", "");
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "SERVER Connection Error<br>Check your Internet Connection"
+        'e',
+        'SERVER Connection Error<br>Check your Internet Connection'
       );
       return;
     }
   };
   genKey = () => {
-    let str = "";
-    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    let str = '';
+    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
     for (let i = 0; i < 10; i++) {
       if (i < 4) {
         const char = alphabet.charAt(Math.floor(Math.random() * 24));
@@ -142,24 +142,24 @@ class ExamAdmin extends Component {
         }
       }
     } else {
-      notify(this.msgHolder, "e", "Please enter Passcode to Load.");
+      notify(this.msgHolder, 'e', 'Please enter Passcode to Load.');
       return false;
     }
     //
     try {
       const promise = await fetch(`${apiUrl}/admin/loadTestData/`, {
-        method: "POST",
+        method: 'POST',
         body: `passcode=${passcode}&_csrf=${this.state.token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true)
         this.setLoadTest(response, true);
       else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
-      notify(this.msgHolder, "e", error);
+      notify(this.msgHolder, 'e', error);
     }
   };
   //
@@ -170,12 +170,12 @@ class ExamAdmin extends Component {
       // Create Section Info
       if (
         window.confirm(
-          "Are you Updating Test Data\nOK- Updating\nCancel- Creating New"
+          'Are you Updating Test Data\nOK- Updating\nCancel- Creating New'
         )
       ) {
         isUpdate = true;
-        formData.append("isUpdt", true);
-      } else formData.append("isUpdt", false);
+        formData.append('isUpdt', true);
+      } else formData.append('isUpdt', false);
       const {
         strtTime,
         endTime,
@@ -191,16 +191,16 @@ class ExamAdmin extends Component {
       } = this.state;
       let { passcode, testInfo, last10Test } = this.state;
       if (testInfo === null) {
-        notify(this.msgHolder, "e", "Test Info is not prepared");
+        notify(this.msgHolder, 'e', 'Test Info is not prepared');
         return;
       } else if (qBank.length === 0) {
-        notify(this.msgHolder, "e", "Question Bank is not prepared");
+        notify(this.msgHolder, 'e', 'Question Bank is not prepared');
         return;
       } else if (passcode === null) {
         const val = this.passCode.current.value;
         if (val) passcode = val;
         else {
-          notify(this.msgHolder, "e", "Pass-Code is NULL");
+          notify(this.msgHolder, 'e', 'Pass-Code is NULL');
           return;
         }
       }
@@ -210,28 +210,28 @@ class ExamAdmin extends Component {
       const testInfoJ = JSON.stringify(testInfo);
       const qBankJ = JSON.stringify(qBank);
       const crctOptArrJ = JSON.stringify(crctOptArr);
-      formData.append("strtTime", strtTime);
-      formData.append("endTime", endTime);
-      formData.append("open", open);
-      formData.append("isFixedDur", isFixedDur);
-      formData.append("dur", dur);
-      formData.append("passcode", passcode);
-      formData.append("testInfo", testInfoJ);
-      formData.append("qBank", qBankJ);
-      formData.append("crctOpt", crctOptArrJ);
-      formData.append("_csrf", token);
+      formData.append('strtTime', strtTime);
+      formData.append('endTime', endTime);
+      formData.append('open', open);
+      formData.append('isFixedDur', isFixedDur);
+      formData.append('dur', dur);
+      formData.append('passcode', passcode);
+      formData.append('testInfo', testInfoJ);
+      formData.append('qBank', qBankJ);
+      formData.append('crctOpt', crctOptArrJ);
+      formData.append('_csrf', token);
       const formBody = new URLSearchParams(formData).toString();
       const promise = await fetch(`${apiUrl}/admin/upload_testData/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         // Clear local-Storage for Default Codes
         localStorage.clear();
         //
-        notify(this.msgHolder, "s", response.msg);
+        notify(this.msgHolder, 's', response.msg);
         if (isUpdate) {
           for (let i = 0; i < last10Test.length; i++) {
             const each = last10Test[i];
@@ -265,19 +265,19 @@ class ExamAdmin extends Component {
         }
         this.setState({ last10Test: last10Test });
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message, 10000);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message, 10000);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
-      notify(this.msgHolder, "e", error.stack);
+      notify(this.msgHolder, 'e', error.stack);
     }
   };
   //
   reqLogout = async () => {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
-        method: "POST",
+        method: 'POST',
         body: `_csrf=${this.state.token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
@@ -287,21 +287,21 @@ class ExamAdmin extends Component {
           display: 0,
         });
       } else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "Something went wrong.<br>OR<br>Unable to connect to Server"
+        'e',
+        'Something went wrong.<br>OR<br>Unable to connect to Server'
       );
     }
   };
   componentDidMount() {
-    const adminInfo = JSON.parse(document.getElementById("userInfo").innerText);
+    const adminInfo = JSON.parse(document.getElementById('userInfo').innerText);
     if (adminInfo.loggedIn) this.authAdmin(false, adminInfo.token);
     this.setState(adminInfo);
-    document.title = "Exam_Admin";
+    document.title = 'Exam_Admin';
   }
   //
   render() {
@@ -407,23 +407,23 @@ class ExamAdmin extends Component {
                           readOnly
                         ></input>
                       </td>
-                      <td>{each.open ? "Open for All" : "Invite Only"}</td>
+                      <td>{each.open ? 'Open for All' : 'Invite Only'}</td>
                       <td>
-                        {each.isFixedDur ? "Fixed Duration" : "Full-Time"}
+                        {each.isFixedDur ? 'Fixed Duration' : 'Full-Time'}
                       </td>
                       <td>{each.dur}</td>
                       <td>
                         {each.status === 0
-                          ? "Ready"
+                          ? 'Ready'
                           : each.status === 1
-                          ? "Result Uploaded"
-                          : null}
+                            ? 'Result Uploaded'
+                            : null}
                       </td>
                       <td>
                         <button
                           onClick={() =>
                             window.prompt(
-                              "Exam Link",
+                              'Exam Link',
                               `https://shredtest.cf/test?passcode=${each.passcode}`
                             )
                           }

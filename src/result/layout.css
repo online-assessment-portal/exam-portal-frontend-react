@@ -1,173 +1,177 @@
 #showPreview {
-	padding: 0vh 8% 4vh 15%;
-	display: block;
+  padding: 0vh 8% 4vh 15%;
+  display: block;
 }
 #showPreview h4 {
-	margin-top: 6vh;
-	margin-bottom: 1.5vh;
-	font-size: larger;
-	text-decoration: underline navy;
-	font-family: "Noto Sans JP", sans-serif;
+  margin-top: 6vh;
+  margin-bottom: 1.5vh;
+  font-size: larger;
+  text-decoration: underline navy;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 .eachMonth {
-	/* display: inline-flex;
+  /* display: inline-flex;
   flex-wrap: wrap; */
 
-	display: inline-grid;
-	grid-gap: 6vh 25px;
-	grid-template-columns: repeat(3, auto);
+  display: inline-grid;
+  grid-gap: 6vh 25px;
+  grid-template-columns: repeat(3, auto);
 }
 .eachTest {
-	font-size: large;
-	font-family: "Roboto", sans-serif;
-	/* margin-bottom: 5vh; */
-	margin-right: 2em;
-	padding: 2vh 20px;
-	border-radius: 3px;
-	background: linear-gradient(
-		45deg,
-		rgba(255, 255, 0, 0.3),
-		rgba(255, 166, 0, 0.2)
-	);
-	box-shadow: 0 0 10px gray, 0 0 50px gainsboro;
-	cursor: pointer;
+  font-size: large;
+  font-family: 'Roboto', sans-serif;
+  /* margin-bottom: 5vh; */
+  margin-right: 2em;
+  padding: 2vh 20px;
+  border-radius: 3px;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 0, 0.3),
+    rgba(255, 166, 0, 0.2)
+  );
+  box-shadow:
+    0 0 10px gray,
+    0 0 50px gainsboro;
+  cursor: pointer;
 }
 .eachTest:hover {
-	box-shadow: 0 0 10px gray, 0 0 25px rgba(128, 128, 128, 0.26),
-		0 0 50px gainsboro;
+  box-shadow:
+    0 0 10px gray,
+    0 0 25px rgba(128, 128, 128, 0.26),
+    0 0 50px gainsboro;
 }
 .eachTest p {
-	margin-top: 0.5vh;
-	/* width: 100%; */
-	/* border: 2px solid navy; */
+  margin-top: 0.5vh;
+  /* width: 100%; */
+  /* border: 2px solid navy; */
 }
 .eachTest span:first-child {
-	color: gray;
-	/* text-align: left; */
+  color: gray;
+  /* text-align: left; */
 }
 .eachTest span:last-child {
-	width: 100%;
+  width: 100%;
 }
 /*  */
 #scoreCard {
-	display: flex;
+  display: flex;
 }
 #scoreCard #qContainer {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	animation: fadeIn 500ms ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 500ms ease;
 }
 #scoreCard #candInfo p {
-	font-size: large;
-	margin-bottom: 1vh;
-	overflow-wrap: anywhere;
+  font-size: large;
+  margin-bottom: 1vh;
+  overflow-wrap: anywhere;
 }
 #scoreCard th,
 #scoreCard td {
-	padding: 1vh 10px;
-	border: 2px solid gray;
+  padding: 1vh 10px;
+  border: 2px solid gray;
 }
 #scoreCard td {
-	text-align: center;
+  text-align: center;
 }
 #scoreCard .tableEff {
-	color: darkgreen;
-	font-weight: bold;
-	font-family: "Noto Sans JP", sans-serif;
+  color: darkgreen;
+  font-weight: bold;
+  font-family: 'Noto Sans JP', sans-serif;
 }
 #scoreCard .tableEff td:first-child {
-	text-align: left;
+  text-align: left;
 }
 /*  */
 /* as same id #container from CodingComp is used to show result make img width 100% */
 #container img {
-	max-width: 100%;
+  max-width: 100%;
 }
 #resultMain {
-	display: flex;
+  display: flex;
 }
 #resultMain #container {
-	padding-top: 1vh;
-	animation: fadeIn 500ms ease;
+  padding-top: 1vh;
+  animation: fadeIn 500ms ease;
 }
 #resultMain #qContainer {
-	min-height: unset;
+  min-height: unset;
 }
 #resultMain #qNav {
-	padding-top: 2vh;
+  padding-top: 2vh;
 }
 .mcqResponse label:hover {
-	box-shadow: none !important;
+  box-shadow: none !important;
 }
 #respDetail {
-	margin-top: 3vh;
-	margin-bottom: 8vh;
+  margin-top: 3vh;
+  margin-bottom: 8vh;
 }
 .crctRes {
-	color: darkgreen;
+  color: darkgreen;
 }
 .crctRes::before {
-	content: "\2713 ";
-	margin-right: 5px;
-	font-weight: bolder !important;
+  content: '\2713 ';
+  margin-right: 5px;
+  font-weight: bolder !important;
 }
 .wrongRes {
-	color: red;
+  color: red;
 }
 .wrongRes::before {
-	content: "\2718 ";
-	color: rgb(214, 0, 0);
-	margin-right: 5px;
-	font-weight: bolder !important;
+  content: '\2718 ';
+  color: rgb(214, 0, 0);
+  margin-right: 5px;
+  font-weight: bolder !important;
 }
 #respDetail .noresp,
 #respDetail .showStatus {
-	float: unset;
-	text-decoration: underline red;
+  float: unset;
+  text-decoration: underline red;
 }
 #respDetail .showStatus {
-	color: rgb(99, 99, 99);
-	text-decoration: none;
+  color: rgb(99, 99, 99);
+  text-decoration: none;
 }
 /*  */
 #resultMain .showCode {
-	height: 80vh;
-	width: 80%;
-	padding: 1vh 0px;
+  height: 80vh;
+  width: 80%;
+  padding: 1vh 0px;
 }
 #resultMain #scoreTable {
-	margin-top: 10vh !important;
-	display: flex !important;
+  margin-top: 10vh !important;
+  display: flex !important;
 }
 #scoreTable {
-	font-size: 18px;
-	font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-family: 'Roboto', sans-serif;
 }
 /*  */
 #showWebCode {
-	overflow: auto;
+  overflow: auto;
 }
 /*  */
 .transpBtn {
-	/* margin-top: 2vh; */
-	/* float: right; */
-	color: blue;
-	text-decoration: underline;
-	border: 0;
-	background: transparent;
+  /* margin-top: 2vh; */
+  /* float: right; */
+  color: blue;
+  text-decoration: underline;
+  border: 0;
+  background: transparent;
 }
 @media only screen and (max-width: 768px) {
-	#showPreview h4,
-	.eachTest,
-	#scoreCard #candInfo p {
-		font-size: medium;
-	}
-	#respDetail {
-		font-size: small;
-	}
-	#resultMain .showCode {
-		width: 100%;
-	}
+  #showPreview h4,
+  .eachTest,
+  #scoreCard #candInfo p {
+    font-size: medium;
+  }
+  #respDetail {
+    font-size: small;
+  }
+  #resultMain .showCode {
+    width: 100%;
+  }
 }

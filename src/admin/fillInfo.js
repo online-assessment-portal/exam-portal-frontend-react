@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import Questionnaire from "./questinnnaireOpt";
-import { notify } from "./../common.js";
+import React, { Component } from 'react';
+import Questionnaire from './questinnnaireOpt';
+import { notify } from './../common.js';
 class FillInfo extends Component {
   constructor(props) {
     super();
     const { testInfo, open, isFixedDur } = props;
     console.log(props);
     this.state = {
-      secInfo: testInfo ? testInfo.secInfo : [["", 1, ""]],
+      secInfo: testInfo ? testInfo.secInfo : [['', 1, '']],
       qsnr: testInfo && testInfo.ques ? testInfo.ques : [],
       open: open,
       isFixedDur: isFixedDur,
@@ -28,15 +28,15 @@ class FillInfo extends Component {
   };
   increaseSec = () => {
     this.setState((prev) => {
-      return prev.secInfo.push(["", 0, ""]);
+      return prev.secInfo.push(['', 0, '']);
     });
   };
   chngQsnr = (wh, event, index, delIndex) => {
     // wh - 0 - to change type, 1 - to add a option
-    if (wh === "alterQsnr")
+    if (wh === 'alterQsnr')
       this.setState((prevState) => {
         // event 0 - Add && 1 - Remove
-        if (event === 0) prevState.qsnr.push([0, 0, ""]);
+        if (event === 0) prevState.qsnr.push([0, 0, '']);
         else if (event === 1) prevState.qsnr.splice(index, 1);
         return prevState;
       });
@@ -45,14 +45,14 @@ class FillInfo extends Component {
       this.setState((prevState) => {
         prevState.qsnr[index][0] = val;
         if (val > 2 && val < 6 && !prevState.qsnr[index][3])
-          prevState.qsnr[index][3] = [""];
+          prevState.qsnr[index][3] = [''];
         else if (prevState.qsnr[index][3]) prevState.qsnr[index].pop();
         return prevState;
       });
-    } else if (wh === "alterOpt") {
+    } else if (wh === 'alterOpt') {
       this.setState((prevState) => {
         // event 0 - Add && 1 - Remove
-        if (event === 0) prevState.qsnr[index][3].push("");
+        if (event === 0) prevState.qsnr[index][3].push('');
         else if (event === 1) prevState.qsnr[index][3].splice(delIndex, 1);
         return prevState;
       });
@@ -77,9 +77,9 @@ class FillInfo extends Component {
     delete ti.strtTime;
     setStateObj.endTime = ti.endTime;
     delete ti.endTime;
-    setStateObj.isFixedDur = ti.isFixedDur === "true";
+    setStateObj.isFixedDur = ti.isFixedDur === 'true';
     delete ti.isFixedDur;
-    setStateObj.open = ti.open === "true";
+    setStateObj.open = ti.open === 'true';
     delete ti.open;
     if (ti.dur) {
       setStateObj.dur = ti.dur;
@@ -138,15 +138,15 @@ class FillInfo extends Component {
         if (index === 0) {
           notify(
             msgHolder,
-            "e",
+            'e',
             "Section Information can't be Null,<br>Atleast 1 is Required - Test won't work"
           );
           return;
         } else
           notify(
             msgHolder,
-            "e",
-            "Blank Sec-Data Found.Rest were ignored after that."
+            'e',
+            'Blank Sec-Data Found.Rest were ignored after that.'
           );
         secInfo = secInfo.slice(0, index);
       }
@@ -173,7 +173,7 @@ class FillInfo extends Component {
       else {
         notify(
           msgHolder,
-          "e",
+          'e',
           `Label-Not Found at position ${
             index + 1
           } - Current and the Rest Ignored`
@@ -201,7 +201,7 @@ class FillInfo extends Component {
               noOpt = true;
               notify(
                 msgHolder,
-                "e",
+                'e',
                 `No Option Exists for Label ${qsnr[index][2]}.<br>This Question was ignored.`
               );
               // Delete array
@@ -211,7 +211,7 @@ class FillInfo extends Component {
               qsnr[index][3] = qsnr[index][3].slice(0, i);
               notify(
                 msgHolder,
-                "e",
+                'e',
                 `Blank Option Exists for Label ${qsnr[index][2]}.<br>Rest after blank was found was ignored.`
               );
             }
@@ -238,12 +238,12 @@ class FillInfo extends Component {
     setStateObj.testInfo = ti;
     //
     this.props.setMainCompState(setStateObj);
-    notify(msgHolder, "s", "<h3>Test Information Prepared</h3>");
+    notify(msgHolder, 's', '<h3>Test Information Prepared</h3>');
   };
   render() {
     const { secInfo, qsnr, open, isFixedDur, isPool, sShot } = this.state;
     const { strtTime, endTime, dur, testInfo } = this.props;
-    console.log("render-testInfo", testInfo);
+    console.log('render-testInfo', testInfo);
     return (
       <form method="post" id="fillInfo" onSubmit={this.prepareTestInfo}>
         <div>
@@ -297,7 +297,7 @@ class FillInfo extends Component {
                 <tr>
                   <td>
                     <label htmlFor="dttmE">
-                      {isFixedDur ? "Entry Allowed Till" : "End Date & Time"}
+                      {isFixedDur ? 'Entry Allowed Till' : 'End Date & Time'}
                     </label>
                   </td>
                   <td>
@@ -314,7 +314,7 @@ class FillInfo extends Component {
                   <td>
                     <label htmlFor="durType1">Candidate Appears For -:</label>
                   </td>
-                  <td style={{ textAlign: "left" }}>
+                  <td style={{ textAlign: 'left' }}>
                     <input
                       type="radio"
                       name="isFixedDur"
@@ -353,7 +353,7 @@ class FillInfo extends Component {
                         id="dur"
                         placeholder="in minutes"
                         defaultValue={dur}
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         required
                       ></input>
                     </td>
@@ -363,7 +363,7 @@ class FillInfo extends Component {
                   <td>
                     <label htmlFor="dttmE">Choose Test Nature</label>
                   </td>
-                  <td style={{ textAlign: "left" }}>
+                  <td style={{ textAlign: 'left' }}>
                     <input
                       type="radio"
                       name="open"
@@ -606,7 +606,7 @@ class FillInfo extends Component {
                     <td>
                       <label>Set Interval Range (in secs)</label>
                     </td>
-                    <td style={{ textAlign: "left" }}>
+                    <td style={{ textAlign: 'left' }}>
                       <input
                         type="number"
                         name="min"
@@ -748,7 +748,7 @@ class FillInfo extends Component {
                   );
                 })}
                 <tr>
-                  <td colSpan={isPool ? 7 : 6} style={{ textAlign: "right" }}>
+                  <td colSpan={isPool ? 7 : 6} style={{ textAlign: 'right' }}>
                     <button
                       type="button"
                       className="btnSecondary"
@@ -786,10 +786,10 @@ class FillInfo extends Component {
                   );
                 })}
                 <tr>
-                  <td colSpan="5" style={{ textAlign: "right" }}>
+                  <td colSpan="5" style={{ textAlign: 'right' }}>
                     <button
                       type="button"
-                      onClick={() => this.chngQsnr("alterQsnr", 0)}
+                      onClick={() => this.chngQsnr('alterQsnr', 0)}
                     >
                       Questionnaire +1
                     </button>

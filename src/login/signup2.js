@@ -1,12 +1,12 @@
-import React, { PureComponent } from "react";
-import { notify } from "./../common.js";
+import React, { PureComponent } from 'react';
+import { notify } from './../common.js';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 class SignUp2 extends PureComponent {
   constructor() {
     super();
-    this.state = { errMsg: "", process: false };
+    this.state = { errMsg: '', process: false };
     this.inputPswd = React.createRef();
     //
     this.reqCtr = 0;
@@ -14,8 +14,8 @@ class SignUp2 extends PureComponent {
   showPswdCheck = (status, index) => {
     const ele = this.pswdChk[index];
     if (!ele) return false;
-    if (status === 1) ele.className = "fa fa-check styleGreen";
-    else ele.className = "fa fa-times styleRed";
+    if (status === 1) ele.className = 'fa fa-check styleGreen';
+    else ele.className = 'fa fa-times styleRed';
   };
   pswdChkLive = () => {
     const { msgHolder } = this.props;
@@ -23,11 +23,11 @@ class SignUp2 extends PureComponent {
     const len = pswd.length;
     //
     if (/\s/g.test(pswd)) {
-      notify(msgHolder, "e", "No whitespace allowed");
+      notify(msgHolder, 'e', 'No whitespace allowed');
       return false;
     }
     if (/\t/g.test(pswd)) {
-      notify(msgHolder, "e", "No TAB spaces allowed");
+      notify(msgHolder, 'e', 'No TAB spaces allowed');
       return false;
     }
     if (len >= 6 && len <= 16) this.showPswdCheck(1, 0);
@@ -51,16 +51,16 @@ class SignUp2 extends PureComponent {
     if (this.reqCtr > 5) {
       notify(
         msgHolder,
-        "e",
-        "Reached maximum attempts allowed.<br>Please retry after few hours."
+        'e',
+        'Reached maximum attempts allowed.<br>Please retry after few hours.'
       );
       return false;
     }
-    const notSatis = document.querySelectorAll("#pswdChkLive .fa-times");
+    const notSatis = document.querySelectorAll('#pswdChkLive .fa-times');
     if (notSatis.length) {
       notify(
         msgHolder,
-        "e",
+        'e',
         "Entered Password doesn't satisfy all security Standards.<br>For details see text against Red Cross."
       );
       return false;
@@ -68,20 +68,20 @@ class SignUp2 extends PureComponent {
     this.setState({ process: true });
     const pswd = this.inputPswd.current.value.trim();
     if (!pswd) {
-      notify(msgHolder, "e", "Password can't be blank.");
+      notify(msgHolder, 'e', "Password can't be blank.");
       return false;
     }
     const formData = new FormData();
-    formData.append("password", pswd);
+    formData.append('password', pswd);
     const { isReset, token } = this.props;
-    if (isReset) formData.append("isReset", true);
-    formData.append("_csrf", token);
+    if (isReset) formData.append('isReset', true);
+    formData.append('_csrf', token);
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/login/register_Acc/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       this.reqCtr++;
       const response = await promise.json();
@@ -100,7 +100,7 @@ class SignUp2 extends PureComponent {
             });
           else {
             window.alert(
-              "You must create your username and Fill your name in your profile to continue to the Test.\nWe are redirecting you to the Profile-Page."
+              'You must create your username and Fill your name in your profile to continue to the Test.\nWe are redirecting you to the Profile-Page.'
             );
             this.props.setMainCompState({
               action: 6,
@@ -113,28 +113,28 @@ class SignUp2 extends PureComponent {
           errMsg: response.error.message,
           process: false,
         });
-      else notify(msgHolder, "e", "");
+      else notify(msgHolder, 'e', '');
       this.setState({ process: false });
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "SERVER Connection Error<br>Check your Internet Connection"
+        'e',
+        'SERVER Connection Error<br>Check your Internet Connection'
       );
       this.setState({ process: false });
     }
   };
   componentDidMount() {
-    this.pswdChk = document.querySelectorAll("#pswdChkLive .fa");
-    if (this.props.isReset) document.title = "Create new Password";
-    else document.title = "Secure your Account";
+    this.pswdChk = document.querySelectorAll('#pswdChkLive .fa');
+    if (this.props.isReset) document.title = 'Create new Password';
+    else document.title = 'Secure your Account';
   }
   render() {
     const { process, errMsg } = this.state;
     const { isReset, toggleShowHide } = this.props;
     return (
       <>
-        <h2>{isReset ? "Create New Password" : "Secure your Account"}</h2>
+        <h2>{isReset ? 'Create New Password' : 'Secure your Account'}</h2>
         <form method="post" onSubmit={this.registerAccount}>
           <div className="middleText">
             <p>✩ Account Verification Complete.</p>
@@ -217,7 +217,7 @@ class SignUp2 extends PureComponent {
               type="submit"
               disabled={process ? true : false}
             >
-              {isReset ? "Submit" : "Register Me"}
+              {isReset ? 'Submit' : 'Register Me'}
             </button>
           </div>
         </form>

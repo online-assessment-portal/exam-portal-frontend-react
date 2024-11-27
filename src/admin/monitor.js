@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import Peer from "peerjs";
-import { io } from "socket.io-client";
+import React, { Component } from 'react';
+import Peer from 'peerjs';
+import { io } from 'socket.io-client';
 //
-import { notify } from "./../common.js";
+import { notify } from './../common.js';
 //
-import "./monitor.css";
-import AdminModal from "./adminModal";
-import ChatComp from "./../ChatComponent";
-import RenderVid from "./renderVideo";
+import './monitor.css';
+import AdminModal from './adminModal';
+import ChatComp from './../ChatComponent';
+import RenderVid from './renderVideo';
 //
-import { checkDev } from "./../detectDev";
+import { checkDev } from './../detectDev';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -41,7 +41,7 @@ class Proctor extends Component {
     this.mediaConn = [];
     this.mediaCallHist = [];
     //
-    this.options = { mimeType: "video/webm;codecs=vp8,opus" };
+    this.options = { mimeType: 'video/webm;codecs=vp8,opus' };
     //
     this.msgHolder = React.createRef();
     //
@@ -58,7 +58,7 @@ class Proctor extends Component {
     const res = checkDev();
     if (res.isOpen || navigator.maxTouchPoints === 1) {
       const { myKey, loggedIn } = this.state;
-      if (loggedIn) this.storeViolation(myKey, "devT");
+      if (loggedIn) this.storeViolation(myKey, 'devT');
       window.alert(
         "Close developer Tools/Inspect.\nFor Security Reasons and to maintain connection ethics we don't allow Inspecting."
       );
@@ -70,25 +70,25 @@ class Proctor extends Component {
   reqLogout = async () => {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
-        method: "POST",
+        method: 'POST',
         body: `_csrf=${this.state.token}`,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true)
         notify(
           this.msgHolder,
-          "s",
-          "Logout Success.<br>Please close all Browser TABs"
+          's',
+          'Logout Success.<br>Please close all Browser TABs'
         );
       else if (response.error)
-        notify(this.msgHolder, "e", response.error.message);
-      else notify(this.msgHolder, "e", "");
+        notify(this.msgHolder, 'e', response.error.message);
+      else notify(this.msgHolder, 'e', '');
     } catch (error) {
       notify(
         this.msgHolder,
-        "e",
-        "Something went wrong.<br>OR<br>Unable to connect to Server."
+        'e',
+        'Something went wrong.<br>OR<br>Unable to connect to Server.'
       );
     }
   };
@@ -105,8 +105,8 @@ class Proctor extends Component {
     if (peerId === -1) {
       notify(
         this.msgHolder,
-        "e",
-        "<h3>Please Wait</h3>Closing All Connections.<br>Wait for confirmation from Server."
+        'e',
+        '<h3>Please Wait</h3>Closing All Connections.<br>Wait for confirmation from Server.'
       );
       // Close from Client Side - Data Conn + Media Conn
       this.dataConn.forEach((each) => each.close());
@@ -121,7 +121,7 @@ class Proctor extends Component {
           while (each.length) each.forEach((eachConn) => eachConn.close());
         }
       }
-      notify(this.msgHolder, "s", "<h3>Done<br>Close this TAB after 3sec</h3>");
+      notify(this.msgHolder, 's', '<h3>Done<br>Close this TAB after 3sec</h3>');
     } else {
       // Close for one Peer both media+data
       if (mediaOnly === false)
@@ -170,14 +170,14 @@ class Proctor extends Component {
       return false;
     notify(
       this.msgHolder,
-      "s",
+      's',
       "Process initiated.<br>Wait for Status from Server.<br>Please don't perform any action till response is received."
     );
-    this.socket.emit("endTest", cand.socketId, (response) => {
+    this.socket.emit('endTest', cand.socketId, (response) => {
       if (response.done) {
         const updated = this.removeLive(cand);
         // ae - Admin Ended Test
-        updated.socketId = "ae";
+        updated.socketId = 'ae';
         this.myList[mListIndex] = updated;
         this.closeAllConn(cand.peerId);
         // Remove Video Stream
@@ -198,27 +198,27 @@ class Proctor extends Component {
             }
           }
         } else this.forceUpdate();
-        notify(this.msgHolder, "e", "Ended");
+        notify(this.msgHolder, 'e', 'Ended');
       } else
         notify(
           this.msgHolder,
-          "e",
+          'e',
           "Sorry due to some issues the Test can't be ended.<br>Please retry after few minutes."
         );
     });
   };
   getSupportedRec = () => {
     const list = [
-      "video/webm",
-      "video/webm;codecs=vp8",
-      "video/webm;codecs=vp9",
-      "video/webm;codecs=vp8.0",
-      "video/webm;codecs=vp9.0",
-      "video/webm;codecs=vp8,opus",
-      "video/webm;codecs=vp8,pcm",
-      "video/WEBM;codecs=VP8,OPUS",
-      "video/webm;codecs=vp9,opus",
-      "video/webm;codecs=vp8,vp9,opus",
+      'video/webm',
+      'video/webm;codecs=vp8',
+      'video/webm;codecs=vp9',
+      'video/webm;codecs=vp8.0',
+      'video/webm;codecs=vp9.0',
+      'video/webm;codecs=vp8,opus',
+      'video/webm;codecs=vp8,pcm',
+      'video/WEBM;codecs=VP8,OPUS',
+      'video/webm;codecs=vp9,opus',
+      'video/webm;codecs=vp8,vp9,opus',
     ];
     for (let i = 0; i < list.length; i++) {
       const each = list[i];
@@ -264,7 +264,7 @@ class Proctor extends Component {
       const recIndex = strCollI * 2 + strmI;
       const { recorderColl } = this.state;
       const recorderChk = this.state.recorderColl[recIndex];
-      if (recorderChk && recorderChk.state === "recording") {
+      if (recorderChk && recorderChk.state === 'recording') {
         recorderChk.stop();
         recorderColl[recIndex] = null;
         this.setState({ recorderColl: recorderColl });
@@ -288,13 +288,13 @@ class Proctor extends Component {
         // Change name in case name from myList get removed faster when removing prcotoring
         downloadE.download =
           myList.email +
-          "_" +
-          (strmObj.streams[strmI].req === "cam" ? "webcam" : "screen") +
-          ".webm";
+          '_' +
+          (strmObj.streams[strmI].req === 'cam' ? 'webcam' : 'screen') +
+          '.webm';
         downloadE.click();
       })
       .catch((err) => {
-        notify(this.msgHolder, "e", "Unable to start recording.");
+        notify(this.msgHolder, 'e', 'Unable to start recording.');
       });
   };
   // Stop Recoding in case candidate dis-connected
@@ -307,13 +307,13 @@ class Proctor extends Component {
         for (let strI = 0; strI < each.streams.length; strI++) {
           const recIndex = strCollI * 2 + strI;
           const recorder = recorderColl[recIndex];
-          if (recorder && recorder.state === "recording") {
+          if (recorder && recorder.state === 'recording') {
             recorder.stop();
             this.setState((prevState) => {
               prevState.alertG.push(`Stopped Recording: Index${strI}`);
               return prevState;
             });
-            recorderColl[recIndex] = "w";
+            recorderColl[recIndex] = 'w';
           }
         }
         break;
@@ -327,7 +327,7 @@ class Proctor extends Component {
       const promiseColl = [];
       for (let i = 0; i < strmObj.streams.length; i++) {
         const recorder = this.state.recorderColl[strCollI * 2 + i];
-        if ((isRecAll && recorder === undefined) || recorder === "w") {
+        if ((isRecAll && recorder === undefined) || recorder === 'w') {
           const promise = new Promise((res) =>
             this.initiateRec(strmObj, strCollI, i, res)
           );
@@ -381,8 +381,8 @@ class Proctor extends Component {
       // Start Recoding
       notify(
         this.msgHolder,
-        "s",
-        "All current and upcoming streams will be recorded.<br>Keep Patience.",
+        's',
+        'All current and upcoming streams will be recorded.<br>Keep Patience.',
         10000
       );
       const stateObj = { isRecAll: true, showVid: 2 };
@@ -398,16 +398,16 @@ class Proctor extends Component {
         else
           notify(
             this.msgHolder,
-            "s",
-            "No Streams to record now.<br>but upcoming Streams will be automatically recorded."
+            's',
+            'No Streams to record now.<br>but upcoming Streams will be automatically recorded.'
           );
       });
     } else {
       // End Recoding
       notify(
         this.msgHolder,
-        "s",
-        "No upcoming streams will be automatically recorded.<br>However the old streams on which recorder was set (if any) will continue to record."
+        's',
+        'No upcoming streams will be automatically recorded.<br>However the old streams on which recorder was set (if any) will continue to record.'
       );
       const { streamColl, recorderColl } = this.state;
       if (streamColl.length)
@@ -416,29 +416,29 @@ class Proctor extends Component {
             const recIndex = index * 2 + strI;
             // If waiting streams ie 'w' then cancel wait else stop recording
             const recorder = recorderColl[recIndex];
-            if (recorder && recorder.state === "recording") recorder.stop();
+            if (recorder && recorder.state === 'recording') recorder.stop();
             recorderColl[recIndex] = null;
           }
         });
-      else notify(this.msgHolder, "s", "No Recordings Available.");
+      else notify(this.msgHolder, 's', 'No Recordings Available.');
       this.setState({ isRecAll: false, recorderColl: recorderColl });
     }
   };
   muteAll = () => {
-    const allVid = document.getElementsByClassName("webcam");
+    const allVid = document.getElementsByClassName('webcam');
     for (let i = 0; i < allVid.length; i++) allVid[i].muted = true;
-    const allUnmute = document.getElementsByClassName("fa-microphone");
+    const allUnmute = document.getElementsByClassName('fa-microphone');
     for (let i = 0; i < allUnmute.length; i++)
-      allUnmute[i].className = "fa fa-microphone-slash";
+      allUnmute[i].className = 'fa fa-microphone-slash';
   };
   toggleMute = (icon, strmColI, strmI) => {
     const vidEle = this.allVid[strmColI * 2 + strmI];
     if (vidEle.muted) {
       vidEle.muted = false;
-      icon.className = "fa fa-microphone";
+      icon.className = 'fa fa-microphone';
     } else {
       vidEle.muted = true;
-      icon.className = "fa fa-microphone-slash";
+      icon.className = 'fa fa-microphone-slash';
     }
   };
   //
@@ -446,9 +446,9 @@ class Proctor extends Component {
     const { testInfo } = this.state;
     let req = [];
     if (cand.cam === true && (testInfo.cam || testInfo.mic)) {
-      req.push("cam");
-      if (cand.scrn === true && testInfo.win) req.push("scrn");
-    } else if (cand.scrn === true && testInfo.win) req.push("scrn");
+      req.push('cam');
+      if (cand.scrn === true && testInfo.win) req.push('scrn');
+    } else if (cand.scrn === true && testInfo.win) req.push('scrn');
     return req;
   };
   // Setup Call Type and send Required Stream using PeerJS data connection
@@ -458,9 +458,9 @@ class Proctor extends Component {
       const conn = this.dataConn[connIndex];
       if (!(conn && conn.open)) rej();
       conn.send(data);
-      conn.once("data", (data) => {
+      conn.once('data', (data) => {
         clearTimeout(timeout);
-        if (data.type === "ct" && data.accept === 1) res();
+        if (data.type === 'ct' && data.accept === 1) res();
         else rej();
       });
     });
@@ -477,7 +477,7 @@ class Proctor extends Component {
           );
           this.mediaConn.push(callConn);
           //
-          callConn.on("stream", (candMediaStream) => {
+          callConn.on('stream', (candMediaStream) => {
             clearTimeout(timeout);
             resolve(candMediaStream);
           });
@@ -492,14 +492,14 @@ class Proctor extends Component {
     return new Promise((res, rej) => {
       let streams = [];
       // ct - call type
-      this.callPeer(dConnIndex, { type: "ct", req: req[0] })
+      this.callPeer(dConnIndex, { type: 'ct', req: req[0] })
         .then((candStream) => {
           streams.push({ req: req[0], stream: candStream });
         })
         .then(() => {
           if (req[1])
             this.callPeer(dConnIndex, {
-              type: "ct",
+              type: 'ct',
               req: req[1],
             })
               .then((candStream_1) => {
@@ -524,9 +524,9 @@ class Proctor extends Component {
       //
       req = [];
       if (each.cam === true && (testInfo.cam || testInfo.mic)) {
-        req.push("cam");
-        if (each.scrn === true && testInfo.win) req.push("scrn");
-      } else if (each.scrn === true && testInfo.win) req.push("scrn");
+        req.push('cam');
+        if (each.scrn === true && testInfo.win) req.push('scrn');
+      } else if (each.scrn === true && testInfo.win) req.push('scrn');
       // If something is available then call else skip candidate
       if (req.length) {
         // list index equals dataConn Index
@@ -564,8 +564,8 @@ class Proctor extends Component {
       .catch(() => {
         notify(
           this.msgHolder,
-          "e",
-          "Failed to fetch all or some of the Streams. - make_Video_Call_All Request"
+          'e',
+          'Failed to fetch all or some of the Streams. - make_Video_Call_All Request'
         );
         process();
       });
@@ -583,7 +583,7 @@ class Proctor extends Component {
       this.closeAllConn(cand.peerId, true);
       //
       //
-      this.socket.emit("closeMedia", {
+      this.socket.emit('closeMedia', {
         socketId: cand.socketId,
         peerId: this.peerConn._id,
       });
@@ -634,7 +634,7 @@ class Proctor extends Component {
           if (check)
             notify(
               this.msgHolder,
-              "e",
+              'e',
               `re-Calling Video Stream: No Stream to fetch.<br>Name: ${cand.name}<br>Email: ${cand.email}`
             );
           else
@@ -661,15 +661,15 @@ class Proctor extends Component {
   toggleVideoRender = () => {
     const { showVid } = this.state;
     if (showVid === -1 && !this.myList.length) {
-      notify(this.msgHolder, "e", "Proctoring List Empty");
+      notify(this.msgHolder, 'e', 'Proctoring List Empty');
       return false;
     }
     if (showVid === -1) {
-      notify(this.msgHolder, "s", "Initiated.<br>Keep Patience.");
+      notify(this.msgHolder, 's', 'Initiated.<br>Keep Patience.');
       this.makeVideoCallAll();
     } else if (showVid > 0) {
       this.setState({ showVid: 0 });
-      notify(this.msgHolder, "s", "Auto fetch stream Stopped.");
+      notify(this.msgHolder, 's', 'Auto fetch stream Stopped.');
     } else this.setState({ showVid: 1 });
   };
   //
@@ -680,11 +680,11 @@ class Proctor extends Component {
     ]);
   };
   createEmptyVideoTrack = ({ width, height }) => {
-    const canvas = Object.assign(document.createElement("canvas"), {
+    const canvas = Object.assign(document.createElement('canvas'), {
       width,
       height,
     });
-    canvas.getContext("2d").fillRect(0, 0, width, height);
+    canvas.getContext('2d').fillRect(0, 0, width, height);
     const stream = canvas.captureStream();
     const track = stream.getVideoTracks()[0];
     return Object.assign(track, { enabled: false });
@@ -699,14 +699,14 @@ class Proctor extends Component {
   };
   toggleGridForm = () => {
     const sty = this.gridForm.current.style;
-    if (sty.display !== "block") {
-      sty.display = "block";
-      sty.animation = "fadeInRight 200ms ease-out";
+    if (sty.display !== 'block') {
+      sty.display = 'block';
+      sty.animation = 'fadeInRight 200ms ease-out';
     } else {
-      sty.animation = "fadeOutRight 200ms ease-out";
+      sty.animation = 'fadeOutRight 200ms ease-out';
       setTimeout(() => {
-        sty.display = "none";
-        sty.animation = "unset";
+        sty.display = 'none';
+        sty.animation = 'unset';
       }, 180);
     }
   };
@@ -719,20 +719,20 @@ class Proctor extends Component {
       return prevState;
     });
     // Send the Value to set to Candidate Violation Storage
-    conn.send({ type: "setVio", setFor: setFor, setVal: setValue });
+    conn.send({ type: 'setVio', setFor: setFor, setVal: setValue });
   };
   //
   addDataConnListPerm = (conn) => {
-    conn.on("data", (data) => {
-      if (data.type === "verifyReq") conn.send({ type: "verifyRes" });
-      else if (data.type === "chat") {
+    conn.on('data', (data) => {
+      if (data.type === 'verifyReq') conn.send({ type: 'verifyRes' });
+      else if (data.type === 'chat') {
         let { chatWith, show } = this.state;
         //
         const old = localStorage.getItem(`chat_${data.from}`);
         let newChat = { nMsg: 1, of: data.from, store: [] };
         if (old) {
           newChat = JSON.parse(old);
-          if (typeof chatWith === "number" && isFinite(chatWith))
+          if (typeof chatWith === 'number' && isFinite(chatWith))
             chatWith = this.myList[0].email;
           if (data.from === chatWith && show === 2) newChat.nMsg = 0;
           else newChat.nMsg += 1;
@@ -756,7 +756,7 @@ class Proctor extends Component {
         //
         if (show === 2) this.forceUpdate();
         //
-      } else if (data.type === "vio") {
+      } else if (data.type === 'vio') {
         let myKey = `${data.code}_${data.email}`,
           userObj = {},
           found = false,
@@ -773,12 +773,12 @@ class Proctor extends Component {
         if (found === false) return false;
         // Process Violation + Device Change / localStorage clear
         let key;
-        if (data.wfo) key = "wfo";
-        else if (data.rsz) key = "rsz";
-        else if (data.fsv) key = "fsv";
-        else if (data.devT) key = "devT";
-        else if (data.mpv) key = "mpv";
-        else if (data.spv) key = "spv";
+        if (data.wfo) key = 'wfo';
+        else if (data.rsz) key = 'rsz';
+        else if (data.fsv) key = 'fsv';
+        else if (data.devT) key = 'devT';
+        else if (data.mpv) key = 'mpv';
+        else if (data.spv) key = 'spv';
         else return false;
         //
         const storeKey = `${myKey}_${key}`;
@@ -800,22 +800,22 @@ class Proctor extends Component {
               data.wfo
                 ? `${userObj.vData.wfo} Window Violations`
                 : data.rsz
-                ? `${userObj.vData.rsz} Resize Violations`
-                : data.fsv
-                ? `${userObj.vData.fsv} Full-Screen Violations`
-                : data.devT
-                ? `${userObj.vData.devT} Test Tamper - Red`
-                : data.mpv
-                ? `${userObj.vData.mpv} Media Proctoring Violations`
-                : data.spv
-                ? `${userObj.vData.spv} Screen Proctoring Violations`
-                : ""
+                  ? `${userObj.vData.rsz} Resize Violations`
+                  : data.fsv
+                    ? `${userObj.vData.fsv} Full-Screen Violations`
+                    : data.devT
+                      ? `${userObj.vData.devT} Test Tamper - Red`
+                      : data.mpv
+                        ? `${userObj.vData.mpv} Media Proctoring Violations`
+                        : data.spv
+                          ? `${userObj.vData.spv} Screen Proctoring Violations`
+                          : ''
             }. &emsp; Name: ${userObj.name} &emsp; Email: ${userObj.email}`
           );
           return prevState;
         });
         if (this.state.show === 1) this.forceUpdate();
-      } else if (data.type === "re-call") {
+      } else if (data.type === 're-call') {
         const email = data.email;
         for (let i = 0; i < this.myList.length; i++) {
           const each = this.myList[i];
@@ -846,12 +846,12 @@ class Proctor extends Component {
         reject();
       }, 10000);
       const dataConn = this.peerConn.connect(peerId);
-      dataConn.on("open", () => {
+      dataConn.on('open', () => {
         // Request Verification from Candidate Side that no previous admin Exists
-        dataConn.send({ type: "verifyReq" });
+        dataConn.send({ type: 'verifyReq' });
       });
-      dataConn.once("data", (data) => {
-        if (data.type === "verifyRes") {
+      dataConn.once('data', (data) => {
+        if (data.type === 'verifyRes') {
           if (data.proctorMe) {
             const response = { conn: dataConn, index: index };
             clearTimeout(timeout);
@@ -879,7 +879,7 @@ class Proctor extends Component {
     // Close all recorder
     const { recorderColl } = this.state;
     recorderColl.forEach((each, index) => {
-      if (each && each.state === "recording") each.stop();
+      if (each && each.state === 'recording') each.stop();
       recorderColl[index] = null;
     });
     this.setState({ recorderColl: recorderColl });
@@ -891,7 +891,7 @@ class Proctor extends Component {
     // Close form Admin Side
     this.closeAllConn(-1);
     // Socket Side Close
-    this.socket.emit("proctorCloseAll", {
+    this.socket.emit('proctorCloseAll', {
       passcode: this.state.passcode,
       peerId: this.peerConn._id,
     });
@@ -909,7 +909,7 @@ class Proctor extends Component {
   };
   setViolationData = (passcode, cand, index) => {
     const myKey = `${passcode}_${cand.email}`;
-    const keyColl = ["wfo", "rsz", "fsv", "devT", "mpv", "spv"];
+    const keyColl = ['wfo', 'rsz', 'fsv', 'devT', 'mpv', 'spv'];
     keyColl.forEach((each) => {
       cand = this.setOneByOne(myKey, each, cand);
     });
@@ -943,9 +943,9 @@ class Proctor extends Component {
         this.addDataConnListPerm(response.conn);
       })
       .catch((rejIndex) => {
-        let rejCand = "",
+        let rejCand = '',
           isUnreachable = false;
-        if (typeof rejIndex === "object") {
+        if (typeof rejIndex === 'object') {
           rejIndex = rejIndex.index;
           isUnreachable = true;
         }
@@ -954,9 +954,9 @@ class Proctor extends Component {
         if (rejCand)
           notify(
             this.msgHolder,
-            "e",
+            'e',
             `Candidate ${
-              isUnreachable ? "Unreachable" : "Already being Proctored"
+              isUnreachable ? 'Unreachable' : 'Already being Proctored'
             }<br>Name: ${rejCand.name}<br>Email: ${rejCand.email}`,
             10000
           );
@@ -974,7 +974,7 @@ class Proctor extends Component {
     //
     this.rmvStream(listIndex);
     //
-    this.socket.emit("closeMedia", {
+    this.socket.emit('closeMedia', {
       socketId: cand.socketId,
       peerId: this.peerConn._id,
     });
@@ -1002,9 +1002,9 @@ class Proctor extends Component {
           // Stop Recording if any
           for (let j = 0; j < streams.length; j++) {
             const recorder = recorderColl[i * 2 + j];
-            if (recorder && recorder.state === "recording") {
+            if (recorder && recorder.state === 'recording') {
               const promise = new Promise((resolve) => {
-                recorder.addEventListener("stop", () => {
+                recorder.addEventListener('stop', () => {
                   resolve(i * 2 + j);
                 });
                 recorder.stop();
@@ -1057,7 +1057,7 @@ class Proctor extends Component {
     const dataConn = this.dataConn[listIndex];
     if (dataConn && dataConn.open) dataConn.send({ closeAll: true });
     //
-    this.socket.emit("proctorClose", {
+    this.socket.emit('proctorClose', {
       socketId: cand.socketId,
       peerId: this.peerConn._id,
     });
@@ -1068,7 +1068,7 @@ class Proctor extends Component {
 
     notify(
       this.msgHolder,
-      "s",
+      's',
       `Proctoring taken down for-:Name: ${cand.name}<br>Email: ${cand.email}.`
     );
   };
@@ -1105,7 +1105,7 @@ class Proctor extends Component {
                   .catch(() => {
                     notify(
                       this.msgHolder,
-                      "e",
+                      'e',
                       `No Stream to fetch.<br>Name: ${cand.name}<br>Email: ${cand.email}`,
                       10000
                     );
@@ -1141,58 +1141,58 @@ class Proctor extends Component {
         else this.setState({ show: 1 });
       })
       .catch(() => {
-        notify(this.msgHolder, "e", "Addding to your List Failed");
+        notify(this.msgHolder, 'e', 'Addding to your List Failed');
       });
   };
   //
   initiatePeerConn = (pser) => {
     return new Promise((resolve) => {
       const peerHost =
-        pser === 0 ? "mypeercleanserve.herokuapp.com" : "mypeerserv.tk";
+        pser === 0 ? 'mypeercleanserve.herokuapp.com' : 'mypeerserv.tk';
       this.peerConn = new Peer(undefined, {
         host: peerHost,
         secure: true,
         port: 443,
-        path: "/peerjs/myapp",
+        path: '/peerjs/myapp',
       });
       //
       // setInterval(() => {
       // 	console.log(this.peerConn.connections);
       // }, 5000);
       //
-      this.peerConn.on("open", () => {
-        notify(this.msgHolder, "s", "Connection 2: Intact");
+      this.peerConn.on('open', () => {
+        notify(this.msgHolder, 's', 'Connection 2: Intact');
         resolve();
       });
       //
-      this.peerConn.on("close", () => {
-        notify(this.msgHolder, "e", "Connection 2: Closed.");
+      this.peerConn.on('close', () => {
+        notify(this.msgHolder, 'e', 'Connection 2: Closed.');
         this.peerConn.destroy();
       });
-      this.peerConn.on("disconnected", () => {
+      this.peerConn.on('disconnected', () => {
         notify(
           this.msgHolder,
-          "e",
-          "Connection 2: Disconnected.<br>Auto retry after 10s.<br>else you may choose to close all connections from your side <br>and refresh this Page to re-connect.",
+          'e',
+          'Connection 2: Disconnected.<br>Auto retry after 10s.<br>else you may choose to close all connections from your side <br>and refresh this Page to re-connect.',
           10000
         );
         setTimeout(() => {
           if (this.peerConn._destroyed)
             notify(
               this.msgHolder,
-              "e",
-              "<h3>Connection Ended</h3> - Close connections from your side and close this page.",
+              'e',
+              '<h3>Connection Ended</h3> - Close connections from your side and close this page.',
               60000
             );
           else this.peerConn.reconnect();
         }, 10000);
       });
-      this.peerConn.on("error", (err) => {
+      this.peerConn.on('error', (err) => {
         console.log(err, err.type);
         notify(
           this.msgHolder,
-          "e",
-          "<h3>Server 2 : Connection Error</h3>- Switch to High Speed Internet<br>- Prefer Chrome Browser<br>- Disable all extensions.<br>Still facing issue contact Webmaster",
+          'e',
+          '<h3>Server 2 : Connection Error</h3>- Switch to High Speed Internet<br>- Prefer Chrome Browser<br>- Disable all extensions.<br>Still facing issue contact Webmaster',
           60000
         );
       });
@@ -1205,7 +1205,7 @@ class Proctor extends Component {
       this.setState((prevState) => {
         prevState.alertR.push(
           `Candidate connected - ${
-            list === 1 ? "proctoring list" : "other candidate list"
+            list === 1 ? 'proctoring list' : 'other candidate list'
           } - <b>New session - Duplicate Login.</b><br>Name: ${
             each.name
           } &emsp; Email: ${
@@ -1295,8 +1295,8 @@ class Proctor extends Component {
     data.cam = false;
     data.mic = false;
     data.scrn = false;
-    data.peerId = "";
-    data.socketId = "";
+    data.peerId = '';
+    data.socketId = '';
     return data;
   };
   otherSession = (data, each, listIndex, list) => {
@@ -1310,7 +1310,7 @@ class Proctor extends Component {
           this.setState((prevState) => {
             prevState.alertR.push(
               `Candidate dis-Connected - ${
-                list === 1 ? "proctoring list" : "other candidate list"
+                list === 1 ? 'proctoring list' : 'other candidate list'
               } - <b>One session - Duplicate Login.</b><br>Name: ${
                 each.name
               } &emsp; Email: ${each.email}`
@@ -1405,32 +1405,32 @@ class Proctor extends Component {
   };
   socketConnect = (passcode) => {
     return new Promise((resolve) => {
-      this.socket = io("/");
-      this.socket.on("connect", () => {
+      this.socket = io('/');
+      this.socket.on('connect', () => {
         resolve();
-        this.socket.emit("join-room", `${passcode}_admin`);
-        notify(this.msgHolder, "s", "Connection 1: Intact");
+        this.socket.emit('join-room', `${passcode}_admin`);
+        notify(this.msgHolder, 's', 'Connection 1: Intact');
       });
-      this.socket.on("newProctor", () =>
-        notify(this.msgHolder, "e", "New Proctor: Joined")
+      this.socket.on('newProctor', () =>
+        notify(this.msgHolder, 'e', 'New Proctor: Joined')
       );
-      this.socket.on("disconnect", () => {
+      this.socket.on('disconnect', () => {
         notify(
           this.msgHolder,
-          "e",
-          "Connection 1: Disconnected<br>Wait till I re-connect.<br>I will notify you once we are connected."
+          'e',
+          'Connection 1: Disconnected<br>Wait till I re-connect.<br>I will notify you once we are connected.'
         );
       });
-      this.socket.on("newRegistration", (data) => {
+      this.socket.on('newRegistration', (data) => {
         data.entryCtr = 1;
         let temp = [data];
         temp = this.constructVData(temp);
         this.newRegCandList.push(temp[0]);
       });
-      this.socket.on("cand-connected", (data) =>
+      this.socket.on('cand-connected', (data) =>
         this.processSocketConnData(data)
       );
-      this.socket.on("cand-disConnected", (data) =>
+      this.socket.on('cand-disConnected', (data) =>
         this.processSocketDconnData(data)
       );
     });
@@ -1462,7 +1462,7 @@ class Proctor extends Component {
         mpv: 0,
         spv: 0,
         devT: 0,
-        offline: "",
+        offline: '',
       };
       allCand[i] = eachReg;
     }
@@ -1472,17 +1472,17 @@ class Proctor extends Component {
     return new Promise(async (resolve, rej) => {
       try {
         const promise = await fetch(`${apiUrl}/proctor/enquire/`, {
-          method: "POST",
+          method: 'POST',
           body: `passcode=${passcode}&_csrf=${token}`,
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         });
         const response = await promise.json();
         if (promise.status === 200 && promise.ok === true) {
           if (response.allCand === 0)
             notify(
               this.msgHolder,
-              "e",
-              "<h3>No Registered Candidate Found.</h3>Wait for a candidate to register",
+              'e',
+              '<h3>No Registered Candidate Found.</h3>Wait for a candidate to register',
               10000
             );
           if (response.liveCand.length && response.allCand.length) {
@@ -1494,8 +1494,8 @@ class Proctor extends Component {
             this.otherCand = response.allCand;
             notify(
               this.msgHolder,
-              "e",
-              "<h3>No Candidate Found to be LIVE.</h3>Wait for connections."
+              'e',
+              '<h3>No Candidate Found to be LIVE.</h3>Wait for connections.'
             );
           }
           this.otherCand = this.constructVData(this.otherCand);
@@ -1538,34 +1538,34 @@ class Proctor extends Component {
             .catch((err) => {
               notify(
                 this.msgHolder,
-                "e",
+                'e',
                 "<h3>Can't connect to Stream Server.</h3>",
                 60000
               );
             });
         } else if (response.error) {
-          notify(this.msgHolder, "e", response.error.message);
+          notify(this.msgHolder, 'e', response.error.message);
           rej();
-        } else notify(this.msgHolder, "e", "");
+        } else notify(this.msgHolder, 'e', '');
       } catch (err) {
         notify(
           this.msgHolder,
-          "e",
-          "Request Send Failed.<br>Check for Internet Connection."
+          'e',
+          'Request Send Failed.<br>Check for Internet Connection.'
         );
       }
     });
   };
   componentDidUpdate() {
-    this.allVid = document.getElementsByTagName("video");
+    this.allVid = document.getElementsByTagName('video');
   }
   componentDidMount() {
-    const adminInfo = JSON.parse(document.getElementById("userInfo").innerText);
+    const adminInfo = JSON.parse(document.getElementById('userInfo').innerText);
     if (!adminInfo.passcode) {
-      notify(this.msgHolder, "e", "<h3>Invalid URL Access.</h3>", 10000);
+      notify(this.msgHolder, 'e', '<h3>Invalid URL Access.</h3>', 10000);
       return false;
     } else if (!adminInfo.loggedIn) {
-      notify(this.msgHolder, "e", "<h3>Unauthenticated Access.</h3>", 10000);
+      notify(this.msgHolder, 'e', '<h3>Unauthenticated Access.</h3>', 10000);
       return false;
     }
     document.title = `Proctoring - ${adminInfo.passcode}`;
@@ -1580,14 +1580,14 @@ class Proctor extends Component {
       .catch(() => {
         notify(
           this.msgHolder,
-          "e",
-          "<h3>Proctoring Initiate Failed.</h3>",
+          'e',
+          '<h3>Proctoring Initiate Failed.</h3>',
           60000
         );
       });
     this.processDevCheck();
-    window.addEventListener("blur", this.processDevCheck);
-    window.addEventListener("resize", this.processDevCheck);
+    window.addEventListener('blur', this.processDevCheck);
+    window.addEventListener('resize', this.processDevCheck);
   }
   render() {
     const {
@@ -1691,19 +1691,19 @@ class Proctor extends Component {
                   className="btnPrimary"
                   title={
                     showVid > 0
-                      ? "Stop Video Render"
-                      : "Request Video from Server : Start Render"
+                      ? 'Stop Video Render'
+                      : 'Request Video from Server : Start Render'
                   }
                   onClick={this.toggleVideoRender}
                 >
                   <i
-                    className={showVid > 0 ? "fa fa-stop-circle" : "fa fa-play"}
+                    className={showVid > 0 ? 'fa fa-stop-circle' : 'fa fa-play'}
                     aria-hidden="true"
                   ></i>
                 </button>
                 <button
                   type="button"
-                  className={isRecAll ? "btnPrimary recording" : "btnPrimary"}
+                  className={isRecAll ? 'btnPrimary recording' : 'btnPrimary'}
                   title="Record-all : All Displaying Screens will be recorded"
                   onClick={this.recordAll}
                 >
@@ -1720,7 +1720,7 @@ class Proctor extends Component {
                 <button
                   type="button"
                   className={
-                    showVid === 2 ? "btnPrimary activeBtn" : "btnPrimary"
+                    showVid === 2 ? 'btnPrimary activeBtn' : 'btnPrimary'
                   }
                   title="Show web-cam(s) Only"
                   onClick={
@@ -1738,7 +1738,7 @@ class Proctor extends Component {
                 <button
                   type="button"
                   className={
-                    showVid === 3 ? "btnPrimary activeBtn" : "btnPrimary"
+                    showVid === 3 ? 'btnPrimary activeBtn' : 'btnPrimary'
                   }
                   title="Show screen(s) Only"
                   onClick={
@@ -1772,8 +1772,8 @@ class Proctor extends Component {
                 else
                   notify(
                     this.msgHolder,
-                    "e",
-                    "No candidate in your Proctor List.<br>Please add one to initate Chat."
+                    'e',
+                    'No candidate in your Proctor List.<br>Please add one to initate Chat.'
                   );
               }}
             >
@@ -1838,20 +1838,20 @@ class Proctor extends Component {
                       key={strmColI}
                       className={
                         showVid === 1 && strm2
-                          ? "eachCand Streams2"
-                          : "eachCand"
+                          ? 'eachCand Streams2'
+                          : 'eachCand'
                       }
                     >
                       <div>
                         {each.streams.map((eachStream, strmI) => {
                           if (
-                            (showVid === 2 && eachStream.req === "scrn") ||
-                            (showVid === 3 && eachStream.req === "cam")
+                            (showVid === 2 && eachStream.req === 'scrn') ||
+                            (showVid === 3 && eachStream.req === 'cam')
                           )
                             return false;
                           const recorder = recorderColl[strmColI * 2 + strmI];
                           const isRec =
-                            recorder && recorder.state === "recording"
+                            recorder && recorder.state === 'recording'
                               ? true
                               : false;
                           return (
@@ -1861,7 +1861,7 @@ class Proctor extends Component {
                             >
                               <span
                                 className={
-                                  isRec ? "recSpan showRec" : "recSpan"
+                                  isRec ? 'recSpan showRec' : 'recSpan'
                                 }
                               >
                                 REC
@@ -1874,7 +1874,7 @@ class Proctor extends Component {
                               />
                               <div className="callOpt">
                                 <div>
-                                  {eachStream.req === "cam" ? (
+                                  {eachStream.req === 'cam' ? (
                                     <i
                                       className="fa fa-microphone-slash"
                                       aria-hidden="true"
@@ -1890,8 +1890,8 @@ class Proctor extends Component {
                                   <i
                                     className={
                                       isRec
-                                        ? "fa fa-video-camera recording"
-                                        : "fa fa-video-camera"
+                                        ? 'fa fa-video-camera recording'
+                                        : 'fa fa-video-camera'
                                     }
                                     aria-hidden="true"
                                     title="Start Recording"
@@ -1956,8 +1956,8 @@ class Proctor extends Component {
                     key={i1}
                     className={
                       showVid === 1 && strm2
-                        ? "eachCand Streams2 duplicate"
-                        : "eachCand duplicate"
+                        ? 'eachCand Streams2 duplicate'
+                        : 'eachCand duplicate'
                     }
                   >
                     <div>

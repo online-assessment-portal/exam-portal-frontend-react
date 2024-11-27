@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 class Navigator extends Component {
   render() {
     const {
@@ -20,7 +20,7 @@ class Navigator extends Component {
     return (
       <>
         <div id={id1}>
-          {id1 === "qNav" ? (
+          {id1 === 'qNav' ? (
             <>
               <p>Total Questions - {total}</p>
               <div id="qOverview">
@@ -31,8 +31,8 @@ class Navigator extends Component {
                   <span>{ansQ}</span> Answered
                 </p>
                 <p className="ansRevQ">
-                  <span>{ansRevQ}</span> Answered{" "}
-                  <span style={{ fontSize: "15px" }}>
+                  <span>{ansRevQ}</span> Answered{' '}
+                  <span style={{ fontSize: '15px' }}>
                     (&amp; marked for Review)
                   </span>
                 </p>
@@ -57,12 +57,12 @@ class Navigator extends Component {
             const secNotation = String.fromCharCode(65 + secIndex);
             return (
               <div key={secIndex}>
-                {id1 === "qNav" ? (
+                {id1 === 'qNav' ? (
                   <h4>
                     Section - {secNotation} ({eachSec[0]})
                   </h4>
                 ) : (
-                  <p style={{ textAlign: "center" }}>Sec-{secNotation}</p>
+                  <p style={{ textAlign: 'center' }}>Sec-{secNotation}</p>
                 )}
                 <div key={secIndex} id={id2}>
                   {cropStatus.map((each, index) => {
@@ -71,7 +71,7 @@ class Navigator extends Component {
                       <button
                         key={index}
                         className={
-                          crntQIndex === index ? each + " crntQ" : each
+                          crntQIndex === index ? each + ' crntQ' : each
                         }
                         type="button"
                         disabled={btnDis}

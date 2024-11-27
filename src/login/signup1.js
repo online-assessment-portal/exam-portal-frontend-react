@@ -1,5 +1,5 @@
-import React, { PureComponent } from "react";
-import { notify } from "./../common.js";
+import React, { PureComponent } from 'react';
+import { notify } from './../common.js';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -9,8 +9,8 @@ class SignUp1 extends PureComponent {
     this.state = {
       process: false,
       otpSent: false,
-      email: "",
-      errMsg: "",
+      email: '',
+      errMsg: '',
     };
     this.resendOTP = false;
     this.vfFailCtr = 0;
@@ -30,8 +30,8 @@ class SignUp1 extends PureComponent {
     ) {
       notify(
         msgHolder,
-        "e",
-        "Reached maximum attempts allowed.<br>Please retry after 15 mins."
+        'e',
+        'Reached maximum attempts allowed.<br>Please retry after 15 mins.'
       );
       return false;
     }
@@ -43,30 +43,30 @@ class SignUp1 extends PureComponent {
     if (otpSent) {
       otp = parseInt(this.otp.current.value);
       if (isNaN(otp) && !this.resendOTP)
-        return this.setState({ errMsg: "Invalid OTP Entered", process: false });
+        return this.setState({ errMsg: 'Invalid OTP Entered', process: false });
     }
     const { isReset, token } = this.props;
     const formData = new FormData();
     if (email) {
-      formData.append("email", email);
+      formData.append('email', email);
       if (!this.resendOTP && otp) {
-        formData.append("otp", otp);
+        formData.append('otp', otp);
         this.reqCtrV++;
       } else this.reqCtrM++;
     } else {
-      notify(msgHolder, "e", "Enter a valid e-Mail.");
+      notify(msgHolder, 'e', 'Enter a valid e-Mail.');
       this.setState({ process: false });
       return false;
     }
-    if (isReset) formData.append("isReset", true);
-    formData.append("_csrf", token);
+    if (isReset) formData.append('isReset', true);
+    formData.append('_csrf', token);
     //
     const formBody = new URLSearchParams(formData).toString();
     try {
       const promise = await fetch(`${apiUrl}/login/otp_auth/`, {
-        method: "POST",
+        method: 'POST',
         body: formBody,
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();
       //
@@ -75,36 +75,36 @@ class SignUp1 extends PureComponent {
           this.setState({
             otpSent: true,
             email: response.sentTo,
-            errMsg: "",
+            errMsg: '',
           });
-        } else if (response.ovs && response.ovs === "V") {
+        } else if (response.ovs && response.ovs === 'V') {
           if (response.vioVerify)
             notify(
               msgHolder,
-              "e",
-              "eMail-Id was Changed.<br>Account will be created for the email on which OTP was sent.<br>You can proceed safely."
+              'e',
+              'eMail-Id was Changed.<br>Account will be created for the email on which OTP was sent.<br>You can proceed safely.'
             );
           const { setMainCompState } = this.props;
           if (isReset) setMainCompState({ action: 5 });
           else setMainCompState({ action: 3 });
-        } else notify(msgHolder, "e", "");
+        } else notify(msgHolder, 'e', '');
       } else if (response.error) {
-        let msg = "";
+        let msg = '';
         const recMsg = response.error.message;
-        if (recMsg.search("email") >= 0)
+        if (recMsg.search('email') >= 0)
           msg =
-            "Email must be a valid email.<br>Note that we currently allow only [.com , .in , .edu , .net] email addresses.<br>Contact to add your organization.";
+            'Email must be a valid email.<br>Note that we currently allow only [.com , .in , .edu , .net] email addresses.<br>Contact to add your organization.';
         return this.setState({
           errMsg: msg ? msg : recMsg,
           process: false,
         });
-      } else notify(msgHolder, "e", "");
+      } else notify(msgHolder, 'e', '');
       this.setState({ process: false });
     } catch (error) {
       notify(
         msgHolder,
-        "e",
-        "SERVER Connection Error<br>Check your Internet Connection"
+        'e',
+        'SERVER Connection Error<br>Check your Internet Connection'
       );
       this.setState({ process: false });
     } finally {
@@ -112,8 +112,8 @@ class SignUp1 extends PureComponent {
     }
   };
   componentDidMount() {
-    if (this.props.isReset) document.title = "Reset Password";
-    else document.title = "Sign-Up";
+    if (this.props.isReset) document.title = 'Reset Password';
+    else document.title = 'Sign-Up';
   }
   render() {
     const { process, otpSent, email, errMsg } = this.state;
@@ -121,7 +121,7 @@ class SignUp1 extends PureComponent {
       this.props;
     return (
       <>
-        <h2>{isReset ? "Reset Password" : "Create your account"}</h2>
+        <h2>{isReset ? 'Reset Password' : 'Create your account'}</h2>
         <form method="post" onSubmit={this.signUpForm}>
           <div className="field">
             <i className="floatter fa fa-user" aria-hidden="true"></i>
@@ -139,7 +139,7 @@ class SignUp1 extends PureComponent {
           <div>
             <button
               className="btnPrimary"
-              type={otpSent ? "button" : "submit"}
+              type={otpSent ? 'button' : 'submit'}
               onClick={
                 otpSent
                   ? () => {
@@ -150,7 +150,7 @@ class SignUp1 extends PureComponent {
               }
               disabled={process ? true : false}
             >
-              {otpSent ? "Resend" : "Send"} OTP
+              {otpSent ? 'Resend' : 'Send'} OTP
             </button>
           </div>
           {otpSent ? null : (
@@ -164,7 +164,7 @@ class SignUp1 extends PureComponent {
           {otpSent ? (
             <div className="sucesMsg">
               <p>
-                ✩ A Verification e-Mail containing 6-digit OTP was Sent to{" "}
+                ✩ A Verification e-Mail containing 6-digit OTP was Sent to{' '}
                 {email}.
               </p>
               <p>
@@ -216,7 +216,7 @@ class SignUp1 extends PureComponent {
             </>
           ) : null}
           <h3 className="othOptHead">
-            <span>{isReset ? "Often forget Password ?" : "OR"}</span>
+            <span>{isReset ? 'Often forget Password ?' : 'OR'}</span>
           </h3>
           <div id="alternateLogin">
             <button
@@ -225,19 +225,19 @@ class SignUp1 extends PureComponent {
               disabled={process ? true : false}
               onClick={() => {
                 this.setState({ process: true });
-                localStorage.setItem("gLogin", window.location.pathname);
+                localStorage.setItem('gLogin', window.location.pathname);
                 window.location.replace(
-                  "https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20profile&response_type=code&client_id=1025872685182-o5jdqap12eg6d9t06sh5nqqdnj8she8s.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.cf%2Fgsign%2Fgoogle-login"
+                  'https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20profile&response_type=code&client_id=1025872685182-o5jdqap12eg6d9t06sh5nqqdnj8she8s.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.cf%2Fgsign%2Fgoogle-login'
                 );
               }}
             >
               <img src={googleLogo} alt="G" srcSet=""></img>
-              <p>{isReset ? "Use Sign-In" : "Sign-Up"} with Google</p>
+              <p>{isReset ? 'Use Sign-In' : 'Sign-Up'} with Google</p>
             </button>
           </div>
           <h3 className="othOptHead">
             <span>
-              {isReset ? "Give your memory a Try" : "Already Have an Account ?"}
+              {isReset ? 'Give your memory a Try' : 'Already Have an Account ?'}
             </span>
           </h3>
           <div>
