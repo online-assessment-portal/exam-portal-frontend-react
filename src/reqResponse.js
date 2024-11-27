@@ -110,7 +110,7 @@ class ReqResponse extends PureComponent {
                   <ul>
                     <li>
                       Open Site Settings and allow camera and microphone for
-                      this website (shredtest.cf).
+                      this website (shredtest.coderadiant.com).
                     </li>
                     <li>Reload/Refresh this Page.</li>
                   </ul>

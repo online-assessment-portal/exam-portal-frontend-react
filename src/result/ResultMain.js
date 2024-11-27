@@ -14,6 +14,8 @@ import { notify } from './../common.js';
 import './layout.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class ResultMain extends Component {
   constructor() {
@@ -52,6 +54,7 @@ class ResultMain extends Component {
       else token = this.state.userInfo.token;
       const promise = await fetch(`${apiUrl}/cand/resultPre/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `_csrf=${token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -150,6 +153,7 @@ class ResultMain extends Component {
       }
       const promise = await fetch(`${apiUrl}/cand/showResult/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `passcode=${passcode}&_csrf=${this.state.userInfo.token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -175,6 +179,7 @@ class ResultMain extends Component {
     try {
       let promise = await fetch(`${apiUrl}/logout/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `_csrf=${this.state.userInfo.token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });

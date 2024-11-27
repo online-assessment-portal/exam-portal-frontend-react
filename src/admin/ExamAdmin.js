@@ -12,6 +12,8 @@ import { dateTimeFormat } from './../helpers/dateTimeFormat';
 import './layout.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class ExamAdmin extends Component {
   constructor() {
@@ -60,6 +62,7 @@ class ExamAdmin extends Component {
     try {
       const promise = await fetch(`${apiUrl}/admin/authAdmin/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody ? formBody : '',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -149,6 +152,7 @@ class ExamAdmin extends Component {
     try {
       const promise = await fetch(`${apiUrl}/admin/loadTestData/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `passcode=${passcode}&_csrf=${this.state.token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -223,6 +227,7 @@ class ExamAdmin extends Component {
       const formBody = new URLSearchParams(formData).toString();
       const promise = await fetch(`${apiUrl}/admin/upload_testData/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -276,6 +281,7 @@ class ExamAdmin extends Component {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `_csrf=${this.state.token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -424,7 +430,7 @@ class ExamAdmin extends Component {
                           onClick={() =>
                             window.prompt(
                               'Exam Link',
-                              `https://shredtest.cf/test?passcode=${each.passcode}`
+                              `https://shredtest.coderadiant.com/test?passcode=${each.passcode}`
                             )
                           }
                         >
@@ -435,7 +441,7 @@ class ExamAdmin extends Component {
                         <button
                           onClick={() =>
                             window.open(
-                              `https://shredtest.cf/monitor?proctor=${each.passcode}`
+                              `https://shredtest.coderadiant.com/monitor?proctor=${each.passcode}`
                             )
                           }
                         >

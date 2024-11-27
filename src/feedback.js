@@ -6,6 +6,8 @@ import { notify } from './common.js';
 import './feedback.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class FeedbackForm extends PureComponent {
   constructor() {
@@ -43,6 +45,7 @@ class FeedbackForm extends PureComponent {
     try {
       const promise = await fetch(`${apiUrl}/cand/feedback/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });

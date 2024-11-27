@@ -5,6 +5,8 @@ import logo from './favicon-32x32.png';
 import { notify, storeError } from './common.js';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class Home extends Component {
   constructor() {
@@ -32,6 +34,7 @@ class Home extends Component {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `_csrf=${this.state.token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -60,6 +63,7 @@ class Home extends Component {
     try {
       const promise = await fetch(`${apiUrl}/proctor/contact/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: new URLSearchParams(formData).toString(),
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });

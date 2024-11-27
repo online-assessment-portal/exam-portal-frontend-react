@@ -3,6 +3,8 @@ import { notify } from './../common.js';
 import { fascilateForm } from './../fascilateForm';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class Profile extends PureComponent {
   constructor() {
@@ -60,6 +62,7 @@ class Profile extends PureComponent {
     try {
       const promise = await fetch(`${apiUrl}/upload/img`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         headers: { 'csrf-token': userInfo.token },
         body: formData,
       });
@@ -103,6 +106,7 @@ class Profile extends PureComponent {
     try {
       const promise = await fetch(`${apiUrl}/login/updateProfile/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
@@ -136,6 +140,7 @@ class Profile extends PureComponent {
     try {
       const promise = await fetch(`${apiUrl}/logout/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: `_csrf=${userInfo.token}`,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });

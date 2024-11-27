@@ -6,7 +6,7 @@ class Navigator extends Component {
       id2,
       crntSec,
       constrained,
-      sec,
+      secInfo,
       crntQIndex,
       status,
       revQ,
@@ -16,7 +16,7 @@ class Navigator extends Component {
       total,
       jumpToQ,
     } = this.props;
-    // const secInfo = sec[crntSec];
+    // const secInfo = secInfo[crntSec];
     return (
       <>
         <div id={id1}>
@@ -47,11 +47,11 @@ class Navigator extends Component {
               <hr />
             </>
           ) : null}
-          {sec.map((eachSec, secIndex) => {
+          {secInfo.map((eachSec, secIndex) => {
             let btnDis = false;
             if (constrained && secIndex < crntSec) btnDis = true;
             let from = 0;
-            if (secIndex > 0) from = sec[secIndex - 1][1];
+            if (secIndex > 0) from = secInfo[secIndex - 1][1];
             let cropStatus = status.slice(from, eachSec[1]);
             //
             const secNotation = String.fromCharCode(65 + secIndex);

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { notify } from './common';
 
 const apiUrl = process.env.REACT_APP_API_URL;
+const appEnv = process.env.REACT_APP_APP_ENV;
+const isProd = appEnv === 'PROD';
 
 class HeadAuth extends Component {
   constructor() {
@@ -17,6 +19,7 @@ class HeadAuth extends Component {
       const formBody = new URLSearchParams(formData).toString();
       const promise = await fetch(`${apiUrl}/helloHead/addAdmin/`, {
         method: 'POST',
+        credentials: isProd ? 'same-origin' : 'include',
         body: formBody,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
