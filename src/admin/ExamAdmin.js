@@ -63,7 +63,7 @@ class ExamAdmin extends Component {
       const promise = await fetch(`${apiUrl}/admin/authAdmin/`, {
         method: 'POST',
         credentials: isProd ? 'same-origin' : 'include',
-        body: formBody ? formBody : '',
+        body: formBody || '',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
       const response = await promise.json();

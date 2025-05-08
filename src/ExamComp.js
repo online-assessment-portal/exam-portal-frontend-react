@@ -39,6 +39,9 @@ const apiUrl = process.env.REACT_APP_API_URL;
 const appEnv = process.env.REACT_APP_APP_ENV;
 const isProd = appEnv === 'PROD';
 
+const peerjsHost = process.env.REACT_APP_PEERJS_URL;
+const peerjsPort = process.env.REACT_APP_PEERJS_PORT;
+
 class ExamComp extends Component {
   constructor() {
     super();
@@ -1492,14 +1495,11 @@ class ExamComp extends Component {
   };
   //
   initatePeerConn = () => {
-    const { testInfo } = this.state;
-    const peerHost =
-      testInfo.pser === 0 ? 'mypeercleanserve.herokuapp.com' : 'mypeerserv.tk';
     this.peerConn = new Peer(undefined, {
-      host: peerHost,
-      secure: true,
-      port: 443,
-      path: '/peerjs/myapp',
+      host: peerjsHost,
+      secure: false,
+      port: peerjsPort,
+      path: '/peerjs',
     });
     //
     // setInterval(() => {

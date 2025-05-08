@@ -2,6 +2,10 @@ import React, { PureComponent } from 'react';
 
 import AceEditor from 'react-ace';
 import 'ace-builds/webpack-resolver';
+// Ensure you have at least one mode and theme imported
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/theme-monokai';
+
 import EditorControl from './edtitorControl';
 import Beautify from 'ace-builds/src-noconflict/ext-beautify';
 import { notify, isInViewport } from './common.js';
@@ -507,8 +511,8 @@ class CodingComponent extends PureComponent {
                       <>
                         <h5>Standard Input</h5>
                         <AceEditor
-                          key={'SI'.crntQIndex}
-                          name={'inpE'.index}
+                          key={'SI' + crntQIndex}
+                          name={'inpE' + index}
                           mode={mode}
                           value={each[0]}
                           fontSize={fontS}
@@ -528,8 +532,8 @@ class CodingComponent extends PureComponent {
                       <>
                         <h5>Standard Output</h5>
                         <AceEditor
-                          key={'SO'.crntQIndex}
-                          name={'outE'.index}
+                          key={'SO' + crntQIndex}
+                          name={'outE' + index}
                           mode={mode}
                           value={each[1]}
                           fontSize={fontS}
