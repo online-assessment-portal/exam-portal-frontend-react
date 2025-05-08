@@ -84,7 +84,24 @@ class AdminModal extends Component {
   };
   render() {
     const { show } = this.props;
-    if (show === -1)
+    if (show === -2) {
+      const { initiateProctoring } = this.props;
+      return (
+        <div id="responseWin">
+          <div id="responseDiv">
+            <h1>Welcome to Proctor</h1>
+            <br></br>
+            <button
+              className="btnPrimary"
+              type="button"
+              onClick={initiateProctoring}
+            >
+              Click to Initiate Proctoring
+            </button>
+          </div>
+        </div>
+      );
+    } else if (show === -1) {
       return (
         <div id="responseWin">
           <div id="responseDiv">
@@ -99,7 +116,7 @@ class AdminModal extends Component {
           </div>
         </div>
       );
-    else if (show === 1) {
+    } else if (show === 1) {
       const {
         testInfo,
         myList,
