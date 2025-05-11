@@ -47,4 +47,4 @@ jobs:
           script: |
             sudo rm -rf /var/www/exam-portal-backend/public
             sudo mkdir -p /var/www/exam-portal-backend/public
-            sudo mv /tmp/react-build/* /var/www/exam-portal-backend/public
+            sudo mv /tmp/react-build/build/* /var/www/exam-portal-backend/public
