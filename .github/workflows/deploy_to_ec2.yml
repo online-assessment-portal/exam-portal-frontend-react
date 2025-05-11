@@ -28,7 +28,7 @@ jobs:
         run: yarn build
 
       - name: Transfer build folder to EC2
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -38,7 +38,7 @@ jobs:
           target: /tmp/react-build/
 
       - name: Move build into place on EC2
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
