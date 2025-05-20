@@ -1497,7 +1497,7 @@ class ExamComp extends Component {
   initatePeerConn = () => {
     this.peerConn = new Peer(undefined, {
       host: peerjsHost,
-      secure: false,
+      secure: isProd ? true : false,
       port: peerjsPort,
       path: '/peerjs',
     });

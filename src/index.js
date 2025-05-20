@@ -20,14 +20,14 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} exact />
+        <Route path="/" element={<Home />} />
         <Route path="/profile" element={<LoginComp isHome={true} />} />
-        <Route path="/test/" element={<ExamComp />} />
-        <Route path="/testAdmin/" element={<ExamAdmin />} />
-        <Route path="/result/" element={<Result />} />
-        <Route path="/monitor/" element={<Monitor />} />
-        <Route path="/helloHead/" element={<HeadAuth />} />
-        <Route element={Error} />
+        <Route path="/test" element={<ExamComp />} />
+        <Route path="/testAdmin" element={<ExamAdmin />} />
+        <Route path="/result" element={<Result />} />
+        <Route path="/monitor" element={<Monitor />} />
+        <Route path="/helloHead" element={<HeadAuth />} />
+        <Route path="*" element={<Error />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
