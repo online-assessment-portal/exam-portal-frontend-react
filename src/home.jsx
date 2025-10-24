@@ -4,8 +4,8 @@ import './home.css';
 import logo from './favicon-32x32.png';
 import { notify, storeError } from './common.js';
 
-const apiUrl = import.meta.env.VITE.REACT_APP_API_URL;
-const appEnv = import.meta.env.VITE.REACT_APP_APP_ENV;
+const apiUrl = import.meta.env.VITE.import.meta.env.VITE_API_URL;
+const appEnv = import.meta.env.VITE.import.meta.env.VITE_APP_ENV;
 const isProd = appEnv === 'PROD';
 
 class Home extends Component {

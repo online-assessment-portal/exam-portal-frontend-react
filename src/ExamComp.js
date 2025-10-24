@@ -35,12 +35,12 @@ import CodingComponent from './CodingComponent';
 import ChatComp from './ChatComponent';
 import FeedbackForm from './feedback';
 
-const apiUrl = process.env.REACT_APP_API_URL;
-const appEnv = process.env.REACT_APP_APP_ENV;
+const apiUrl = import.meta.env.VITE_API_URL;
+const appEnv = import.meta.env.VITE_APP_ENV;
 const isProd = appEnv === 'PROD';
 
-const peerjsHost = process.env.REACT_APP_PEERJS_URL;
-const peerjsPort = process.env.REACT_APP_PEERJS_PORT;
+const peerjsHost = import.meta.env.VITE_PEERJS_URL;
+const peerjsPort = import.meta.env.VITE_PEERJS_PORT;
 
 class ExamComp extends Component {
   constructor() {
