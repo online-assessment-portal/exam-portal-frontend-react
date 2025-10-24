@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import { notify } from './../common.js';
 
-const apiUrl = process.env.REACT_APP_API_URL;
-const appEnv = process.env.REACT_APP_APP_ENV;
+const apiUrl = import.meta.env.VITE_API_URL;
+const appEnv = import.meta.env.VITE_APP_ENV;
 const isProd = appEnv === 'PROD';
 
-const googleLoginURL = process.env.REACT_APP_GOOGLE_LOGIN_AUTH_URL;
+const googleLoginURL = import.meta.env.VITE_GOOGLE_LOGIN_AUTH_URL;
 
 class SignUp1 extends PureComponent {
   constructor() {

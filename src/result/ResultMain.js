@@ -13,8 +13,8 @@ import { notify } from './../common.js';
 //
 import './layout.css';
 
-const apiUrl = process.env.REACT_APP_API_URL;
-const appEnv = process.env.REACT_APP_APP_ENV;
+const apiUrl = import.meta.env.VITE_API_URL;
+const appEnv = import.meta.env.VITE_APP_ENV;
 const isProd = appEnv === 'PROD';
 
 class ResultMain extends Component {
