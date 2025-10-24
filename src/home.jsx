@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 // import "./about.css";
 import './home.css';
+import './navbar.css';
+import './allBtns.css';
 import logo from './favicon-32x32.png';
 import { notify, storeError } from './common.js';
 

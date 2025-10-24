@@ -43,4 +43,6 @@ nav button {
   outline: none;
   border: none;
   white-space: nowrap;
+  font-weight: lighter;
+  background: white;
 }
