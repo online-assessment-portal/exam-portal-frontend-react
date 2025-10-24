@@ -1,4 +1,4 @@
-* {
+/* * {
   margin: 0;
   position: relative;
   box-sizing: border-box;
@@ -12,7 +12,7 @@ body {
   height: 100%;
   width: 100%;
   font-family: 'Roboto', sans-serif;
-}
+} */
 body#cursorEW {
   cursor: ew-resize !important;
 }

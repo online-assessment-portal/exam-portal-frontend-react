@@ -89,7 +89,7 @@
 }
 #home {
   animation: fadeIn 1.5s ease;
-  display: none;
+  display: block;
 }
 #home section {
   min-height: 92vh;
