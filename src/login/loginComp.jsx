@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 //
-import logo from './../favicon-32x32.png';
+import logo from './../assets/icons/favicon-32x32.png';
 import googleLogo from './../google-logo.png';
 import './loginComp.css';
 //
-import SignIn from './signin';
-import SignUp1 from './signup1';
-import SignUp2 from './signup2';
-import Profile from './profile';
-import { storeError, notify } from '../common';
+import SignIn from './signin.jsx';
+import SignUp1 from './signup1.jsx';
+import SignUp2 from './signup2.jsx';
+import Profile from './profile.jsx';
+import { storeError, notify } from '../lib';
 //
 // import LoginCont from "./loginCont";
 class LoginComp extends PureComponent {

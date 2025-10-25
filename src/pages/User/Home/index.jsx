@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../../../styles/pages/home.css';
 import '../../../styles/components/navbar.css';
 import '../../../styles/components/allBtns.css';
-import { notify, storeError } from '../../../lib/common.js';
+import { notify, storeError } from '../../../lib';
 import {
   Navigation,
   HeroSection,
