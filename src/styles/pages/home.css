@@ -108,7 +108,7 @@
   min-height: 105vh;
   background:
     linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.01)),
-    url('./sbg.png') no-repeat center center fixed;
+    url('./../../assets/images/sbg.png') no-repeat center center fixed;
   color: white;
   background-size: cover;
   border-bottom: 10px solid;

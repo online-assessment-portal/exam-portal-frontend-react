@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-//
-import Home from './home.jsx';
+
+import Home from './pages/User/Home/index.jsx';
+
 // import LoginComp from './login/loginComp';
 // import ExamComp from './ExamComp';
 // import ExamAdmin from './admin/ExamAdmin';
