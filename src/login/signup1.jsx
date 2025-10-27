@@ -89,9 +89,7 @@ class SignUp1 extends PureComponent {
               'e',
               'eMail-Id was Changed.<br>Account will be created for the email on which OTP was sent.<br>You can proceed safely.'
             );
-          const { setMainCompState } = this.props;
-          if (isReset) setMainCompState({ action: 5 });
-          else setMainCompState({ action: 3 });
+          this.props.setStep((s) => s + 1); // ?? Verify
         } else notify(msgHolder, 'e', '');
       } else if (response.error) {
         let msg = '';
@@ -122,8 +120,7 @@ class SignUp1 extends PureComponent {
   }
   render() {
     const { process, otpSent, email, errMsg } = this.state;
-    const { isReset, toggleShowHide, setMainCompState, googleLogo } =
-      this.props;
+    const { isReset, toggleShowHide, googleLogo } = this.props;
     return (
       <>
         <h2>{isReset ? 'Reset Password' : 'Create your account'}</h2>
@@ -249,7 +246,7 @@ class SignUp1 extends PureComponent {
               type="button"
               disabled={process ? true : false}
               onClick={() => {
-                setMainCompState({ action: 1 });
+                this.props.changeMode('signIn');
               }}
             >
               &nbsp;&nbsp;Sign In&nbsp;&nbsp;

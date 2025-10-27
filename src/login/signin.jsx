@@ -62,12 +62,10 @@ class SignIn extends PureComponent {
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         response.userInfo.token = token;
-        if (this.props.isHome)
-          this.props.setMainCompState({
-            action: 6,
-            userInfo: response.userInfo,
-          });
-        else {
+        if (this.props.isHome) {
+          this.props.changeMode('profile');
+          this.props.setUserInfo(response.userInfo);
+        } else {
           if (response.userInfo.uname && response.userInfo.name)
             return this.props.setExamCompState({
               userInfo: response.userInfo,
@@ -77,10 +75,8 @@ class SignIn extends PureComponent {
             window.alert(
               'You must create your username and Fill your name in your profile to continue to the Test.\nWe are redirecting you to the Profile-Page.'
             );
-            return this.props.setMainCompState({
-              action: 6,
-              userInfo: response.userInfo,
-            });
+            this.props.changeMode('profile');
+            this.props.setUserInfo(response.userInfo);
           }
         }
       } else if (response.error) {
@@ -104,7 +100,7 @@ class SignIn extends PureComponent {
   }
   render() {
     const { process, signInErr } = this.state;
-    const { toggleShowHide, setMainCompState, googleLogo } = this.props;
+    const { toggleShowHide, changeMode, googleLogo } = this.props;
     return (
       <>
         <h2>Sign In</h2>
@@ -163,7 +159,7 @@ class SignIn extends PureComponent {
               className="blueLinkBtn"
               type="button"
               onClick={() => {
-                setMainCompState({ action: 4 });
+                changeMode('reset');
               }}
               disabled={process ? true : false}
             >
@@ -196,7 +192,7 @@ class SignIn extends PureComponent {
               className="blueLinkBtn"
               type="button"
               onClick={() => {
-                setMainCompState({ action: 2 });
+                changeMode('signUp');
               }}
               disabled={process ? true : false}
             >

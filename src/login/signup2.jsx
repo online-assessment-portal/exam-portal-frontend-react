@@ -90,12 +90,10 @@ class SignUp2 extends PureComponent {
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         response.userInfo.token = token;
-        if (this.props.isHome)
-          this.props.setMainCompState({
-            action: 6,
-            userInfo: response.userInfo,
-          });
-        else {
+        if (this.props.isHome) {
+          this.props.changeMode('profile');
+          this.props.setUserInfo(response.userInfo);
+        } else {
           if (response.userInfo.uname && response.userInfo.name)
             this.props.setExamCompState({
               userInfo: response.userInfo,
@@ -105,10 +103,8 @@ class SignUp2 extends PureComponent {
             window.alert(
               'You must create your username and Fill your name in your profile to continue to the Test.\nWe are redirecting you to the Profile-Page.'
             );
-            this.props.setMainCompState({
-              action: 6,
-              userInfo: response.userInfo,
-            });
+            this.props.changeMode('profile');
+            this.props.setUserInfo(response.userInfo);
           }
         }
       } else if (response.error)

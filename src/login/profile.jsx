@@ -147,7 +147,7 @@ class Profile extends PureComponent {
       const response = await promise.json();
       if (promise.status === 200 && promise.ok === true) {
         if (response.msg) notify(msgHolder, 's', response.msg);
-        this.props.setMainCompState({ action: 1 });
+        this.props.changeMode('signIn');
       } else if (response.error) notify(msgHolder, 'e', response.error.message);
       else notify(msgHolder, 'e', '');
     } catch (error) {
