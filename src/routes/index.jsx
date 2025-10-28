@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 // Lazy load components
 const Home = lazy(() => import('../pages/User/Home'));
-const AuthPage = lazy(() => import('../login/AuthPage'));
+const AuthPage = lazy(() => import('../pages/User/Auth/index'));
 const Error = lazy(() => import('../error'));
 
 // Lazy load additional components

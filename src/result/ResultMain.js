@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // JS
-import AuthPage from './../login/AuthPage';
+import AuthPage from './../pages/User/Auth/index.jsx';
 import NavBar from './../navbar';
 import ReqResponse from './../reqResponse.js';
 import Preview from './showPreview';
