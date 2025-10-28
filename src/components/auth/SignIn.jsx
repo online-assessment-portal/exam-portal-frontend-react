@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { notify } from './../lib';
+import { notify } from '../../lib';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const appEnv = import.meta.env.VITE_APP_ENV;

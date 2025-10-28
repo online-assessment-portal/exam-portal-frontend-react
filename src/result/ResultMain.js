@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // JS
-import LoginComp from './../login/loginComp';
+import AuthPage from './../login/AuthPage';
 import NavBar from './../navbar';
 import ReqResponse from './../reqResponse.js';
 import Preview from './showPreview';
@@ -208,8 +208,7 @@ class ResultMain extends Component {
   }
   render() {
     const { loggedIn, action, previewData, cover } = this.state;
-    if (!loggedIn)
-      return <LoginComp setExamCompState={this.setMainCompState} />;
+    if (!loggedIn) return <AuthPage setExamCompState={this.setMainCompState} />;
     else if (action === -1)
       return (
         <>

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-import { notify } from './../lib';
-import { fascilateForm } from '../fascilateForm.js';
+import { notify } from '../../lib';
+import { fascilateForm } from '../../fascilateForm.js';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const appEnv = import.meta.env.VITE_APP_ENV;

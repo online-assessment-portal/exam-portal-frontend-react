@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 // Lazy load components
 const Home = lazy(() => import('../pages/User/Home'));
-const LoginComp = lazy(() => import('../login/loginComp'));
+const AuthPage = lazy(() => import('../login/AuthPage'));
 const Error = lazy(() => import('../error'));
 
 // Lazy load additional components
@@ -21,7 +21,7 @@ export const routes = [
   },
   {
     path: '/profile',
-    element: LoginComp,
+    element: AuthPage,
     props: { isHome: true },
     name: 'Profile',
   },
@@ -59,7 +59,7 @@ export const routes = [
 
 export {
   Home,
-  LoginComp,
+  AuthPage,
   ExamComp,
   ExamAdmin,
   Result,
@@ -73,7 +73,7 @@ export {
 
 // import Home from './pages/User/Home/index.jsx';
 
-// import LoginComp from './login/loginComp';
+// import AuthPage from './login/AuthPage';
 // // import ExamComp from './ExamComp';
 // // import ExamAdmin from './admin/ExamAdmin';
 // // import Result from './result/ResultMain';
@@ -87,7 +87,7 @@ export {
 //     <BrowserRouter future={{ v7_startTransition: true }}>
 //       <Routes>
 //         <Route path="/" element={<Home />} />
-//         <Route path="/profile" element={<LoginComp isHome={true} />} />
+//         <Route path="/profile" element={<AuthPage isHome={true} />} />
 //         {/*<Route path="/test" element={<ExamComp />} />
 //         <Route path="/testAdmin" element={<ExamAdmin />} />
 //         <Route path="/result" element={<Result />} />

@@ -22,7 +22,7 @@ import { storeError, notify, cjoinQbank } from './common.js';
 import Peer from 'peerjs';
 import { io } from 'socket.io-client';
 // JS
-import LoginComp from './login/loginComp';
+import AuthPage from './pages/User/Auth/index.jsx';
 import ReqExamCode from './reqExamCd';
 import ToStart from './toStart';
 import Facilitate from './facilitate';
@@ -1864,7 +1864,7 @@ class ExamComp extends Component {
       );
     else if (!loggedIn || !userInfo || !userInfo.name || !userInfo.uname)
       return (
-        <LoginComp
+        <AuthPage
           setExamCompState={this.setMainCompState}
           userInfo={userInfo}
         />

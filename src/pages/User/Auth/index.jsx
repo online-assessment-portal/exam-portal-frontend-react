@@ -5,18 +5,19 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import logo from '../assets/favicon/favicon-32x32.png';
-import googleLogo from '../google-logo.png';
-import './loginComp.css';
-import './../styles/components/allBtns.css';
-import { storeError, notify } from '../lib';
+import logo from '../../../assets/favicon/favicon-32x32.png';
+import googleLogo from '../../../google-logo.png';
+import './styles/login.css';
+import '../../../styles/components/allBtns.css';
+import { storeError, notify } from '../../../lib';
 import { AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router';
-import { useStepNavigation } from './hooks/useStepNavigation';
-import StepRenderer from './components/StepRenderer';
+import { useStepNavigation } from '../../../hooks/auth/useStepNavigation';
+import StepRenderer from '../../../components/auth/StepRenderer';
 
-const LoginComp = ({ userInfo: propUserInfo, isHome, setExamCompState }) => {
-  const { mode, step, direction, nextStep, prevStep, changeMode } = useStepNavigation();
+const AuthPage = ({ userInfo: propUserInfo, isHome, setExamCompState }) => {
+  const { mode, step, direction, nextStep, prevStep, changeMode } =
+    useStepNavigation();
   const [userInfo, setUserInfo] = useState({});
   const msgHolder = useRef(null);
 
@@ -68,10 +69,8 @@ const LoginComp = ({ userInfo: propUserInfo, isHome, setExamCompState }) => {
     }
   }, [propUserInfo, isHome]);
 
-
-
   return (
-    <main id="loginComp">
+    <main id="AuthPage">
       <div id="msgHolder" ref={msgHolder} />
       <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 999999 }}>
         <button onClick={() => changeMode('signUp')}> SU </button>
@@ -108,4 +107,4 @@ const LoginComp = ({ userInfo: propUserInfo, isHome, setExamCompState }) => {
   );
 };
 
-export default LoginComp;
+export default AuthPage;

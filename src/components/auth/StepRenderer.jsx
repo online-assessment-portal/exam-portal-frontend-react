@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import SignIn from '../signin';
-import SignUp1 from '../signup1';
-import SignUp2 from '../signup2';
-import Profile from '../profile';
+import SignIn from './SignIn';
+import SignUp1 from './SignUp1';
+import SignUp2 from './SignUp2';
+import Profile from './Profile';
 
 const variants = {
   enter: (direction) => ({
