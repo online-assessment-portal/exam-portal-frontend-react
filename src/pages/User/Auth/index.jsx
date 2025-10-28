@@ -9,17 +9,16 @@ import logo from '../../../assets/favicon/favicon-32x32.png';
 import googleLogo from '../../../google-logo.png';
 import './styles/login.css';
 import '../../../styles/components/allBtns.css';
-import { storeError, notify } from '../../../lib';
+import { storeError, notifications } from '../../../lib';
 import { AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router';
 import { useStepNavigation } from '../../../hooks/auth/useStepNavigation';
 import StepRenderer from '../../../components/auth/StepRenderer';
 
 const AuthPage = ({ userInfo: propUserInfo, isHome, setExamCompState }) => {
-  const { mode, step, direction, nextStep, prevStep, changeMode } =
-    useStepNavigation();
+  const { mode, step, direction, nextStep, changeMode } = useStepNavigation();
   const [userInfo, setUserInfo] = useState({});
-  const msgHolder = useRef(null);
+  const initialized = useRef(false);
 
   const toggleShowHide = useCallback((event) => {
     const button = event.target;
@@ -38,47 +37,47 @@ const AuthPage = ({ userInfo: propUserInfo, isHome, setExamCompState }) => {
       toggleShowHide,
       changeMode,
       setUserInfo,
-      msgHolder,
       token: userInfo.token,
     }),
     [toggleShowHide, changeMode, setUserInfo, userInfo.token]
   );
 
   useEffect(() => {
-    const info =
-      propUserInfo ||
-      JSON.parse(document.getElementById('userInfo')?.innerText || '{}');
+    if (initialized.current) return;
+
+    let info = propUserInfo;
+    if (!info) {
+      try {
+        const userInfoElement = document.getElementById('userInfo');
+        const userInfoText = userInfoElement?.innerText;
+        info = userInfoText ? JSON.parse(userInfoText) : {};
+      } catch (error) {
+        console.warn('Failed to parse userInfo from DOM:', error);
+        info = {};
+      }
+    }
     setUserInfo(info);
 
     if (info.ds) {
-      notify(
-        msgHolder,
-        's',
-        '<h3>Candidate Verified</h3>Manual Verification Skipped.<br>you just need to fill these 2 fields.',
-        10000
-      );
+      notifications.exam.candidateVerified();
       changeMode('profile');
     } else if (info.loggedIn) {
       changeMode('profile');
     }
 
-    if (isHome) {
-      const errorHandler = (err) => storeError(err, info.token);
+    initialized.current = true;
+  }, [propUserInfo, changeMode]);
+
+  useEffect(() => {
+    if (isHome && userInfo.token) {
+      const errorHandler = (err) => storeError(err, userInfo.token);
       window.addEventListener('error', errorHandler);
       return () => window.removeEventListener('error', errorHandler);
     }
-  }, [propUserInfo, isHome]);
+  }, [isHome, userInfo.token]);
 
   return (
-    <main id="AuthPage">
-      <div id="msgHolder" ref={msgHolder} />
-      <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 999999 }}>
-        <button onClick={() => changeMode('signUp')}> SU </button>
-        <button onClick={() => changeMode('reset')}> Reset </button>
-        <button onClick={nextStep}> {'>'} </button>
-        <button onClick={prevStep}> {'<'} </button>
-      </div>
-      {/* <CSSTransition in appear timeout={250} classNames="fade"> */}
+    <main id="loginComp">
       <div id="loginCont" className="flex flex-col">
         <div className="sticky top-0 bg-white z-10 pt-10">
           <Link to={'/'} id="branding">

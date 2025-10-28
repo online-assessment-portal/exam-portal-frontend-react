@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
+import { Toaster } from 'react-hot-toast';
 import { routes } from './routes';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           ))}
         </Routes>
       </Suspense>
+      <Toaster position="top-right" />
     </BrowserRouter>
   );
 }

@@ -1,2 +1,8 @@
 // Barrel exports for commonly used utilities
-export { notify, cjoinQbank, makeDateTimeReadable, storeError, isInViewport } from './common.js';
+export {
+  cjoinQbank,
+  makeDateTimeReadable,
+  storeError,
+  isInViewport,
+} from './common.js';
+export { notify, notifications } from './notifications.jsx';

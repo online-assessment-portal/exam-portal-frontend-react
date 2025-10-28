@@ -2,47 +2,6 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const appEnv = import.meta.env.VITE_APP_ENV;
 const isProd = appEnv === 'PROD';
 
-let crntHide;
-function mouseHide(msgHolder, ele, tm) {
-  // Check if the Element is being removed
-  if (crntHide === ele) return false;
-  clearTimeout(tm);
-  hideMsg(msgHolder, ele);
-}
-function hideMsg(msgHolder, node) {
-  crntHide = node;
-  //
-  const style = node.style;
-  style.padding = '0.1px';
-  style.marginTop = 0;
-  style.maxHeight = 0;
-  style.minHeight = 0;
-  style.transition = 'all 200ms linear';
-  node.style.animation = 'fadeOutUp 300ms ease-out';
-  setTimeout(() => {
-    // Check id node to be removed exists in Message Holder
-    if (node.parentNode === msgHolder) msgHolder.removeChild(node);
-    node = null;
-    crntHide = null;
-  }, 295);
-}
-function notify(msgHolder, what, msg, time = 5000) {
-  msgHolder = msgHolder.current;
-  if (!msgHolder) return false;
-  const ele = document.createElement('div');
-  if (what === 's') ele.className = 'msgS';
-  else ele.className = 'msgE';
-  if (msg) ele.innerHTML = `<p>${msg}</p>`;
-  else
-    ele.innerHTML =
-      "<p>Something went wrong.<br>Request couldn't be fulfilled at the moment.<br>Please retry after sometime.</p>";
-  msgHolder.appendChild(ele);
-  const timeOut = setTimeout(() => {
-    hideMsg(msgHolder, ele);
-  }, time);
-  ele.addEventListener('mouseleave', () => mouseHide(msgHolder, ele, timeOut));
-  ele.addEventListener('click', () => mouseHide(msgHolder, ele, timeOut));
-}
 function cjoinQbank(resp, dictFlow) {
   const myDict = [
     'testOnCmnd',
@@ -160,4 +119,4 @@ function isInViewport(element) {
     rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   );
 }
-export { notify, cjoinQbank, makeDateTimeReadable, storeError, isInViewport };
+export { cjoinQbank, makeDateTimeReadable, storeError, isInViewport };
