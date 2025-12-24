@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import logo from '../../assets/icons/favicon-32x32.png';
+import { useEffect, useRef } from 'react';
+import logo from '../../assets/favicon/favicon-32x32.png';
 
 const Navigation = ({ loggedIn, onLogout, process }) => {
   const navLinks = useRef();
