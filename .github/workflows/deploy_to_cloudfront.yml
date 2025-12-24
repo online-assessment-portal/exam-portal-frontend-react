@@ -21,12 +21,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "yarn"
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install --frozen-lockfile
 
       - name: Build React app
-        run: npm run build
+        run: yarn build
         env:
           REACT_APP_API_URL: https://shredtest.scriptbliss.com
           REACT_APP_APP_ENV: PROD
