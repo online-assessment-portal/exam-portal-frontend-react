@@ -56,7 +56,6 @@ main#loginComp {
 }
 #containerLSR h2 {
   font-weight: bold;
-  margin-top: 3vh;
   font-size: 26px;
   color: white;
   letter-spacing: 1px;
@@ -68,25 +67,20 @@ main#loginComp {
     0 0 30px gray,
     0 0 50px gray;
 }
-#containerLSR form {
-  margin-top: 2vh;
-  width: 90%;
-}
-.field {
+#containerLSR .field {
   position: relative;
-  margin: 0 15px;
 }
-.field {
+#containerLSR .field {
   margin-top: 2vh;
 }
-.field > .floatter {
+#containerLSR .field > .floatter {
   position: absolute;
   font-size: 23px;
   bottom: 7px;
   left: 3px;
   color: rgba(128, 128, 128, 0.678);
 }
-.field .fa-key {
+#containerLSR .field .fa-key {
   font-size: 21px;
   left: 1px;
 }
@@ -100,10 +94,10 @@ main#loginComp {
   background: transparent;
   border: none;
 }
-.field input {
+#containerLSR .field input {
   width: 100%;
   line-height: 32px;
-  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
   font-size: 18px;
   letter-spacing: 1.5px;
   padding: 0;
@@ -115,33 +109,25 @@ main#loginComp {
   border-bottom: 2px solid #ff8c0069;
   transition: border-bottom 0.3s ease;
 }
-.field input:focus {
+#containerLSR .field input:focus {
   border-color: #ff8c00;
 }
-.field input::placeholder {
+#containerLSR .field input::placeholder {
   color: #c28e2f;
-}
-#containerLSR form button {
-  margin-top: 2vh;
-}
-#containerLSR form div {
-  display: flex;
-  justify-content: center;
 }
 .blueLinkBtn {
   color: #0074d9;
   background: transparent;
+  letter-spacing: 1.5px;
   border: none;
   text-decoration: underline;
-}
-#containerLSR #frgtPswd {
-  justify-content: flex-end;
+  font-size: large;
 }
 .othOptHead {
-  margin-top: 6vh;
-  margin-bottom: 1vh;
+  /* margin-top: 6vh;
+  margin-bottom: 4vh; */
   text-align: center;
-  border-bottom: 2px solid wheat;
+  border-bottom: 2px solid gainsboro;
   line-height: 0.1em;
 }
 .othOptHead span {
@@ -165,9 +151,9 @@ main#loginComp {
   margin-right: 3px;
 }
 /*  */
-#containerLSR .middleText,
+/* #containerLSR .middleText,
 #containerLSR .errMsg,
-#containerLSR .sucesMsg {
+#containerLSR .successMsg {
   display: inline-block;
   margin-top: 2vh;
   border-radius: 3px;
@@ -175,36 +161,29 @@ main#loginComp {
   font-family: 'Roboto', sans-serif;
   letter-spacing: 0.8px;
   padding: 1vh 10px;
-  overflow: auto;
 }
 #containerLSR .middleText {
-  text-align: left;
   border-color: gainsboro;
 }
 #containerLSR .errMsg,
-#containerLSR .sucesMsg {
-  text-align: center;
+#containerLSR .successMsg {
   animation: flash 1s linear;
   transition: all 0.3s ease-out;
-}
-#containerLSR .sucesMsg {
-  color: darkgreen;
-  border-color: #2bff00;
-  background-color: rgba(30, 255, 0, 0.06);
 }
 #containerLSR .errMsg {
   color: red;
   border-color: red;
   background-color: rgba(255, 0, 0, 0.103);
 }
+#containerLSR .successMsg {
+  color: darkgreen;
+  border-color: #2bff00;
+  background-color: rgba(30, 255, 0, 0.06);
+}
 .errMsg {
   display: inline-flex;
   width: 100%;
-}
-#containerLSR button:disabled,
-#containerLSR input:disabled {
-  opacity: 0.3;
-}
+} */
 /*  */
 #loginCont::-webkit-scrollbar {
   width: 7px !important;
@@ -220,7 +199,7 @@ main#loginComp {
   display: flex;
   flex-direction: column;
   font-size: medium;
-  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
   letter-spacing: 0.8px;
 }
 #pswdChkLive p {
@@ -251,23 +230,7 @@ main#loginComp {
 #pswdChkLive .styleRed span {
   opacity: 1;
 }
-#proLogoutCont {
-  margin: 1vh 0;
-  margin-right: 2em;
-  width: 100%;
-}
-#proLogoutCont button {
-  float: right;
-}
-#profileImg {
-  margin-top: 2vh;
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 3px;
-  border: 2px solid gainsboro;
-}
-#imgUpload {
+/* #imgUpload {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -291,17 +254,16 @@ main#loginComp {
 }
 /* To override opacity CSS */
 #imgUpload button:disabled {
-  opacity: unset;
+  /* opacity: unset; */
 }
-#selectImg {
+*/ #selectImg {
   display: none;
 }
-#profileForm {
+/* #profileForm {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 10vh;
-}
+} */
 /*  */
 @media only screen and (max-width: 1024px) {
   #loginCont {
