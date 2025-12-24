@@ -1,227 +1,360 @@
-import React, { PureComponent } from 'react';
-import { notify } from '../../lib';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Eye, EyeOff, Key, Check, Circle, X } from 'lucide-react';
+import { SYSTEM_MESSAGES } from '../../constants/messages';
+import { complete } from '../../services/auth.service';
+import { PASSWORD_REGEX } from '../../constants/validation';
+import Button from '../ui/Button';
+import Message from '../ui/Message';
+import { notifications } from '../../lib';
+import { useAuth } from '../../hooks';
+import { useLocation, useNavigate } from 'react-router';
 
-const apiUrl = import.meta.env.VITE_API_URL;
-const appEnv = import.meta.env.VITE_APP_ENV;
-const isProd = appEnv === 'PROD';
+const SignUp2 = ({ isReset, otpVerifyToken, isHome }) => {
+  // State initialization
+  const [formData, setFormData] = useState({ password: '', agree: false });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
+  const formRef = useRef(null);
 
-class SignUp2 extends PureComponent {
-  constructor() {
-    super();
-    this.state = { errMsg: '', process: false };
-    this.inputPswd = React.createRef();
-    //
-    this.reqCtr = 0;
-  }
-  showPswdCheck = (status, index) => {
-    const ele = this.pswdChk[index];
-    if (!ele) return false;
-    if (status === 1) ele.className = 'fa fa-check styleGreen';
-    else ele.className = 'fa fa-times styleRed';
-  };
-  pswdChkLive = () => {
-    const { msgHolder } = this.props;
-    const pswd = this.inputPswd.current.value.trim();
-    const len = pswd.length;
-    //
-    if (/\s/g.test(pswd)) {
-      notify(msgHolder, 'e', 'No whitespace allowed');
-      return false;
-    }
-    if (/\t/g.test(pswd)) {
-      notify(msgHolder, 'e', 'No TAB spaces allowed');
-      return false;
-    }
-    if (len >= 6 && len <= 16) this.showPswdCheck(1, 0);
-    else this.showPswdCheck(0, 0);
-    //
-    if (/[A-Z]/g.test(pswd)) this.showPswdCheck(1, 1);
-    else this.showPswdCheck(0, 1);
-    //
-    if (/[a-z]/g.test(pswd)) this.showPswdCheck(1, 2);
-    else this.showPswdCheck(0, 2);
-    //
-    if (/\d/g.test(pswd)) this.showPswdCheck(1, 3);
-    else this.showPswdCheck(0, 3);
-    //
-    if (/\W|_/g.test(pswd)) this.showPswdCheck(1, 4);
-    else this.showPswdCheck(0, 4);
-  };
-  registerAccount = async (event) => {
-    event.preventDefault();
-    const { msgHolder } = this.props;
-    if (this.reqCtr > 5) {
-      notify(
-        msgHolder,
-        'e',
-        'Reached maximum attempts allowed.<br>Please retry after few hours.'
-      );
-      return false;
-    }
-    const notSatis = document.querySelectorAll('#pswdChkLive .fa-times');
-    if (notSatis.length) {
-      notify(
-        msgHolder,
-        'e',
-        "Entered Password doesn't satisfy all security Standards.<br>For details see text against Red Cross."
-      );
-      return false;
-    }
-    this.setState({ process: true });
-    const pswd = this.inputPswd.current.value.trim();
-    if (!pswd) {
-      notify(msgHolder, 'e', "Password can't be blank.");
-      return false;
-    }
-    const formData = new FormData();
-    formData.append('password', pswd);
-    const { isReset, token } = this.props;
-    if (isReset) formData.append('isReset', true);
-    formData.append('_csrf', token);
-    const formBody = new URLSearchParams(formData).toString();
-    try {
-      const promise = await fetch(`${apiUrl}/login/register_Acc/`, {
-        method: 'POST',
-        credentials: isProd ? 'same-origin' : 'include',
-        body: formBody,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      });
-      this.reqCtr++;
-      const response = await promise.json();
-      if (promise.status === 200 && promise.ok === true) {
-        response.userInfo.token = token;
-        if (this.props.isHome) {
-          this.props.changeMode('profile');
-          this.props.setUserInfo(response.userInfo);
-        } else {
-          if (response.userInfo.uname && response.userInfo.name)
-            this.props.setExamCompState({
-              userInfo: response.userInfo,
-              loggedIn: true,
-            });
-          else {
-            window.alert(
-              'You must create your username and Fill your name in your profile to continue to the Test.\nWe are redirecting you to the Profile-Page.'
-            );
-            this.props.changeMode('profile');
-            this.props.setUserInfo(response.userInfo);
-          }
-        }
-      } else if (response.error)
-        return this.setState({
-          errMsg: response.error.message,
-          process: false,
-        });
-      else notify(msgHolder, 'e', '');
-      this.setState({ process: false });
-    } catch (error) {
-      notify(
-        msgHolder,
-        'e',
-        'SERVER Connection Error<br>Check your Internet Connection'
-      );
-      this.setState({ process: false });
-    }
-  };
-  componentDidMount() {
-    this.pswdChk = document.querySelectorAll('#pswdChkLive .fa');
-    if (this.props.isReset) document.title = 'Create new Password';
-    else document.title = 'Secure your Account';
-  }
-  render() {
-    const { process, errMsg } = this.state;
-    const { isReset, toggleShowHide } = this.props;
+  // Hooks
+  const { login } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/profile';
+
+  // Password validation
+  const passwordValidation = useMemo(() => {
+    const pswd = formData.password.trim();
+    return {
+      length: PASSWORD_REGEX.length.test(pswd),
+      uppercase: PASSWORD_REGEX.uppercase.test(pswd),
+      lowercase: PASSWORD_REGEX.lowercase.test(pswd),
+      number: PASSWORD_REGEX.number.test(pswd),
+      special: PASSWORD_REGEX.special.test(pswd),
+      hasWhitespace: PASSWORD_REGEX.whitespace.test(pswd),
+      hasTab: PASSWORD_REGEX.tab.test(pswd),
+    };
+  }, [formData.password]);
+
+  const isPasswordValid = useMemo(() => {
+    const {
+      length,
+      uppercase,
+      lowercase,
+      number,
+      special,
+      hasWhitespace,
+      hasTab,
+    } = passwordValidation;
     return (
-      <>
-        <h2>{isReset ? 'Create New Password' : 'Secure your Account'}</h2>
-        <form method="post" onSubmit={this.registerAccount}>
-          <div className="middleText">
-            <p>✩ Account Verification Complete.</p>
-            {isReset ? (
-              <p>
-                ✩ Create a Password that is both easy to Remember and difficult
-                to guess.
-              </p>
-            ) : (
-              <p>✩ Please create a Strong Password for your Account.</p>
-            )}
-          </div>
-          <div className="field">
-            <i className="floatter fa fa-key" aria-hidden="true"></i>
-            <input
-              ref={this.inputPswd}
-              type="password"
-              autoComplete="off"
-              name="pswd"
-              placeholder="Enter a strong Password"
-              minLength="8"
-              maxLength="16"
-              onKeyUp={this.pswdChkLive}
-              required
-            ></input>
-            <button type="button" id="eyeBtn">
-              <i
-                className="fa fa-eye-slash"
-                id="eyeIcon"
-                aria-hidden="true"
-                onClick={toggleShowHide}
-              ></i>
-            </button>
-          </div>
-          <div id="pswdChkLive">
-            <p>
-              <i className="fa fa-check" aria-hidden="true"></i>
-              <span>Min 6 - Max 16 Characters</span>
-            </p>
-            <p>
-              <i className="fa fa-check" aria-hidden="true"></i>
-              <span>Min 1 UpperCase Character (A-Z)</span>
-            </p>
-            <p>
-              <i className="fa fa-check" aria-hidden="true"></i>
-              <span>Min 1 LowerCase Character (a-z)</span>
-            </p>
-            <p>
-              <i className="fa fa-check" aria-hidden="true"></i>
-              <span>Min 1 Number (0-9)</span>
-            </p>
-            <p>
-              <i className="fa fa-check" aria-hidden="true"></i>
-              <span>Min 1 Special Character (eg @ # $ % &amp; * )</span>
-            </p>
-          </div>
-          {!process && errMsg ? (
+      length &&
+      uppercase &&
+      lowercase &&
+      number &&
+      special &&
+      !hasWhitespace &&
+      !hasTab
+    );
+  }, [passwordValidation]);
+
+  const isFormValid = useMemo(() => {
+    return (
+      formData.password.trim() && isPasswordValid && (isReset || formData.agree)
+    );
+  }, [formData.password, formData.agree, isPasswordValid, isReset]);
+
+  // Event handlers
+  const handleInputChange = useCallback((e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+    setMessage({ type: '', text: '' });
+
+    if (name === 'agree' && checked && formRef.current) {
+      setTimeout(() => {
+        formRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 100);
+    }
+  }, []);
+
+  const togglePasswordVisibility = useCallback(() => {
+    setShowPassword((prev) => !prev);
+  }, []);
+
+  const processSuccessfulCompletion = useCallback(
+    (userInfo) => {
+      try {
+        if (isReset) {
+          notifications.auth.resetPasswordSuccess();
+        } else {
+          notifications.auth.signupSuccess();
+        }
+
+        login(userInfo);
+
+        if (!isHome && (!userInfo.email || !userInfo.name)) {
+          notifications.exam.basicProfileRequired();
+        }
+
+        // redirect back to where user came from
+        navigate(from, { replace: true });
+      } catch (error) {
+        console.error('Login processing error:', error);
+        setMessage({
+          type: 'error',
+          text: 'Login successful but navigation failed. Please refresh the page.',
+        });
+      }
+    },
+    [isReset, login, isHome, navigate, from]
+  );
+
+  const handleCompletion = useCallback(
+    async (event) => {
+      event.preventDefault();
+      if (!isFormValid) return;
+
+      if (passwordValidation.hasWhitespace || passwordValidation.hasTab) {
+        setMessage({
+          type: 'error',
+          text: 'Password cannot contain spaces or tab characters.',
+        });
+        return;
+      }
+
+      if (!isPasswordValid) {
+        setMessage({
+          type: 'error',
+          text: 'Password does not meet all security requirements.',
+        });
+        return;
+      }
+
+      setLoading(true);
+      setMessage({ type: '', text: '' });
+
+      try {
+        if (!otpVerifyToken) {
+          throw new Error(
+            'Verification token not found. Please restart the signup process.'
+          );
+        }
+
+        const {
+          success,
+          message: msg,
+          data,
+        } = await complete(formData.password.trim(), otpVerifyToken, isReset);
+
+        if (success && data?.userInfo) {
+          processSuccessfulCompletion(data.userInfo);
+        } else {
+          setMessage({
+            type: 'error',
+            text: msg || SYSTEM_MESSAGES.UNKNOWN_ERROR,
+          });
+        }
+      } catch (error) {
+        setMessage({
+          type: 'error',
+          text: error?.message || SYSTEM_MESSAGES.UNKNOWN_ERROR,
+        });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [
+      formData.password,
+      otpVerifyToken,
+      isReset,
+      isFormValid,
+      passwordValidation,
+      isPasswordValid,
+      processSuccessfulCompletion,
+    ]
+  );
+
+  // Effects
+  useEffect(() => {
+    document.title = isReset ? 'Create New Password' : 'Secure Your Account';
+  }, [isReset]);
+
+  // Render
+  return (
+    <>
+      <h2 className="mt-6">
+        {isReset ? 'Create New Password' : 'Secure Your Account'}
+      </h2>
+
+      {/* Password Creation Form */}
+      <form
+        ref={formRef}
+        method="post"
+        onSubmit={handleCompletion}
+        noValidate
+        className="w-full mt-4"
+      >
+        {/* Success Message */}
+        <Message
+          type="success"
+          message="Email verification completed successfully."
+          dismissible={false}
+        />
+
+        {/* Info Message */}
+        <Message
+          type="info"
+          message={
+            isReset
+              ? "Choose a strong password that you'll remember but others can't guess."
+              : 'Create a secure password to protect your account. Follow the requirements listed below.'
+          }
+          dismissible={false}
+        />
+
+        {/* Password Field */}
+        <div className="field mt-2 mx-4">
+          <label htmlFor="password" className="sr-only">
+            Password
+          </label>
+          <Key className="floatter" size={16} aria-hidden="true" />
+          <input
+            id="password"
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            placeholder="Enter your password"
+            minLength={6}
+            maxLength={16}
+            autoComplete="new-password"
+            disabled={loading}
+            required
+          />
+          <button
+            type="button"
+            id="eyeBtn"
+            onClick={togglePasswordVisibility}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            disabled={loading}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
+
+        {/* Password Requirements */}
+        <div className="mt-3 mx-4 space-y-1">
+          {[
+            { key: 'length', text: '6-16 characters' },
+            { key: 'uppercase', text: 'One uppercase letter (A-Z)' },
+            { key: 'lowercase', text: 'One lowercase letter (a-z)' },
+            { key: 'number', text: 'One number (0-9)' },
+            { key: 'special', text: 'One special character (@#$%&*)' },
+          ].map(({ key, text }) => (
             <div
-              className="errMsg"
-              dangerouslySetInnerHTML={{
-                __html: errMsg,
-              }}
-            ></div>
-          ) : null}
-          {isReset ? null : (
-            <div className="middleText">
-              <input type="checkbox" name="agree" id="tandc" required></input>
-              <label htmlFor="tandc">
-                &nbsp;I agree to&nbsp;
-                <a href="/terms.html" target="_blank">
-                  all terms and conditions
-                </a>
-                &nbsp;related to use of this website and its Services.
-              </label>
+              key={key}
+              className={`flex items-center gap-2 text-sm transition-colors ${
+                passwordValidation[key] ? 'text-green-600' : 'text-gray-500'
+              }`}
+            >
+              <span className="w-4 flex justify-center">
+                {passwordValidation[key] ? (
+                  <Check size={14} />
+                ) : (
+                  <Circle size={14} />
+                )}
+              </span>
+              <span>{text}</span>
+            </div>
+          ))}
+          {(passwordValidation.hasWhitespace || passwordValidation.hasTab) && (
+            <div className="flex items-center gap-2 text-sm text-red-600">
+              <span className="w-4 flex justify-center">
+                <X size={14} />
+              </span>
+              <span>No spaces or tabs allowed</span>
             </div>
           )}
-          <div>
-            <button
-              className="btnPrimary"
-              type="submit"
-              disabled={process ? true : false}
-            >
-              {isReset ? 'Submit' : 'Register Me'}
-            </button>
+        </div>
+
+        {/* Error Message */}
+        {message.text && <Message type={message.type} message={message.text} />}
+
+        {/* Terms Agreement (Sign Up Only) */}
+        {!isReset && (
+          <div className="mt-6 mx-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                name="agree"
+                id="terms"
+                checked={formData.agree}
+                onChange={handleInputChange}
+                disabled={loading}
+                className="mt-1 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded transition-colors"
+                required
+              />
+              <label
+                htmlFor="terms"
+                className="text-sm text-gray-700 leading-relaxed cursor-pointer select-none"
+              >
+                By creating an account, I acknowledge that I have read and agree
+                to the{' '}
+                <a
+                  href="/terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 underline font-medium transition-colors"
+                >
+                  Terms of Service
+                </a>{' '}
+                and{' '}
+                <a
+                  href="/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 underline font-medium transition-colors"
+                >
+                  Privacy Policy
+                </a>
+                .
+              </label>
+            </div>
+            {!formData.agree && formData.password && isPasswordValid && (
+              <div className="mt-2 text-xs text-amber-600 flex items-center gap-1">
+                <span>⚠</span>
+                <span>Please accept the terms to continue</span>
+              </div>
+            )}
           </div>
-        </form>
-      </>
-    );
-  }
-}
+        )}
+
+        {/* Submit Button */}
+        <div className="flex justify-center mt-6 pb-12">
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            isLoading={loading}
+            loadingText={
+              isReset ? 'Updating password...' : 'Creating account...'
+            }
+            disabled={!isFormValid || loading}
+            className="btnPrimary"
+          >
+            {isReset ? 'Update Password' : 'Create Account'}
+          </Button>
+        </div>
+      </form>
+    </>
+  );
+};
+
+SignUp2.displayName = 'SignUp2';
+
 export default SignUp2;

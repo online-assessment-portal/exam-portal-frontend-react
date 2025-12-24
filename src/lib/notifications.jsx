@@ -68,11 +68,17 @@ export const notifications = {
     loginError: (message = 'Invalid credentials') =>
       notifications.errorCustom(message, { heading: 'Login Failed' }),
     signupSuccess: () =>
-      notifications.successCustom('Welcome! Please verify your email.', {
+      notifications.successCustom('Welcome!', {
         heading: 'Account Created',
       }),
     signupError: (message = 'Registration failed') =>
       notifications.errorCustom(message, { heading: 'Signup Failed' }),
+    resetPasswordSuccess: () =>
+      notifications.successCustom('Welcome!', {
+        heading: 'Reset Success',
+      }),
+    resetPasswordError: (message = 'Reset failed') =>
+      notifications.errorCustom(message, { heading: 'Reset Failed' }),
     logoutSuccess: () =>
       notifications.successCustom('See you soon!', { heading: 'Logged Out' }),
     sessionExpired: () =>
@@ -81,11 +87,13 @@ export const notifications = {
       }),
   },
 
+  profile: {},
+
   // Exam-specific notifications
   exam: {
-    candidateVerified: () =>
+    basicProfileRequired: () =>
       notifications.successCustom('Please fill the required fields.', {
-        heading: 'Candidate Verified',
+        heading: 'Basic Profile Required',
       }),
     examStarted: () =>
       notifications.successCustom('Good luck!', { heading: 'Exam Started' }),
@@ -102,6 +110,11 @@ export const notifications = {
         heading: 'Auto-saved',
       }),
   },
+
+  serverConnectionError: () =>
+    notifications.errorCustom('Check your internet', {
+      heading: 'Connection Error',
+    }),
 
   // Utility functions
   dismiss: (toastId) => toast.dismiss(toastId),

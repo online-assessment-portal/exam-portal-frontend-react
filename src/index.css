@@ -5,28 +5,22 @@
    =========================== */
 
 /* 1. Box sizing & zero margins */
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-/* Reset margins and padding for specific elements */
-body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote, dl, dd {
-  margin: 0;
-  padding: 0;
-}
+} */
 
 /* 2. Smooth scrolling & base typography */
 html {
   /* font-size: 16px; */
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
 }
 
 /* 3. Body defaults */
 body {
-  min-height: 100vh;
-  font-family:
+  /* min-height: 100vh; */
+  /* font-family:
     'Inter',
     'Roboto',
     system-ui,
@@ -37,12 +31,12 @@ body {
     'Ubuntu',
     'Cantarell',
     'Helvetica Neue',
-    sans-serif;
+    sans-serif; */
   /* background-color: #fafafa; */
   /* color: #111827; */
   /* line-height: 1.6; */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
 }
 
 /* 4. Media elements */
@@ -51,8 +45,8 @@ picture,
 video,
 canvas,
 svg {
-  display: block;
-  max-width: 100%;
+  /* display: block;
+  max-width: 100%; */
 }
 
 /* 5. Form elements */
@@ -60,39 +54,44 @@ button,
 input,
 select,
 textarea {
-  font: inherit;
+  /* font: inherit;
   color: inherit;
   background: none;
-  border: none;
-  outline: none;
+  border: none; */
+  /* outline: none; */
 }
+
+/* Remove outline on focus for all elements */
+/* *:focus {
+  outline: none !important;
+} */
 button {
-  font-size: 18px;
-  border-radius: 3px;
+  /* font-size: 18px; */
+  /* border-radius: 3px; */
 }
 button:hover {
   cursor: pointer;
-  transition: all 200ms ease;
+  /* transition: all 200ms ease; */
 }
 
 /* 6. Links */
 a {
-  color: inherit;
-  text-decoration: none;
+  /* color: inherit;
+  text-decoration: none; */
 }
 
 a:hover {
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 /* 7. Code font */
 code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  /* font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; */
 }
 
 /* 8. Root container sizing (for React apps) */
 #root {
-  height: 100%;
-  width: 100%;
+  /* height: 100%;
+  width: 100%; */
 }

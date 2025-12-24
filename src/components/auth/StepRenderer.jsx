@@ -1,9 +1,7 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import SignIn from './SignIn';
 import SignUp1 from './SignUp1';
 import SignUp2 from './SignUp2';
-import Profile from './Profile';
 
 const variants = {
   enter: (direction) => ({
@@ -31,23 +29,15 @@ const StepRenderer = ({
   mode,
   step,
   direction,
-  commonProps,
-  setExamCompState,
-  isHome,
-  googleLogo,
-  userInfo,
   nextStep,
+  changeMode,
+  isHome,
+  otpVerifyToken,
+  setOtpVerifyToken,
 }) => {
   const renderContent = () => {
     if (mode === 'signIn') {
-      return (
-        <SignIn
-          {...commonProps}
-          setExamCompState={setExamCompState}
-          isHome={isHome}
-          googleLogo={googleLogo}
-        />
-      );
+      return <SignIn changeMode={changeMode} isHome={isHome} />;
     }
 
     if (mode === 'signUp') {
@@ -55,17 +45,16 @@ const StepRenderer = ({
         <>
           {step === 0 && (
             <SignUp1
-              {...commonProps}
+              nextStep={nextStep}
+              changeMode={changeMode}
+              setOtpVerifyToken={setOtpVerifyToken}
               isReset={false}
-              setStep={nextStep}
-              googleLogo={googleLogo}
             />
           )}
           {step === 1 && (
             <SignUp2
-              {...commonProps}
+              otpVerifyToken={otpVerifyToken}
               isReset={false}
-              setExamCompState={setExamCompState}
               isHome={isHome}
             />
           )}
@@ -77,28 +66,21 @@ const StepRenderer = ({
       return (
         <>
           {step === 0 && (
-            <SignUp1 {...commonProps} isReset={true} googleLogo={googleLogo} />
+            <SignUp1
+              nextStep={nextStep}
+              changeMode={changeMode}
+              setOtpVerifyToken={setOtpVerifyToken}
+              isReset={true}
+            />
           )}
           {step === 1 && (
             <SignUp2
-              {...commonProps}
+              otpVerifyToken={otpVerifyToken}
               isReset={true}
-              setExamCompState={setExamCompState}
               isHome={isHome}
             />
           )}
         </>
-      );
-    }
-
-    if (mode === 'profile') {
-      return (
-        <Profile
-          {...commonProps}
-          setExamCompState={setExamCompState}
-          userInfo={userInfo}
-          isHome={isHome}
-        />
       );
     }
   };

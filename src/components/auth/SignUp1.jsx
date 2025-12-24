@@ -1,260 +1,332 @@
-import React, { PureComponent } from 'react';
-import { notify } from '../../lib';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Eye, EyeOff, User, Unlock } from 'lucide-react';
+import { sendOTP, verifyOTP } from '../../services/auth.service';
+import { EMAIL_REGEX } from '../../constants/validation';
+import Button from '../ui/Button';
+import Message from '../ui/Message';
+import googleLogo from '../../google-logo.png';
+import { SYSTEM_MESSAGES } from '../../constants/messages';
+import { notifications } from '../../lib';
 
-const apiUrl = import.meta.env.VITE_API_URL;
-const appEnv = import.meta.env.VITE_APP_ENV;
-const isProd = appEnv === 'PROD';
+const OTP_LENGTH = 6;
 
-const googleLoginURL = import.meta.env.VITE_GOOGLE_LOGIN_AUTH_URL;
+const SignUp1 = ({ setOtpVerifyToken, isReset, nextStep, changeMode }) => {
+  // State initialization
+  const [formData, setFormData] = useState({ email: '', otp: '' });
+  const [showOtp, setShowOtp] = useState(false);
+  const [loading, setLoading] = useState({ send: false, verify: false });
+  const [otpSent, setOtpSent] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '', step: '' });
 
-class SignUp1 extends PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      process: false,
-      otpSent: false,
-      email: '',
-      errMsg: '',
-    };
-    this.resendOTP = false;
-    this.vfFailCtr = 0;
-    this.mailCtr = 0;
-    this.email = React.createRef();
-    this.otp = React.createRef();
-    //
-    this.reqCtrM = 0;
-    this.reqCtrV = 0;
-  }
-  signUpForm = async (event = false) => {
-    if (event) event.preventDefault();
-    const { msgHolder } = this.props;
-    if (
-      (this.resendOTP && this.reqCtrM > 5) ||
-      (!this.resendOTP && this.reqCtrV > 5)
-    ) {
-      notify(
-        msgHolder,
-        'e',
-        'Reached maximum attempts allowed.<br>Please retry after 15 mins.'
-      );
-      return false;
-    }
-    this.setState({ process: true });
-    const { otpSent } = this.state;
-    const email = this.email.current.value;
-    //
-    let otp;
-    if (otpSent) {
-      otp = parseInt(this.otp.current.value);
-      if (isNaN(otp) && !this.resendOTP)
-        return this.setState({ errMsg: 'Invalid OTP Entered', process: false });
-    }
-    const { isReset, token } = this.props;
-    const formData = new FormData();
-    if (email) {
-      formData.append('email', email);
-      if (!this.resendOTP && otp) {
-        formData.append('otp', otp);
-        this.reqCtrV++;
-      } else this.reqCtrM++;
-    } else {
-      notify(msgHolder, 'e', 'Enter a valid e-Mail.');
-      this.setState({ process: false });
-      return false;
-    }
-    if (isReset) formData.append('isReset', true);
-    formData.append('_csrf', token);
-    //
-    const formBody = new URLSearchParams(formData).toString();
-    try {
-      const promise = await fetch(`${apiUrl}/login/otp_auth/`, {
-        method: 'POST',
-        credentials: isProd ? 'same-origin' : 'include',
-        body: formBody,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      });
-      const response = await promise.json();
-      //
-      if (promise.status === 200 && promise.ok === true) {
-        if (response.sentTo) {
-          this.setState({
-            otpSent: true,
-            email: response.sentTo,
-            errMsg: '',
-          });
-        } else if (response.ovs && response.ovs === 'V') {
-          if (response.vioVerify)
-            notify(
-              msgHolder,
-              'e',
-              'eMail-Id was Changed.<br>Account will be created for the email on which OTP was sent.<br>You can proceed safely.'
-            );
-          this.props.setStep((s) => s + 1); // ?? Verify
-        } else notify(msgHolder, 'e', '');
-      } else if (response.error) {
-        let msg = '';
-        const recMsg = response.error.message;
-        if (recMsg.search('email') >= 0)
-          msg =
-            'Email must be a valid email.<br>Note that we currently allow only [.com , .in , .edu , .net] email addresses.<br>Contact to add your organization.';
-        return this.setState({
-          errMsg: msg ? msg : recMsg,
-          process: false,
+  // Form validation
+  const isEmailValid = useMemo(
+    () => formData.email.trim() && EMAIL_REGEX.test(formData.email),
+    [formData.email]
+  );
+
+  const isOtpValid = useMemo(
+    () => formData.otp.length === OTP_LENGTH && /^\d+$/.test(formData.otp),
+    [formData.otp]
+  );
+
+  const isProcessing = useMemo(
+    () => loading.send || loading.verify,
+    [loading.send, loading.verify]
+  );
+
+  // Event handlers
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const toggleOtpVisibility = useCallback(() => {
+    setShowOtp((prev) => !prev);
+  }, []);
+
+  const handleSendOtp = useCallback(
+    async (event) => {
+      event.preventDefault();
+      if (!isEmailValid) return;
+
+      setLoading((prev) => ({ ...prev, send: true }));
+      setMessage({ type: '', text: '', step: '' });
+
+      try {
+        const { success, message: msg } = await sendOTP(
+          formData.email,
+          isReset
+        );
+
+        setMessage({
+          type: success ? 'success' : 'error',
+          text:
+            msg ||
+            (success ? 'OTP sent successfully' : SYSTEM_MESSAGES.UNKNOWN_ERROR),
+          step: 'send',
         });
-      } else notify(msgHolder, 'e', '');
-      this.setState({ process: false });
-    } catch (error) {
-      notify(
-        msgHolder,
-        'e',
-        'SERVER Connection Error<br>Check your Internet Connection'
-      );
-      this.setState({ process: false });
-    } finally {
-      this.resendOTP = false;
+
+        if (success) setOtpSent(true);
+      } catch (error) {
+        setMessage({
+          type: 'error',
+          text: error?.message || SYSTEM_MESSAGES.UNKNOWN_ERROR,
+          step: 'send',
+        });
+      } finally {
+        setLoading((prev) => ({ ...prev, send: false }));
+      }
+    },
+    [formData.email, isReset, isEmailValid]
+  );
+
+  const handleVerifyOtp = useCallback(
+    async (event) => {
+      event.preventDefault();
+      if (!isOtpValid) return;
+
+      setLoading((prev) => ({ ...prev, verify: true }));
+      setMessage({ type: '', text: '', step: '' });
+
+      try {
+        const {
+          success,
+          message: msg,
+          data: { verifyToken },
+        } = await verifyOTP(formData.email, parseInt(formData.otp), isReset);
+
+        if (success && verifyToken) {
+          notifications.successCustom('OTP Verified Successfully');
+          nextStep();
+          console.log({ verifyToken });
+          setOtpVerifyToken(verifyToken);
+        } else {
+          setMessage({
+            type: 'error',
+            text: msg || SYSTEM_MESSAGES.UNKNOWN_ERROR,
+            step: 'verify',
+          });
+        }
+      } catch (error) {
+        setMessage({
+          type: 'error',
+          text: error?.message || SYSTEM_MESSAGES.UNKNOWN_ERROR,
+          step: 'verify',
+        });
+      } finally {
+        setLoading((prev) => ({ ...prev, verify: false }));
+      }
+    },
+    [
+      formData.email,
+      formData.otp,
+      isReset,
+      nextStep,
+      isOtpValid,
+      setOtpVerifyToken,
+    ]
+  );
+
+  const handleGoogleLogin = useCallback(() => {
+    const googleUrl = import.meta.env.VITE_GOOGLE_LOGIN_AUTH_URL;
+
+    if (!googleUrl) {
+      setMessage({
+        type: 'error',
+        text: 'Google login is currently unavailable',
+        step: 'google',
+      });
+      return;
     }
-  };
-  componentDidMount() {
-    if (this.props.isReset) document.title = 'Reset Password';
-    else document.title = 'Sign-Up';
-  }
-  render() {
-    const { process, otpSent, email, errMsg } = this.state;
-    const { isReset, toggleShowHide, googleLogo } = this.props;
-    return (
-      <>
-        <h2>{isReset ? 'Reset Password' : 'Create your account'}</h2>
-        <form method="post" onSubmit={this.signUpForm}>
-          <div className="field">
-            <i className="floatter fa fa-user" aria-hidden="true"></i>
+
+    try {
+      const currentPath = window.location.pathname;
+      if (currentPath) {
+        sessionStorage.setItem('authRedirect', currentPath);
+      }
+      window.location.replace(googleUrl);
+    } catch (error) {
+      console.error('Google login error:', error);
+      setMessage({
+        type: 'error',
+        text: 'Unable to initiate Google login',
+        step: 'google',
+      });
+    }
+  }, []);
+
+  // Effects
+  useEffect(() => {
+    document.title = isReset ? 'Reset Password' : 'Sign-Up';
+  }, [isReset]);
+
+  // Render
+  return (
+    <>
+      <h2 className="mt-6">
+        {isReset ? 'Reset Your Password' : 'Join Us Today'}
+      </h2>
+
+      {/* Email Form */}
+      <form
+        method="post"
+        onSubmit={handleSendOtp}
+        noValidate
+        className="w-full mt-4"
+      >
+        <div className="field mt-2 mx-4">
+          <label
+            htmlFor={isReset ? 'email-reset' : 'email-register'}
+            className="sr-only"
+          >
+            Email
+          </label>
+          <User className="floatter" size={16} aria-hidden="true" />
+          <input
+            id={isReset ? 'email-reset' : 'email-register'}
+            type={isReset ? 'text' : 'email'}
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            placeholder={
+              isReset ? 'Enter your Username or Email' : 'Enter your Email'
+            }
+            maxLength={60}
+            autoComplete={isReset ? 'username' : 'email'}
+            disabled={isProcessing}
+            required
+          />
+        </div>
+        <div className="flex justify-center mt-3">
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            isLoading={loading.send}
+            loadingText={otpSent ? 'Resending...' : 'Sending...'}
+            disabled={!isEmailValid || isProcessing}
+            className="btnPrimary"
+          >
+            {otpSent ? 'Resend OTP' : 'Send OTP'}
+          </Button>
+        </div>
+      </form>
+
+      {/* Info Message */}
+      {!otpSent && (
+        <Message
+          type="info"
+          message="We'll send a 6-digit verification code to your email address."
+          dismissible={false}
+        />
+      )}
+
+      {/* Send OTP Message */}
+      {message.step === 'send' && message.text && (
+        <Message type={message.type} message={message.text} />
+      )}
+
+      {/* OTP Verification Form */}
+      {otpSent && (
+        <form
+          method="post"
+          onSubmit={handleVerifyOtp}
+          noValidate
+          className="w-full mt-4"
+        >
+          <div className="field mt-2 mx-4">
+            <label htmlFor="otp" className="sr-only">
+              OTP
+            </label>
+            <Unlock className="floatter" size={16} aria-hidden="true" />
             <input
-              ref={this.email}
-              type="text"
-              autoComplete="off"
-              name="email"
-              placeholder="Enter your e-Mail"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-              maxLength="60"
+              id="otp"
+              type={showOtp ? 'text' : 'password'}
+              name="otp"
+              value={formData.otp}
+              onChange={handleInputChange}
+              placeholder="Enter verification code"
+              minLength={6}
+              maxLength={6}
+              autoComplete="one-time-code"
+              disabled={isProcessing}
               required
-            ></input>
-          </div>
-          <div>
+            />
             <button
-              className="btnPrimary"
-              type={otpSent ? 'button' : 'submit'}
-              onClick={
-                otpSent
-                  ? () => {
-                      this.resendOTP = true;
-                      this.signUpForm();
-                    }
-                  : null
+              type="button"
+              id="eyeBtn"
+              onClick={toggleOtpVisibility}
+              aria-label={
+                showOtp ? 'Hide verification code' : 'Show verification code'
               }
-              disabled={process ? true : false}
+              disabled={isProcessing}
             >
-              {otpSent ? 'Resend' : 'Send'} OTP
+              {showOtp ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
-          {otpSent ? null : (
-            <div className="middleText">
-              <p>
-                ✩ A Verification e-Mail containing 6-digit OTP will be sent on
-                this e-Mail address.
-              </p>
-            </div>
-          )}
-          {otpSent ? (
-            <div className="sucesMsg">
-              <p>
-                ✩ A Verification e-Mail containing 6-digit OTP was Sent to{' '}
-                {email}.
-              </p>
-              <p>
-                ✩ It may take some time to receive depending on the Mail-Server.
-                Please Wait before Retrying.
-              </p>
-            </div>
-          ) : null}
-          {!process && errMsg ? (
-            <div
-              className="errMsg"
-              dangerouslySetInnerHTML={{
-                __html: errMsg,
-              }}
-            ></div>
-          ) : null}
-          {otpSent ? (
-            <>
-              <div className="field">
-                <i className="floatter fa fa-unlock-alt" aria-hidden="true"></i>
-                <input
-                  ref={this.otp}
-                  type="password"
-                  autoComplete="off"
-                  name="sp_otp"
-                  placeholder="Enter 6-digit OTP"
-                  minLength="6"
-                  maxLength="6"
-                  required
-                ></input>
-                <button type="button" id="eyeBtn">
-                  <i
-                    className="fa fa-eye-slash"
-                    id="eyeIcon"
-                    aria-hidden="true"
-                    onClick={toggleShowHide}
-                  ></i>
-                </button>
-              </div>
-              <div>
-                <button
-                  className="btnPrimary"
-                  type="submit"
-                  disabled={process ? true : false}
-                >
-                  Verify &amp; Proceed
-                </button>
-              </div>
-            </>
-          ) : null}
-          <h3 className="othOptHead">
-            <span>{isReset ? 'Often forget Password ?' : 'OR'}</span>
-          </h3>
-          <div id="alternateLogin">
-            <button
-              type="button"
-              className="gLogin"
-              disabled={process ? true : false}
-              onClick={() => {
-                this.setState({ process: true });
-                localStorage.setItem('gLogin', window.location.pathname);
-                window.location.replace(googleLoginURL);
-              }}
+          <div className="flex justify-center mt-3">
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              isLoading={loading.verify}
+              loadingText="Verifying..."
+              disabled={!isOtpValid || isProcessing}
+              className="btnPrimary"
             >
-              <img src={googleLogo} alt="G" srcSet=""></img>
-              <p>{isReset ? 'Use Sign-In' : 'Sign-Up'} with Google</p>
-            </button>
-          </div>
-          <h3 className="othOptHead">
-            <span>
-              {isReset ? 'Give your memory a Try' : 'Already Have an Account ?'}
-            </span>
-          </h3>
-          <div>
-            <button
-              className="blueLinkBtn"
-              type="button"
-              disabled={process ? true : false}
-              onClick={() => {
-                this.props.changeMode('signIn');
-              }}
-            >
-              &nbsp;&nbsp;Sign In&nbsp;&nbsp;
-            </button>
+              Verify Code
+            </Button>
           </div>
         </form>
-      </>
-    );
-  }
-}
+      )}
+
+      {/* Verification Messages */}
+      {(message.step === 'verify' || message.step === 'google') &&
+        message.text && <Message type={message.type} message={message.text} />}
+
+      {/* Google Login Section */}
+      <div className="w-full mt-12">
+        <h5 className="othOptHead">
+          <span>{isReset ? 'Often forget Password ?' : 'OR'}</span>
+        </h5>
+        <div className="flex justify-center mt-5">
+          <button
+            className="gLogin"
+            type="button"
+            disabled={isProcessing}
+            onClick={handleGoogleLogin}
+            aria-label={
+              isReset ? 'Reset password with Google' : 'Sign up with Google'
+            }
+          >
+            <img src={googleLogo} alt="" aria-hidden="true" />
+            <p>{isReset ? 'Use Sign-In' : 'Sign-Up'} with Google</p>
+          </button>
+        </div>
+      </div>
+
+      {/* Sign In Link */}
+      <div className="w-full mt-12 pb-12">
+        <h3 className="othOptHead">
+          <span>
+            {isReset ? 'Give your memory a Try' : 'Already Have an Account ?'}
+          </span>
+        </h3>
+        <div className="flex justify-center mt-5">
+          <button
+            className="blueLinkBtn"
+            type="button"
+            disabled={isProcessing}
+            onClick={() => changeMode('signIn')}
+          >
+            &nbsp;&nbsp;Sign In&nbsp;&nbsp;
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
+
+SignUp1.displayName = 'SignUp1';
+
 export default SignUp1;
