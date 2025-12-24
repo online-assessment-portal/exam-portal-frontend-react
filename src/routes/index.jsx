@@ -2,15 +2,20 @@ import { lazy } from 'react';
 
 // Lazy load components
 const Home = lazy(() => import('../pages/User/Home'));
+const Profile = lazy(() => import('../pages/User/Profile'));
 const AuthPage = lazy(() => import('../pages/User/Auth/index'));
 const Error = lazy(() => import('../error'));
 
 // Lazy load additional components
-const ExamComp = lazy(() => import('../ExamComp'));
-const ExamAdmin = lazy(() => import('../admin/ExamAdmin'));
-const Result = lazy(() => import('../result/ResultMain'));
-const HeadAuth = lazy(() => import('../HeadAuth'));
-const Monitor = lazy(() => import('../admin/monitor'));
+// const ExamComp = lazy(() => import('../ExamComp'));
+// const ExamAdmin = lazy(() => import('../admin/ExamAdmin'));
+// const Result = lazy(() => import('../result/ResultMain'));
+// const HeadAuth = lazy(() => import('../HeadAuth'));
+// const Monitor = lazy(() => import('../admin/monitor'));
+
+// Lazy load legal components
+const TermsOfService = lazy(() => import('../components/legal/TermsOfService'));
+const PrivacyPolicy = lazy(() => import('../components/legal/PrivacyPolicy'));
 
 // Route configuration
 export const routes = [
@@ -20,35 +25,56 @@ export const routes = [
     name: 'Home',
   },
   {
-    path: '/profile',
+    path: '/auth',
     element: AuthPage,
-    props: { isHome: true },
-    name: 'Profile',
+    props: { isHome: true }, // TODO: To be verified
+    name: 'Authentication',
   },
   {
-    path: '/test',
-    element: ExamComp,
-    name: 'Exam',
+    path: '/profile',
+    element: Profile,
+    name: 'Authentication',
+    isProtected: true,
+  },
+  // {
+  //   path: '/test',
+  //   element: ExamComp,
+  //   name: 'Exam',
+  //   isProtected: true,
+  // },
+  // {
+  //   path: '/testAdmin',
+  //   element: ExamAdmin,
+  //   name: 'ExamAdmin',
+  //   isProtected: true,
+  // },
+  // {
+  //   path: '/result',
+  //   element: Result,
+  //   name: 'Result',
+  //   isProtected: true,
+  // },
+  // {
+  //   path: '/monitor',
+  //   element: Monitor,
+  //   name: 'Monitor',
+  //   isProtected: true,
+  // },
+  // {
+  //   path: '/helloHead',
+  //   element: HeadAuth,
+  //   name: 'HeadAuth',
+  //   isProtected: true,
+  // },
+  {
+    path: '/terms',
+    element: TermsOfService,
+    name: 'TermsOfService',
   },
   {
-    path: '/testAdmin',
-    element: ExamAdmin,
-    name: 'ExamAdmin',
-  },
-  {
-    path: '/result',
-    element: Result,
-    name: 'Result',
-  },
-  {
-    path: '/monitor',
-    element: Monitor,
-    name: 'Monitor',
-  },
-  {
-    path: '/helloHead',
-    element: HeadAuth,
-    name: 'HeadAuth',
+    path: '/privacy',
+    element: PrivacyPolicy,
+    name: 'PrivacyPolicy',
   },
   {
     path: '*',
@@ -58,14 +84,17 @@ export const routes = [
 ];
 
 export {
-  Home,
   AuthPage,
-  ExamComp,
-  ExamAdmin,
-  Result,
-  HeadAuth,
-  Monitor,
   Error,
+  // ExamAdmin,
+  // ExamComp,
+  // HeadAuth,
+  Home,
+  // Monitor,
+  Profile,
+  // Result,
+  TermsOfService,
+  PrivacyPolicy,
 };
 
 // import React from 'react';

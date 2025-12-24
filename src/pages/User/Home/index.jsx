@@ -20,7 +20,7 @@ const isProd = appEnv === 'PROD';
 class Home extends Component {
   constructor() {
     super();
-    this.state = { process: false };
+    this.state = { loggedIn: false, process: false };
     this.msgHolder = React.createRef();
   }
 
@@ -88,16 +88,16 @@ class Home extends Component {
     }
   };
   componentDidMount() {
-    const pgData = JSON.parse(document.getElementById('userInfo').innerText);
-    const myState = { token: pgData.token };
-    if (pgData.loggedIn) myState.loggedIn = true;
-    this.setState(myState);
-    window.addEventListener('load', () => {
-      document.getElementsByTagName('main')[0].style.display = 'block';
-    });
-    window.addEventListener('error', (err) => {
-      storeError(err, pgData.token);
-    });
+    // const pgData = JSON.parse(document.getElementById('userInfo').innerText);
+    // const myState = { token: pgData.token };
+    // if (pgData.loggedIn) myState.loggedIn = true;
+    // this.setState(myState);
+    // window.addEventListener('load', () => {
+    //   document.getElementsByTagName('main')[0].style.display = 'block';
+    // });
+    // window.addEventListener('error', (err) => {
+    //   storeError(err, pgData.token);
+    // });
   }
   render() {
     const { loggedIn, process } = this.state;
