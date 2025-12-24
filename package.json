@@ -11,9 +11,12 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",
     "ace-builds": "^1.43.4",
+    "axios": "^1.13.1",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.548.0",
     "peerjs": "^1.5.4",
+    "prop-types": "^15.8.1",
     "react": "^19.1.1",
     "react-ace": "^14.0.1",
     "react-dom": "^19.1.1",
