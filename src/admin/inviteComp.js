@@ -22,7 +22,7 @@ class Invite extends Component {
       name: 'Sachin Kumar',
       desig: 'Admin Shred Test',
       mobno: '8529493017',
-      mail: 'sachin@shredtest.coderadiant.com',
+      mail: 'sachin@shredtest.scriptbliss.com',
       instr: false,
       // This is email of mail account
       mailAccKey: Object.keys(props.mailAcc)[0],

@@ -430,7 +430,7 @@ class ExamAdmin extends Component {
                           onClick={() =>
                             window.prompt(
                               'Exam Link',
-                              `https://shredtest.coderadiant.com/test?passcode=${each.passcode}`
+                              `https://shredtest.scriptbliss.com/test?passcode=${each.passcode}`
                             )
                           }
                         >
@@ -441,7 +441,7 @@ class ExamAdmin extends Component {
                         <button
                           onClick={() =>
                             window.open(
-                              `https://shredtest.coderadiant.com/monitor?proctor=${each.passcode}`
+                              `https://shredtest.scriptbliss.com/monitor?proctor=${each.passcode}`
                             )
                           }
                         >
