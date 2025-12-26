@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
+import { Link, useNavigate } from 'react-router';
 import logo from '../../assets/favicon/favicon-32x32.png';
 
 const Navigation = ({ loggedIn, onLogout, process }) => {
   const navLinks = useRef();
+  const navigate = useNavigate();
 
   const toggleNavBar = (event) => {
     const target = event.target;
@@ -53,14 +55,12 @@ const Navigation = ({ loggedIn, onLogout, process }) => {
           <a href="#contact">Contact</a>
         </li>
         <li>
-          <a href="/test">ExamPage</a>
+          <Link to="/test">ExamPage</Link>
         </li>
         <li>
           <button
             type="button"
-            onClick={
-              loggedIn ? onLogout : () => window.location.assign('/profile')
-            }
+            onClick={loggedIn ? onLogout : () => navigate('/auth')}
             disabled={process}
           >
             {loggedIn ? 'Log-out' : 'Sign-In'}
