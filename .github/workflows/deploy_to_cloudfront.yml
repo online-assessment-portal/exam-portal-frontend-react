@@ -9,9 +9,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
 
     steps:
       - name: Checkout repository
@@ -29,20 +26,21 @@ jobs:
       - name: Build React app
         run: yarn build
         env:
-          REACT_APP_API_URL: https://shredtest.scriptbliss.com
+          REACT_APP_API_URL: https://api.shredtest.scriptbliss.com
           REACT_APP_APP_ENV: PROD
           REACT_APP_GOOGLE_LOGIN_AUTH_URL: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=openid%20profile%20email&response_type=code&client_id=487563935567-9d7hunscovdvc8940lgfm10ak3ilpiui.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.scriptbliss.com%2Fgsign%2Fgoogle-login
           REACT_APP_GMAIL_SEND_AUTH_URL: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.send&response_type=code&client_id=487563935567-doi10pjcfdikmfh8vioob7qnm1on9hbu.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.scriptbliss.com%2Finvite%2FsetupMailer
           REACT_APP_PEERJS_URL: https://shredtest.scriptbliss.com
           REACT_APP_PEERJS_PORT: 443
 
-      - name: Configure AWS credentials (OIDC)
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ap-south-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Upload build to S3
+      - name: Sync to S3
         run: |
           aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
