@@ -1,8 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import logo from '../../assets/favicon/favicon-32x32.png';
+import { useAuth } from '../../hooks';
+import { notifications } from '../../lib';
+import { SYSTEM_MESSAGES } from '../../constants/messages';
+import { signOut } from '../../services/auth.service';
 
-const Navigation = ({ loggedIn, onLogout, process }) => {
+const Navigation = () => {
+  const [loading, setLoading] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
   const navLinks = useRef();
   const navigate = useNavigate();
 
@@ -35,6 +41,27 @@ const Navigation = ({ loggedIn, onLogout, process }) => {
     }
   }, []);
 
+  const handleLogout = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const { success, message } = await signOut();
+
+      if (success) {
+        logout();
+        notifications.auth.logoutSuccess();
+      } else {
+        notifications.errorCustom(message || SYSTEM_MESSAGES.UNKNOWN_ERROR);
+      }
+    } catch (error) {
+      notifications.errorCustom(
+        error?.message || SYSTEM_MESSAGES.UNKNOWN_ERROR
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [logout]);
+
   return (
     <nav id="homeNav">
       <div>
@@ -55,15 +82,15 @@ const Navigation = ({ loggedIn, onLogout, process }) => {
           <a href="#contact">Contact</a>
         </li>
         <li>
-          <Link to="/test">ExamPage</Link>
+          <Link to="/assessment">ExamPage</Link>
         </li>
         <li>
           <button
             type="button"
-            onClick={loggedIn ? onLogout : () => navigate('/auth')}
-            disabled={process}
+            onClick={isAuthenticated ? handleLogout : () => navigate('/auth')}
+            disabled={loading}
           >
-            {loggedIn ? 'Log-out' : 'Sign-In'}
+            {isAuthenticated ? 'Log-out' : 'Sign-In'}
           </button>
         </li>
       </ul>

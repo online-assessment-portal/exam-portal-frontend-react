@@ -1,52 +1,98 @@
-import React from 'react';
+import { useState } from 'react';
+import { SYSTEM_MESSAGES } from '../../constants/messages';
+import { notifications } from '../../lib';
+import { sendContactRequest } from '../../services/guest.service';
+import Button from '../ui/Button';
 
-const ContactForm = ({ onSubmit, process }) => {
+const SUCCESS_MESSAGE =
+  "Message sent successfully! We'll get back to you soon.";
+
+const ContactForm = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(event.target);
+    const contactData = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      subject: formData.get('subject'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const { success, message } = await sendContactRequest(contactData);
+
+      if (success) {
+        event.target.reset();
+        notifications.success(SUCCESS_MESSAGE);
+      } else {
+        notifications.errorCustom(message || SYSTEM_MESSAGES.UNKNOWN_ERROR);
+      }
+    } catch (error) {
+      notifications.errorCustom(
+        error?.message || SYSTEM_MESSAGES.UNKNOWN_ERROR
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="types" id="contact">
       <h2>Contact Us</h2>
-      <form method="post" id="contactForm" onSubmit={onSubmit}>
-        <label htmlFor="name">Full Name -:</label>
+      <form method="post" id="contactForm" onSubmit={handleFormSubmit}>
+        <label htmlFor="name">Full Name:</label>
         <input
           name="name"
           id="name"
+          type="text"
           placeholder="Your Full Name"
           maxLength="50"
+          required
         />
-        <p></p>
-        <label htmlFor="mail">Email-Id -:</label>
+
+        <label htmlFor="mail">Email:</label>
         <input
           type="email"
-          name="mailId"
+          name="email"
           id="mail"
-          placeholder="Updates will be sent here"
-          defaultValue=""
+          placeholder="your.email@example.com"
           maxLength="100"
+          required
         />
-        <p></p>
-        <label htmlFor="mobno">Mobile Number</label>
+
+        <label htmlFor="subject">Subject:</label>
         <input
           type="text"
-          name="mobNo"
-          id="mobno"
-          placeholder="Enter 10-digit Mobile Number"
-          minLength="10"
-          maxLength="10"
+          name="subject"
+          id="subject"
+          placeholder="What is this about?"
+          maxLength="100"
+          required
         />
-        <p></p>
-        <label htmlFor="msg">Any initial Message ?</label>
+
+        <label htmlFor="msg">Message:</label>
         <textarea
-          name="msg"
+          name="message"
           id="msg"
-          rows="9"
-          placeholder="Type it Here"
-          autoComplete="off"
+          rows="6"
+          placeholder="Tell us more about your inquiry..."
           maxLength="500"
+          required
         />
+
         <div>
-          <button className="btnPrimary" type="submit" disabled={process}>
-            Submit
-            {process && <i className="fa fa-spinner" aria-hidden="true"></i>}
-          </button>
+          <Button
+            type="submit"
+            isLoading={loading}
+            loadingText="Sending..."
+            disabled={loading}
+          >
+            Send Message
+          </Button>
         </div>
       </form>
     </section>

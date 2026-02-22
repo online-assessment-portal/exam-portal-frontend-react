@@ -145,18 +145,18 @@ const SignUp2 = ({ isReset, otpVerifyToken, isHome }) => {
           );
         }
 
-        const {
-          success,
-          message: msg,
-          data,
-        } = await complete(formData.password.trim(), otpVerifyToken, isReset);
+        const { success, message, data } = await complete(
+          formData.password.trim(),
+          otpVerifyToken,
+          isReset
+        );
 
         if (success && data?.userInfo) {
           processSuccessfulCompletion(data.userInfo);
         } else {
           setMessage({
             type: 'error',
-            text: msg || SYSTEM_MESSAGES.UNKNOWN_ERROR,
+            text: message || SYSTEM_MESSAGES.UNKNOWN_ERROR,
           });
         }
       } catch (error) {

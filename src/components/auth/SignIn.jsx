@@ -88,18 +88,17 @@ const SignIn = ({ changeMode, isHome }) => {
       setMessage({ type: '', text: '' });
 
       try {
-        const {
-          success,
-          message: msg,
-          data,
-        } = await signIn(formData.email.trim(), formData.password.trim());
+        const { success, message, data } = await signIn(
+          formData.email.trim(),
+          formData.password.trim()
+        );
 
         if (success && data?.userInfo) {
           processSuccessfulLogin(data.userInfo);
         } else {
           setMessage({
             type: 'error',
-            text: msg || SYSTEM_MESSAGES.UNKNOWN_ERROR,
+            text: message || SYSTEM_MESSAGES.UNKNOWN_ERROR,
           });
         }
       } catch (error) {

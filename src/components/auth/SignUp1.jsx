@@ -53,15 +53,12 @@ const SignUp1 = ({ setOtpVerifyToken, isReset, nextStep, changeMode }) => {
       setMessage({ type: '', text: '', step: '' });
 
       try {
-        const { success, message: msg } = await sendOTP(
-          formData.email,
-          isReset
-        );
+        const { success, message } = await sendOTP(formData.email, isReset);
 
         setMessage({
           type: success ? 'success' : 'error',
           text:
-            msg ||
+            message ||
             (success ? 'OTP sent successfully' : SYSTEM_MESSAGES.UNKNOWN_ERROR),
           step: 'send',
         });
@@ -91,7 +88,7 @@ const SignUp1 = ({ setOtpVerifyToken, isReset, nextStep, changeMode }) => {
       try {
         const {
           success,
-          message: msg,
+          message,
           data: { verifyToken },
         } = await verifyOTP(formData.email, parseInt(formData.otp), isReset);
 
@@ -103,7 +100,7 @@ const SignUp1 = ({ setOtpVerifyToken, isReset, nextStep, changeMode }) => {
         } else {
           setMessage({
             type: 'error',
-            text: msg || SYSTEM_MESSAGES.UNKNOWN_ERROR,
+            text: message || SYSTEM_MESSAGES.UNKNOWN_ERROR,
             step: 'verify',
           });
         }

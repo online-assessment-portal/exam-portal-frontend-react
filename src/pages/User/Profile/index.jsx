@@ -1,6 +1,6 @@
-import { LogOut, Mail, Upload, User } from 'lucide-react';
+import { Home, LogOut, Mail, Upload, User } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import Button from '../../../components/ui/Button.jsx';
 import Message from '../../../components/ui/Message.jsx';
 import { SYSTEM_MESSAGES } from '../../../constants/messages.js';
@@ -16,6 +16,7 @@ const isProd = appEnv === 'PROD';
 
 const MAX_FILE_SIZE = 1048576; // 1MB
 const DEFAULT_AVATAR = 'https://i.ibb.co/QpJYCQ7/UL8Ijh0w.png';
+const IMAGE_UPLOAD_DISABLED = true; // TODO: Enable in future
 
 const Profile = () => {
   // Hooks first
@@ -238,16 +239,14 @@ const Profile = () => {
     setLoading((prev) => ({ ...prev, logout: true }));
 
     try {
-      const { success, message: logoutMessage } = await signOut();
+      const { success, message } = await signOut();
 
       if (success) {
         logout();
         notifications.auth.logoutSuccess();
         navigate('/auth');
       } else {
-        notifications.errorCustom(
-          logoutMessage || SYSTEM_MESSAGES.UNKNOWN_ERROR
-        );
+        notifications.errorCustom(message || SYSTEM_MESSAGES.UNKNOWN_ERROR);
         setLoading((prev) => ({ ...prev, logout: false }));
       }
     } catch (error) {
@@ -267,22 +266,30 @@ const Profile = () => {
     <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-              Profile
-            </h1>
+          <div className="flex items-center justify-between mb-6">
+            <Link
+              to="/"
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              <Home className="w-5 h-5" />
+              <span className="font-semibold">Shred Test</span>
+            </Link>
             <Button
               onClick={handleLogout}
               variant="outline"
               size="sm"
               isLoading={loading.logout}
               loadingText="Signing out..."
-              className="flex items-center justify-center gap-2 w-full sm:w-auto"
+              className="flex items-center gap-2"
             >
               <LogOut className="w-4 h-4" />
               <span>Sign Out</span>
             </Button>
           </div>
+
+          <h1 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            Profile Settings
+          </h1>
 
           {/* Profile Image */}
           <div className="flex flex-col items-center mb-6 sm:mb-8">
@@ -294,36 +301,42 @@ const Profile = () => {
               />
             </div>
 
-            <form
-              onSubmit={handleImageUpload}
-              className="flex flex-col items-center gap-3 w-full max-w-xs"
-            >
-              <label className="cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 sm:px-4 py-2 rounded-lg border border-blue-200 transition-all duration-200 text-sm sm:text-base text-center w-full hover:shadow-sm">
-                <Upload className="w-4 h-4 inline mr-2" />
-                <span className="truncate">{uploadLabelText}</span>
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleImageSelect}
-                  className="hidden"
-                  disabled={isProcessing}
-                />
-              </label>
+            {!IMAGE_UPLOAD_DISABLED ? (
+              <form
+                onSubmit={handleImageUpload}
+                className="flex flex-col items-center gap-3 w-full max-w-xs"
+              >
+                <label className="cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 sm:px-4 py-2 rounded-lg border border-blue-200 transition-all duration-200 text-sm sm:text-base text-center w-full hover:shadow-sm">
+                  <Upload className="w-4 h-4 inline mr-2" />
+                  <span className="truncate">{uploadLabelText}</span>
+                  <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleImageSelect}
+                    className="hidden"
+                    disabled={isProcessing}
+                  />
+                </label>
 
-              {showUploadButton && (
-                <Button
-                  type="submit"
-                  size="sm"
-                  isLoading={loading.imageUpload}
-                  loadingText="Uploading..."
-                  disabled={isProcessing}
-                  className="w-full"
-                >
-                  {uploadButtonText}
-                </Button>
-              )}
-            </form>
+                {showUploadButton && (
+                  <Button
+                    type="submit"
+                    size="sm"
+                    isLoading={loading.imageUpload}
+                    loadingText="Uploading..."
+                    disabled={isProcessing}
+                    className="w-full"
+                  >
+                    {uploadButtonText}
+                  </Button>
+                )}
+              </form>
+            ) : (
+              <p className="text-sm text-gray-500">
+                Image upload temporarily disabled
+              </p>
+            )}
           </div>
 
           {/* Profile Form */}
