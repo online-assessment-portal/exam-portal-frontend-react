@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 // CSS
-import './navbar.css';
+import './styles/components/navbar.css';
 import './reqExamCd.css';
 import './testInfo.css';
 import './reqResponse.css';
-import './form.css';
-import './allBtns.css';
+import './styles/common/form.css';
+import './styles/components/allBtns.css';
 import './topBar.css';
 import './examPage.css';
 import './mcq.css';
@@ -13,27 +13,27 @@ import './exmPgCmn.css';
 import './exmPgC.css';
 import './exmPgH.css';
 import './htmlEditor.css';
-import './notify.css';
+import './styles/global/notify.css';
 //
 // import { checkDev } from './detectDev';
 //
-import { storeError, notify, cjoinQbank } from './common.js';
+import { storeError, notify, cjoinQbank } from './lib/common.js';
 //
-import Peer from 'peerjs';
+import { Peer } from 'peerjs';
 import { io } from 'socket.io-client';
 // JS
 import AuthPage from './pages/User/Auth/index.jsx';
-import ReqExamCode from './reqExamCd';
-import ToStart from './toStart';
-import Facilitate from './facilitate';
-import ReqResponse from './reqResponse.js';
-import Navigator from './navigator';
-import McqComponent from './McqComponent';
-import HTMLComponent from './HTMLComponent';
-import CodingComponent from './CodingComponent';
+import ReqExamCode from './reqExamCd.jsx';
+import ToStart from './toStart.jsx';
+import Facilitate from './facilitate.jsx';
+import ReqResponse from './reqResponse.jsx';
+import Navigator from './navigator.jsx';
+import McqComponent from './McqComponent.jsx';
+import HTMLComponent from './HTMLComponent.jsx';
+import CodingComponent from './CodingComponent.jsx';
 //
-import ChatComp from './ChatComponent';
-import FeedbackForm from './feedback';
+import ChatComp from './ChatComponent.jsx';
+import FeedbackForm from './feedback.jsx';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const appEnv = import.meta.env.VITE_APP_ENV;

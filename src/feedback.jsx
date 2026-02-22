@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
-import NavBar from './navbar';
-import logo from './favicon-32x32.png';
-import { notify } from './common.js';
+import NavBar from './navbar.jsx';
+import logo from './assets/favicon/favicon-32x32.png';
+import { notify } from './lib/common.js';
 //
 import './feedback.css';
 

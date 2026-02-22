@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import NavBar from './navbar';
-import { makeDateTimeReadable } from './common';
+import { makeDateTimeReadable } from './lib/common';
 import RenderVidCand from './renderVideoCand';
 class ToStart extends PureComponent {
   constructor() {

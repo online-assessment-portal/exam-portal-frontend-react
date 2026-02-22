@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { notify } from './common';
-import { makeDateTimeReadable } from './common';
+import { notify, makeDateTimeReadable } from './lib/common';
 class Facilitate extends PureComponent {
   constructor(props) {
     super();

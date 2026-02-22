@@ -8,7 +8,7 @@ import 'ace-builds/src-noconflict/theme-monokai';
 
 import EditorControl from './edtitorControl';
 import Beautify from 'ace-builds/src-noconflict/ext-beautify';
-import { notify, isInViewport } from './common.js';
+import { isInViewport, notifications } from './lib';
 //
 import { extractDefCode } from './helpers/codingQ';
 import { edtrColl, resetEdtrColl, mouseDownHandlerH } from './helpers/resizer';
@@ -79,7 +79,7 @@ class CodingComponent extends PureComponent {
         'ctrl-c|ctrl-v|ctrl-x|ctrl-s|ctrl-shift-v|shift-del|ctrl-h|cmd-c|cmd-v|cmd-x|cmd-s|cmd-h',
       exec: () => {
         if (this.cmndNoti) return;
-        notify(this.props.msgHolder, 'e', 'Command Not Allowed');
+        notifications.errorCustom('Command Not Allowed');
         this.cmndNoti = true;
         setTimeout(() => {
           this.cmndNoti = false;
@@ -139,11 +139,9 @@ class CodingComponent extends PureComponent {
   setParentCompState = (obj, isNewLang) => {
     this.setState(obj);
     if (isNewLang)
-      notify(
-        this.props.msgHolder,
-        's',
-        "&starf; New Compiler added.<br>&starf; Don't forget to reset your current code<br>to get default code of current language (if any).",
-        10000
+      notifications.successCustom(
+        'New compiler added.\nDo not forget to reset your code to get the default template for this language (if available).',
+        { duration: 10000 }
       );
   };
   //
@@ -160,14 +158,11 @@ class CodingComponent extends PureComponent {
     const status = await this.compileCode();
     this.setState({ isSubmit: false });
     // Update Response
-    const { myKey, msgHolder, ques, cdLangId, recRes, setExamCompState } =
-      this.props;
+    const { myKey, ques, cdLangId, recRes, setExamCompState } = this.props;
     if (status === 0)
-      notify(
-        msgHolder,
-        'e',
-        '&starf; Code was not run for Hidden Test Cases but was submitted.<br>&starf; No score was given for this Coding Question.<br>&starf; you may contact your Test Incharge at a later point of time<br>and request for evaluation.',
-        10000
+      notifications.errorCustom(
+        'Code was submitted without hidden test execution.\nNo score was assigned for this coding question.\nContact your test incharge later if you want a manual evaluation.',
+        { duration: 10000 }
       );
     recRes('ansQ', code);
     // Set crnt_Lang_Id
@@ -223,7 +218,7 @@ class CodingComponent extends PureComponent {
   };
   compileCode = async () => {
     const { isCustInp, crntLangId, crntCompId } = this.state;
-    const { ques, msgHolder, token } = this.props;
+    const { ques, token } = this.props;
     const crntDefCode = extractDefCode(ques, crntLangId);
     //
     if (isCustInp) this.setState({ isCustInp: false, hideScore: true });
@@ -232,7 +227,7 @@ class CodingComponent extends PureComponent {
     formData.append('useflow', crntCompId);
     let code = this.codeEdtr.getValue();
     if (!code) {
-      notify(msgHolder, 'e', '&starf; No Code to Compile.');
+      notifications.errorCustom('No code to compile.');
       this.setState({ custInpTrigger: false });
       return false;
     }
@@ -305,18 +300,16 @@ class CodingComponent extends PureComponent {
         if (response.memory >= 0) memoryEle.innerText = response.memory;
         else memoryEle.innerText = '';
       } else if (response.error) {
-        notify(msgHolder, 'e', response.error.message);
+        notifications.errorCustom(response.error.message);
         if (!isCustInp)
           this.props.chngTCRes(ques.qIndex, new Array(ques[8]).fill(0));
       } else {
-        notify(msgHolder, 'e', '');
+        notifications.errorCustom();
         return 0;
       }
     } catch (error) {
-      notify(
-        msgHolder,
-        'e',
-        '&starf; Code was not Compiled<br>&starf; your Browser failed to connect to Server<br>&starf; Check your Internet Connection'
+      notifications.errorCustom(
+        'Code was not compiled.\nYour browser could not connect to the server.\nCheck your internet connection.'
       );
       return 0;
     } finally {
@@ -325,7 +318,7 @@ class CodingComponent extends PureComponent {
   };
   matchOutput = (output) => {
     // chngTCRes - Test Case Update Function
-    const { chngTCRes, ques, msgHolder } = this.props;
+    const { chngTCRes, ques } = this.props;
     let tcOut = ques[11];
     if (output.localeCompare(tcOut) === 0) chngTCRes(ques.qIndex, ques[9]);
     else {
@@ -333,10 +326,8 @@ class CodingComponent extends PureComponent {
       const tcOutLen = (tcOut.match(/\n/g) || []).length;
       let score = {};
       if (outputLen !== tcOutLen)
-        notify(
-          msgHolder,
-          'e',
-          "&starf; Output Format Doesn't Match Required Format"
+        notifications.errorCustom(
+          'Output format does not match the required format.'
         );
       const eachTCL = tcOutLen / ques[8];
       for (let i = 0; i < ques[8]; i++) {

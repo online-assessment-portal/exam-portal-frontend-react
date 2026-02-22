@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { notify } from './common.js';
+import { notifications } from './lib';
 class ChatComp extends Component {
   constructor() {
     super();
@@ -50,10 +50,8 @@ class ChatComp extends Component {
         storageKey = `chat_${chatWith}`;
         event.target.reset();
       } else {
-        notify(
-          this.props.msgHolder,
-          'e',
-          `This candidate is currently dis-Connected.<br>Message can't be delivered to dis-connected Candidates.`
+        notifications.errorCustom(
+          "This candidate is currently disconnected.\nMessage can't be delivered to disconnected candidates."
         );
         return false;
       }
@@ -67,10 +65,8 @@ class ChatComp extends Component {
         storageKey = 'chat_Admin';
         event.target.reset();
       } else {
-        notify(
-          this.props.msgHolder,
-          'e',
-          'Chat Window is currently Closed for you.<br>Wait for your Proctor to Open it for you.'
+        notifications.errorCustom(
+          'Chat window is currently closed for you.\nWait for your proctor to open it.'
         );
         return false;
       }

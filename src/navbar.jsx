@@ -1,6 +1,7 @@
 import { PureComponent } from 'react';
-import logo from './favicon-32x32.png';
-import './navbar.css';
+import logo from './assets/favicon/favicon-32x32.png';
+
+import './styles/components/navbar.css';
 //
 class Navbar extends PureComponent {
   render() {
