@@ -29,12 +29,12 @@ jobs:
       - name: Build React app with Yarn
         run: yarn build
         env:
-          REACT_APP_API_URL: https://shredtest.scriptbliss.com
-          REACT_APP_APP_ENV: PROD
-          REACT_APP_GOOGLE_LOGIN_AUTH_URL: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=openid%20profile%20email&response_type=code&client_id=487563935567-9d7hunscovdvc8940lgfm10ak3ilpiui.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.scriptbliss.com%2Fgsign%2Fgoogle-login
-          REACT_APP_GMAIL_SEND_AUTH_URL: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.send&response_type=code&client_id=487563935567-doi10pjcfdikmfh8vioob7qnm1on9hbu.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.scriptbliss.com%2Finvite%2FsetupMailer
-          REACT_APP_PEERJS_URL: https://shredtest.scriptbliss.com
-          REACT_APP_PEERJS_PORT: 443
+          VITE_API_URL: https://shredtest.scriptbliss.com
+          VITE_APP_ENV: PROD
+          VITE_GOOGLE_LOGIN_AUTH_URL: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=openid%20profile%20email&response_type=code&client_id=487563935567-9d7hunscovdvc8940lgfm10ak3ilpiui.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.scriptbliss.com%2Fgsign%2Fgoogle-login
+          VITE_GMAIL_SEND_AUTH_URL: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.send&response_type=code&client_id=487563935567-doi10pjcfdikmfh8vioob7qnm1on9hbu.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fshredtest.scriptbliss.com%2Finvite%2FsetupMailer
+          VITE_PEERJS_URL: https://shredtest.scriptbliss.com
+          VITE_PEERJS_PORT: 443
 
       - name: Transfer build folder to EC2
         uses: appleboy/scp-action@v1.0.0
