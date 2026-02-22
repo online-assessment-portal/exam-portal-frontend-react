@@ -18,7 +18,14 @@ function App() {
       <Suspense fallback={<LoadingPage />}>
         <Routes>
           {routes.map(
-            ({ path, element: Component, props, name, isProtected }) => {
+            ({
+              path,
+              element: Component,
+              props,
+              name,
+              isProtected,
+              requireProfile,
+            }) => {
               const ElementComponent = Component;
               return (
                 <Route
@@ -26,7 +33,7 @@ function App() {
                   path={path}
                   element={
                     isProtected ? (
-                      <ProtectedRoute>
+                      <ProtectedRoute requireProfile={requireProfile}>
                         <ElementComponent {...(props || {})} />
                       </ProtectedRoute>
                     ) : (

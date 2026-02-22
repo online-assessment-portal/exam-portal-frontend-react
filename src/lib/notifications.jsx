@@ -127,46 +127,68 @@ export const notifications = {
 // Default export
 export default notifications;
 
+const normalizeLegacyMessage = (input) => {
+  if (typeof input !== 'string') return input;
+  return input
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/h[1-6]>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&starf;/g, '★')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .trim();
+};
+
+export const notify = (msgHolder, what, msg, time = 5000) => {
+  const message = normalizeLegacyMessage(msg);
+  if (what === 's') {
+    return notifications.successCustom(message || 'Success', {
+      duration: time,
+    });
+  }
+  return notifications.errorCustom(message, { duration: time });
+};
+
 // ----------- Custom Notification (backup code) -------------
-let crntHide;
-function mouseHide(msgHolder, ele, tm) {
-  // Check if the Element is being removed
-  if (crntHide === ele) return false;
-  clearTimeout(tm);
-  hideMsg(msgHolder, ele);
-}
-function hideMsg(msgHolder, node) {
-  crntHide = node;
-  //
-  const style = node.style;
-  style.padding = '0.1px';
-  style.marginTop = 0;
-  style.maxHeight = 0;
-  style.minHeight = 0;
-  style.transition = 'all 200ms linear';
-  node.style.animation = 'fadeOutUp 300ms ease-out';
-  setTimeout(() => {
-    // Check id node to be removed exists in Message Holder
-    if (node.parentNode === msgHolder) msgHolder.removeChild(node);
-    node = null;
-    crntHide = null;
-  }, 295);
-}
-export function notify(msgHolder, what, msg, time = 5000) {
-  msgHolder = msgHolder.current;
-  if (!msgHolder) return false;
-  const ele = document.createElement('div');
-  if (what === 's') ele.className = 'msgS';
-  else ele.className = 'msgE';
-  if (msg) ele.innerHTML = `<p>${msg}</p>`;
-  else
-    ele.innerHTML =
-      "<p>Something went wrong.<br>Request couldn't be fulfilled at the moment.<br>Please retry after sometime.</p>";
-  msgHolder.appendChild(ele);
-  const timeOut = setTimeout(() => {
-    hideMsg(msgHolder, ele);
-  }, time);
-  ele.addEventListener('mouseleave', () => mouseHide(msgHolder, ele, timeOut));
-  ele.addEventListener('click', () => mouseHide(msgHolder, ele, timeOut));
-}
+// let crntHide;
+// function mouseHide(msgHolder, ele, tm) {
+//   // Check if the Element is being removed
+//   if (crntHide === ele) return false;
+//   clearTimeout(tm);
+//   hideMsg(msgHolder, ele);
+// }
+// function hideMsg(msgHolder, node) {
+//   crntHide = node;
+//   //
+//   const style = node.style;
+//   style.padding = '0.1px';
+//   style.marginTop = 0;
+//   style.maxHeight = 0;
+//   style.minHeight = 0;
+//   style.transition = 'all 200ms linear';
+//   node.style.animation = 'fadeOutUp 300ms ease-out';
+//   setTimeout(() => {
+//     // Check id node to be removed exists in Message Holder
+//     if (node.parentNode === msgHolder) msgHolder.removeChild(node);
+//     node = null;
+//     crntHide = null;
+//   }, 295);
+// }
+// export const notify = (msgHolder, what, msg, time = 5000) => {
+//   msgHolder = msgHolder.current;
+//   if (!msgHolder) return false;
+//   const ele = document.createElement('div');
+//   if (what === 's') ele.className = 'msgS';
+//   else ele.className = 'msgE';
+//   if (msg) ele.innerHTML = `<p>${msg}</p>`;
+//   else
+//     ele.innerHTML =
+//       "<p>Something went wrong.<br>Request couldn't be fulfilled at the moment.<br>Please retry after sometime.</p>";
+//   msgHolder.appendChild(ele);
+//   const timeOut = setTimeout(() => {
+//     hideMsg(msgHolder, ele);
+//   }, time);
+//   ele.addEventListener('mouseleave', () => mouseHide(msgHolder, ele, timeOut));
+//   ele.addEventListener('click', () => mouseHide(msgHolder, ele, timeOut));
+// };
 // ----------- Custom Notification (backup code) -------------

@@ -7,7 +7,7 @@ const AuthPage = lazy(() => import('../pages/User/Auth/index'));
 const Error = lazy(() => import('../error'));
 
 // Lazy load additional components
-// const ExamComp = lazy(() => import('../ExamComp'));
+const ExamComp = lazy(() => import('../ExamComp.jsx'));
 // const ExamAdmin = lazy(() => import('../admin/ExamAdmin'));
 // const Result = lazy(() => import('../result/ResultMain'));
 // const HeadAuth = lazy(() => import('../HeadAuth'));
@@ -36,12 +36,13 @@ export const routes = [
     name: 'Authentication',
     isProtected: true,
   },
-  // {
-  //   path: '/test',
-  //   element: ExamComp,
-  //   name: 'Exam',
-  //   isProtected: true,
-  // },
+  {
+    path: '/assessment',
+    element: ExamComp,
+    name: 'Exam',
+    isProtected: true,
+    requireProfile: true,
+  },
   // {
   //   path: '/testAdmin',
   //   element: ExamAdmin,
@@ -83,19 +84,19 @@ export const routes = [
   },
 ];
 
-export {
-  AuthPage,
-  Error,
-  // ExamAdmin,
-  // ExamComp,
-  // HeadAuth,
-  Home,
-  // Monitor,
-  Profile,
-  // Result,
-  TermsOfService,
-  PrivacyPolicy,
-};
+// export {
+//   AuthPage,
+//   Error,
+//   // ExamAdmin,
+//   ExamComp,
+//   // HeadAuth,
+//   Home,
+//   // Monitor,
+//   Profile,
+//   // Result,
+//   TermsOfService,
+//   PrivacyPolicy,
+// };
 
 // import React from 'react';
 // import { BrowserRouter, Route, Routes } from 'react-router';

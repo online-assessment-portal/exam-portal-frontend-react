@@ -1,6 +1,7 @@
 const apiUrl = import.meta.env.VITE_API_URL;
 const appEnv = import.meta.env.VITE_APP_ENV;
 const isProd = appEnv === 'PROD';
+export { notify } from './notifications.jsx';
 
 function cjoinQbank(resp, dictFlow) {
   const myDict = [

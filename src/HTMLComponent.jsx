@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import AceEditor from 'react-ace';
-import 'ace-builds/webpack-resolver'; // Ensure you have at least one mode and theme imported
+// TODO: use maintained libs (React-Ace is causing issues with VITE)
+// import 'ace-builds/webpack-resolver'; // Ensure you have at least one mode and theme imported
 import 'ace-builds/src-noconflict/mode-html';
 import 'ace-builds/src-noconflict/mode-css';
 import 'ace-builds/src-noconflict/mode-jsx';

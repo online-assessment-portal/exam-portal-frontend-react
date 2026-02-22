@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { useAuth } from './hooks';
 // CSS
 import './styles/components/navbar.css';
 import './reqExamCd.css';
@@ -22,7 +23,7 @@ import { storeError, notify, cjoinQbank } from './lib/common.js';
 import { Peer } from 'peerjs';
 import { io } from 'socket.io-client';
 // JS
-import AuthPage from './pages/User/Auth/index.jsx';
+import LoadingPage from './components/LoadingPage';
 import ReqExamCode from './reqExamCd.jsx';
 import ToStart from './toStart.jsx';
 import Facilitate from './facilitate.jsx';
@@ -34,6 +35,8 @@ import CodingComponent from './CodingComponent.jsx';
 //
 import ChatComp from './ChatComponent.jsx';
 import FeedbackForm from './feedback.jsx';
+import { fetchTestInfo } from './services/exam.service';
+import { SYSTEM_MESSAGES } from './constants/messages.js';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const appEnv = import.meta.env.VITE_APP_ENV;
@@ -42,9 +45,9 @@ const isProd = appEnv === 'PROD';
 const peerjsHost = import.meta.env.VITE_PEERJS_URL;
 const peerjsPort = import.meta.env.VITE_PEERJS_PORT;
 
-class ExamComp extends Component {
-  constructor() {
-    super();
+class ExamCompLegacy extends Component {
+  constructor(props) {
+    super(props);
     const stateObj = {
       loggedIn: false,
       verify: -1,
@@ -111,34 +114,21 @@ class ExamComp extends Component {
     this.setState(obj);
   };
   fetchTest = async (code) => {
-    const { token } = this.state.userInfo;
     const passcode = code.toUpperCase();
     try {
-      const promise = await fetch(`${apiUrl}/cand/examInfo/`, {
-        method: 'POST',
-        credentials: isProd ? 'same-origin' : 'include',
-        body: `passcode=${passcode}&_csrf=${token}`,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      });
-      this.response = await promise.json();
-      if (promise.status === 200 && promise.ok === true) this.handleFetch();
-      else if (this.response.error)
-        this.setState({ reqErr: this.response.error.message });
-      else {
+      const { success, message, data } = await fetchTestInfo(passcode);
+      if (success) {
+        this.response = data;
+      } else {
         this.setState({
-          reqErr: 'Something went wrong: Unable to Process your Request',
+          reqErr: message || SYSTEM_MESSAGES.UNKNOWN_ERROR,
         });
-        notify(this.msgHolder, 'e', '', 10000);
       }
+      this.handleFetch();
     } catch (error) {
       this.submitErr(error);
-      notify(
-        this.msgHolder,
-        'e',
-        '&starf; your Browser failed to Connect to SERVER<br>&starf; Check your Internet Connection'
-      );
       this.setState({
-        reqErr: 'Something went wrong: Unable to Process your Request',
+        reqErr: error?.message || SYSTEM_MESSAGES.UNKNOWN_ERROR,
       });
     }
   };
@@ -1812,11 +1802,15 @@ class ExamComp extends Component {
       }
     }
     //
-    const userInfo = JSON.parse(document.getElementById('userInfo').innerText);
+    const { userInfo: authUserInfo, isAuthenticated } = this.props;
+    const userInfo = authUserInfo ? { ...authUserInfo } : null;
+    if (!userInfo) {
+      this.setState({ loggedIn: false, userInfo: null });
+      return false;
+    }
     //
     const myState = { loggedIn: false };
-    const loggedIn = userInfo.loggedIn;
-    delete userInfo.loggedIn;
+    const loggedIn = Boolean(isAuthenticated);
     //
     const localPasscode = localStorage.getItem('passcode');
     if (userInfo.passcode) {
@@ -1862,14 +1856,9 @@ class ExamComp extends Component {
           ></h1>
         </center>
       );
-    else if (!loggedIn || !userInfo || !userInfo.name || !userInfo.uname)
-      return (
-        <AuthPage
-          setExamCompState={this.setMainCompState}
-          userInfo={userInfo}
-        />
-      );
-    else if (!userInfo) return <h1>Loading</h1>;
+    else if (!loggedIn || !userInfo || !userInfo.name || !userInfo.uname) {
+      return <LoadingPage />;
+    }
     const {
       reqErr,
       secInfo,
@@ -2065,4 +2054,16 @@ class ExamComp extends Component {
     );
   }
 }
+
+const ExamComp = (props) => {
+  const { userInfo, isAuthenticated } = useAuth();
+  return (
+    <ExamCompLegacy
+      {...props}
+      userInfo={userInfo}
+      isAuthenticated={isAuthenticated}
+    />
+  );
+};
+
 export default ExamComp;
